@@ -7,21 +7,25 @@ import android.os.Bundle;
 
 public class MenuActivity extends AppCompatActivity {
 
+    private User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+        user = (User) getIntent().getSerializableExtra("user");
 
     }
 
     // check this function
+    /*
     public void goToActivity(Class<?> className) {
         Intent intent = new Intent(this, className);
         intent.putExtra("user", user);
         startActivity(intent);
         finish();
-    }// check
+    }*/// check
 
     public void goToSetting() {
         Intent intent = new Intent(this, SettingActivity.class);

@@ -1,6 +1,8 @@
 package com.example.checkmypay;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     String email;
     String password;
 
