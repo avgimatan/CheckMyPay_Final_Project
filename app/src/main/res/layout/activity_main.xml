@@ -65,7 +65,7 @@
             android:src="@drawable/Logo"/>
 
         <Button
-            android:id="@+id/btn_start_order"
+            android:id="@+id/btn_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"

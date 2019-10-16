@@ -4,11 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     EditText email, password;
+    Button btn_login;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,10 +20,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         email = findViewById(R.id.input_email);
-
-
-
         password = findViewById(R.id.input_password);
+        btn_login = findViewById(R.id.btn_login);
+
+        btn_login.setOnClickListener(this);
+
 
 
     }
@@ -40,9 +45,49 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onClick(View view) {
+        boolean isUserExist = false;
+
+        // while the email is invalid
+        while(!emailValidation()) {
+        }
+
+        user = new User(email.getText().toString(), password.getText().toString());
+
+        /*
+        TODO: search this user in the DB
+            if (exist)
+                check the password
+                if (valid password)
+                    valid user
+                    goToMenuActivity()
+                else
+                    invalid password
+                    insert again
+            else
+                the user is not exist! should sign up first
+
+         */
+
+        if(isUserExist) {
+            goToMenuActivity();
+        }
+        else {
+
+        }
+
+    }
 
     public void goToSignUp() {
         Intent intent = new Intent(this, SignUpActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void goToMenuActivity() {
+        Intent intent = new Intent(this, MenuActivity.class);
+        intent.putExtra("user", user);
         startActivity(intent);
         finish();
     }
