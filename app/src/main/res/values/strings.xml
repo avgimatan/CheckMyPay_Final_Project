@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CheckMyPay</string>
+    <string name="input_email">Enter your email</string>
+    <string name="input_password">Enter your password</string>
 </resources>
