@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
         email = findViewById(R.id.input_email);
 
-
+        
 
         password = findViewById(R.id.input_password);
 
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
-    
+
 
     public void goToSignUp() {
         Intent intent = new Intent(this, SignUpActivity.class);
