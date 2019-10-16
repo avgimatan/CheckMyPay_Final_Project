@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
         email = findViewById(R.id.input_email);
 
-        
+
 
         password = findViewById(R.id.input_password);
 
