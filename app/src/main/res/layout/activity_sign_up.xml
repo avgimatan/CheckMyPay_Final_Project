@@ -1,9 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".SignUpActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="casual"
+        android:gravity="center"
+        android:text="Sign Up Menu"
+        android:layout_margin="25dp"
+        android:textSize="@android:dimen/app_icon_size" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_signup_email"
+        android:fontFamily="casual"
+        android:layout_marginBottom="5dp"
+        android:hint="@string/input_email" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_signup_pass"
+        android:fontFamily="casual"
+        android:hint="@string/input_password"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sign up"
+        android:fontFamily="casual"
+        android:layout_margin="25dp"
+        android:textAllCaps="false"/>
+
+</LinearLayout>
