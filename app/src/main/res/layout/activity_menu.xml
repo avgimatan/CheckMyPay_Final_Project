@@ -14,7 +14,7 @@
         android:layout_margin="10dp"
         android:textAllCaps="false"
         android:background="@color/colorPrimary"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/white"
         android:text="Log out"/>
 
     <TextView
@@ -44,7 +44,7 @@
             android:fontFamily="casual"
             android:textAllCaps="false"
             android:background="@color/colorPrimary"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:text="My Paycheck"/>
 
         <Button
@@ -55,7 +55,7 @@
             android:fontFamily="casual"
             android:textAllCaps="false"
             android:background="@color/colorPrimary"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:text="My Salary"/>
 
         <Button
@@ -66,7 +66,7 @@
             android:fontFamily="casual"
             android:textAllCaps="false"
             android:background="@color/colorPrimary"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:text="My Setting"/>
 
         <Button
@@ -77,7 +77,7 @@
             android:fontFamily="casual"
             android:textAllCaps="false"
             android:background="@color/colorPrimary"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:text="My Rate"/>
 
     </GridLayout>
