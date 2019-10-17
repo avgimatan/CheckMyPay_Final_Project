@@ -7,10 +7,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     EditText email, password;
+    TextView btn_signUp;
     Button btn_login;
     User user;
 
@@ -21,7 +24,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         email = findViewById(R.id.input_email);
         password = findViewById(R.id.input_password);
+        btn_signUp = findViewById(R.id.button_sign_up);
         btn_login = findViewById(R.id.btn_login);
+
+        btn_signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToSignUp();
+            }
+        });
 
         btn_login.setOnClickListener(this);
 
@@ -49,8 +60,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         boolean isUserExist = false;
 
-        // while the email is invalid
-        while(!emailValidation()) {
+        // if the email is invalid
+        if(!emailValidation()) {
+            Toast.makeText(this, "Invalid email!", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         user = new User(email.getText().toString(), password.getText().toString());
