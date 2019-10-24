@@ -10,12 +10,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    EditText email, password;
-    TextView btn_signUp;
-    Button btn_login;
-    User user;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private EditText email, password;
+    private TextView btn_signUp;
+    private Button btn_login;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     insert again
             else
                 the user is not exist! should sign up first
-
          */
 
         if(isUserExist) {
