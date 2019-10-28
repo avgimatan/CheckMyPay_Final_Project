@@ -67,6 +67,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+
+
+
+
         boolean isUserExist = false;
 
         // if the email is invalid
@@ -75,7 +79,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
+        // TODO: For testing
         user = new User(email.getText().toString(), password.getText().toString());
+        goToMenuActivity();
 
         /*
         TODO: search this user in the DB

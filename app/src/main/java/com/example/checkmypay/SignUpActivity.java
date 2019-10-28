@@ -42,7 +42,7 @@ public class SignUpActivity extends AppCompatActivity {
         // Create a new user with a email and password
         Map<String, Object> user = new HashMap<>();
         user.put("email", email.getText().toString());
-        user.put("last", "Lovelace");
-        user.put("born", 1815);
+        user.put("password", password.getText().toString());
+
     }
 }
