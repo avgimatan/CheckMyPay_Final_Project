@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/main_layout"
     tools:context=".MenuActivity">
 
     <Button
@@ -27,59 +28,5 @@
         android:fontFamily="casual"
         android:gravity="center"/>
 
-    <GridLayout
-        android:id="@+id/grid_layout_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="80dp"
-        android:columnCount="2"
-        android:rowCount="2">
-
-        <Button
-            android:id="@+id/btn_00"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_margin="10dp"
-            android:fontFamily="casual"
-            android:textAllCaps="false"
-            android:background="@color/colorPrimary"
-            android:textColor="@color/white"
-            android:text="My Paycheck"/>
-
-        <Button
-            android:id="@+id/btn_01"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_margin="10dp"
-            android:fontFamily="casual"
-            android:textAllCaps="false"
-            android:background="@color/colorPrimary"
-            android:textColor="@color/white"
-            android:text="My Salary"/>
-
-        <Button
-            android:id="@+id/btn_02"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_margin="10dp"
-            android:fontFamily="casual"
-            android:textAllCaps="false"
-            android:background="@color/colorPrimary"
-            android:textColor="@color/white"
-            android:text="My Setting"/>
-
-        <Button
-            android:id="@+id/btn_10"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_margin="10dp"
-            android:fontFamily="casual"
-            android:textAllCaps="false"
-            android:background="@color/colorPrimary"
-            android:textColor="@color/white"
-            android:text="My Rate"/>
-
-    </GridLayout>
 
 </LinearLayout>
