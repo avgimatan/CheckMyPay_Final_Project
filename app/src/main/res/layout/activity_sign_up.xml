@@ -13,22 +13,25 @@
         android:fontFamily="casual"
         android:gravity="center"
         android:text="Sign Up Menu"
+        android:textColor="@color/colorPrimary"
         android:layout_margin="25dp"
         android:textSize="@android:dimen/app_icon_size" />
 
     <EditText
+        android:id="@+id/text_signup_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/text_signup_email"
         android:fontFamily="casual"
+        android:textSize="25dp"
         android:layout_marginBottom="5dp"
         android:hint="@string/input_email" />
 
     <EditText
+        android:id="@+id/text_signup_pass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/text_signup_pass"
         android:fontFamily="casual"
+        android:textSize="25dp"
         android:hint="@string/input_password"/>
 
     <Button
@@ -36,6 +39,8 @@
         android:layout_height="wrap_content"
         android:text="Sign up"
         android:fontFamily="casual"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
         android:layout_margin="25dp"
         android:textAllCaps="false"/>
 
