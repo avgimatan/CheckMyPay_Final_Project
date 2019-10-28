@@ -1,5 +1,6 @@
 package com.example.checkmypay;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -13,7 +14,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -23,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView btn_signUp;
     private Button btn_login;
     private User user;
+    private boolean isUserExist = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,22 +40,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         password = findViewById(R.id.input_password);
         btn_signUp = findViewById(R.id.button_sign_up);
         btn_login = findViewById(R.id.btn_login);
-
         btn_login.setOnClickListener(this);
-
         btn_signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 goToSignUp();
             }
         });
-
-
-
     }
-
-
-
 
     public boolean emailValidation() {
         String emailAddress = email.getText().toString().trim();
@@ -68,20 +67,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
 
-
-
-
-        boolean isUserExist = false;
-
         // if the email is invalid
         if(!emailValidation()) {
             Toast.makeText(this, "Invalid email!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // TODO: For testing
-        user = new User(email.getText().toString(), password.getText().toString());
-        goToMenuActivity();
+        initUser(email, password);
+
+        checkIfUserInDB();
+
+        if(isUserExist) {
+
+        }
 
         /*
         TODO: search this user in the DB
@@ -104,6 +102,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
 
+    }
+
+    public void checkIfUserInDB() {
+
+        db.collection("Users").whereEqualTo("email", this.user.getEmail())
+                .limit(1).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            //boolean isEmpty = task.getResult().isEmpty();
+                            if(task.getResult().isEmpty()) {
+                                Toast.makeText(MainActivity.this, "This user is not in DB!", Toast.LENGTH_SHORT).show();
+                                isUserExist = false;
+                            }
+                            else {
+                                isUserExist = true;
+                            }
+                        }
+                    }
+                });
+    }
+
+    public void initUser(EditText email, EditText password) {
+        this.user = new User(email.getText().toString(), password.getText().toString());
     }
 
     public void goToSignUp() {
