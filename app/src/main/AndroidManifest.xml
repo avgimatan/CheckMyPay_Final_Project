@@ -9,9 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MenuActivity"></activity>
+        <activity android:name=".SettingActivity"></activity>
+        <activity android:name=".SalaryActivity" />
+        <activity android:name=".RateActivity" />
+        <activity android:name=".PaycheckActivity" />
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".MenuActivity" />
         <activity android:name=".MainActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

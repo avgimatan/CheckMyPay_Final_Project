@@ -4,4 +4,5 @@
     <string name="input_password">Enter your password</string>
     <string name="title_activity_setting">SettingActivity</string>
     <string name="title_activity_rate">RateActivity</string>
+    <string name="title_activity_salary">SalaryActivity</string>
 </resources>

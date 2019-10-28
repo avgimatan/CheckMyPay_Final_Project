@@ -31,14 +31,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_signUp = findViewById(R.id.button_sign_up);
         btn_login = findViewById(R.id.btn_login);
 
+        btn_login.setOnClickListener(this);
+
         btn_signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 goToSignUp();
             }
         });
-
-        btn_login.setOnClickListener(this);
 
 
 
