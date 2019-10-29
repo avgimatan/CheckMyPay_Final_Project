@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView btn_signUp;
     private Button btn_login;
     private User user;
-    private boolean isUserExist = false;
+    private boolean isUserExist = false, isValidPassword = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +78,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         checkIfUserInDB();
 
         if(isUserExist) {
-
+            checkIfValidPassword();     // if the user exist, check the password
+            if(isValidPassword) {
+                goToMenuActivity();     // if all right, connect and go to MenuActivity
+            }
+            else {
+                return;     // return if invalid password
+            }
+        }
+        else {
+            return;     // return if the user is not exist
         }
 
-        /*
-        TODO: search this user in the DB
+        /*TODO: search this user in the DB
             if (exist)
                 check the password
                 if (valid password)
@@ -92,15 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     invalid password
                     insert again
             else
-                the user is not exist! should sign up first
-         */
-
-        if(isUserExist) {
-            goToMenuActivity();
-        }
-        else {
-
-        }
+                the user is not exist! should sign up first*/
 
     }
 
@@ -119,6 +119,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             }
                             else {
                                 isUserExist = true;
+                            }
+                        }
+                    }
+                });
+    }
+
+    public void checkIfValidPassword() {
+
+        db.collection("Users").whereEqualTo("password", this.user.getPassword())
+                .limit(1).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            //boolean isEmpty = task.getResult().isEmpty();
+                            if(task.getResult().isEmpty()) {
+                                Toast.makeText(MainActivity.this, "Invalid password!", Toast.LENGTH_SHORT).show();
+                                isValidPassword = false;
+                            }
+                            else {
+                                isValidPassword = true;
                             }
                         }
                     }
