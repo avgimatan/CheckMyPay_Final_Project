@@ -15,7 +15,7 @@ import android.widget.RelativeLayout;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MenuActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity implements View.OnClickListener {
 
     private User user;
     private Map<String,Button> buttons;
@@ -46,12 +46,11 @@ public class MenuActivity extends AppCompatActivity {
 
         for (Button button : buttons.values())
         {
-            button.setLayoutParams(new ViewGroup.LayoutParams(360,400));
-            //button.setPadding(500,500,500,500);
+            button.setLayoutParams(new ViewGroup.LayoutParams(400,400));
             button.setAllCaps(false);
+            button.setOnClickListener(this);
             gridLayout.addView(button);
         }
-
 
 
     }
@@ -64,10 +63,11 @@ public class MenuActivity extends AppCompatActivity {
         gridLayout.setRowCount(rowsNum);
         gridLayout.setOrientation(GridLayout.HORIZONTAL);
 
-/*        RelativeLayout.LayoutParams layoutParams =
-                new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+
+/*        LinearLayout.LayoutParams layoutParams =
+                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT);
-        RelativeLayout parentRelativeLayout = new RelativeLayout(this);
+        LinearLayout parentRelativeLayout = new LinearLayout(this);
         parentRelativeLayout.setLayoutParams(layoutParams);
         parentRelativeLayout.setGravity(Gravity.CENTER);
         parentRelativeLayout.addView(gridLayout);*/
@@ -110,5 +110,22 @@ public class MenuActivity extends AppCompatActivity {
         intent.putExtra("user", user);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view instanceof Button) {
+            Button clickedButton = (Button)findViewById(view.getId());
+
+            if (clickedButton.equals(buttons.get("My Paycheck"))){
+                goToPaycheck();
+            } if (clickedButton == buttons.get("My Salary")) {
+                goToSalary();
+            } if (clickedButton == buttons.get("My Rate")) {
+                goToRate();
+            } if (clickedButton == buttons.get("My Setting")) {
+                goToSetting();
+            }
+        }
     }
 }
