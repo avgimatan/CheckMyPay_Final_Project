@@ -115,9 +115,8 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if(view instanceof Button) {
-            Button clickedButton = (Button)findViewById(view.getId());
-
-            if (clickedButton.equals(buttons.get("My Paycheck"))){
+            Button clickedButton = (Button) view;
+            if (clickedButton == buttons.get("My Paycheck")){
                 goToPaycheck();
             } if (clickedButton == buttons.get("My Salary")) {
                 goToSalary();
