@@ -4,8 +4,190 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layoutDirection="ltr"
     tools:context=".RateActivity"
-    android:orientation="vertical"
-    android:id="@+id/rate_linearLayout">
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/rate_txt_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="casual"
+        android:gravity="center"
+        android:text="My Rate"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@android:dimen/app_icon_size" />
+
+    <GridLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:rowCount="5"
+        android:columnCount="2" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="casual"
+            android:text="Hourly Wage: "
+            android:textColor="@color/colorPrimary" />
+
+        <EditText
+            android:id="@+id/rate_input_hourly_wage"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="casual"
+            android:text="Start Date: "
+            android:textColor="@color/colorPrimary" />
+
+        <EditText
+            android:id="@+id/rate_input_start_date"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="casual"
+            android:text="End Date: "
+            android:textColor="@color/colorPrimary" />
+
+        <EditText
+            android:id="@+id/rate_input_end_date"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="casual"
+            android:text="Overtime: "
+            android:textColor="@color/colorPrimary" />
+
+        <EditText
+            android:id="@+id/rate_input_overtime"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="casual"
+            android:text="Credits: "
+            android:textColor="@color/colorPrimary" />
+
+        <EditText
+            android:id="@+id/rate_input_credits"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+    </GridLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:fontFamily="casual"
+        android:layout_gravity="center"
+        android:text="@string/txt_shabbat_hours"
+        android:textSize="@dimen/fab_margin"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary" />
+
+    <GridLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:rowCount="2"
+        android:columnCount="2" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="casual"
+            android:text="From Hour: "
+            android:textColor="@color/colorPrimary" />
+
+        <EditText
+            android:id="@+id/rate_input_from_hour"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="casual"
+            android:text="To Hour: "
+            android:textColor="@color/colorPrimary" />
+
+        <EditText
+            android:id="@+id/rate_input_to_hour"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+    </GridLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:fontFamily="casual"
+        android:layout_gravity="center"
+        android:text="@string/txt_retirement"
+        android:textSize="@dimen/fab_margin"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary" />
+
+    <GridLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:rowCount="2"
+        android:columnCount="2" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="casual"
+            android:text="Provident Fund : "
+            android:textColor="@color/colorPrimary" />
+
+        <EditText
+            android:id="@+id/rate_input_provident_funds"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="casual"
+            android:text="Advanced Study Fund : "
+            android:textColor="@color/colorPrimary" />
+
+        <EditText
+            android:id="@+id/rate_input_advanced_study_fund"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+    </GridLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/rate_btn_save_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/white"
+            android:fontFamily="casual"
+            android:layout_gravity="bottom"
+            android:textAllCaps="false"
+            android:text="Save Details"
+            android:textSize="20dp"/>
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -2,7 +2,9 @@
     <string name="app_name">CheckMyPay</string>
     <string name="input_email">Enter your email</string>
     <string name="input_password">Enter your password</string>
-    <string name="title_activity_setting">SettingActivity</string>
-    <string name="title_activity_rate">RateActivity</string>
-    <string name="title_activity_salary">SalaryActivity</string>
+    <string name="title_activity_setting">Setting Activity</string>
+    <string name="title_activity_rate">Rate Activity</string>
+    <string name="title_activity_salary">Salary Activity</string>
+    <string name="txt_shabbat_hours"><u>Shabbat Hours</u>.</string>
+    <string name="txt_retirement"><u>Retirement</u>.</string>
 </resources>
