@@ -19,21 +19,29 @@ import java.util.Map;
 public class MenuActivity extends AppCompatActivity implements View.OnClickListener {
 
     private User user;
-    private Map<String,Button> buttons;
+    private HashMap<String,Button> buttons;
+    private LinearLayout linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+        // get user from other activities
         user = (User) getIntent().getSerializableExtra("user");
-        buttons = new HashMap<>();
 
-        //create Grid
+        //create Linear and Buttons
         LinearLayout mainLayout = findViewById(R.id.main_layout);
-        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
+        buttons = new HashMap<>();
+        createButtons();
         mainLayout.addView(linearLayout);
+
+    }
+
+
+    private void createButtons() {
 
         buttons.put("My Paycheck",new Button(this));
         buttons.put("My Salary",new Button(this));
@@ -45,40 +53,29 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         buttons.get("My Rate").setText("My Rate");
         //buttons.get("My Setting").setText("My Setting");
 
-
         for (Button button : buttons.values())
         {
-            button.setLayoutParams(
-                    new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT, GridLayout.LayoutParams.WRAP_CONTENT));
+            ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, GridLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(10,10,10,10);
+            button.setLayoutParams(params);
             button.setAllCaps(false);
             button.setOnClickListener(this);
-            //button.setPadding(100,100,100,100);
             button.setBackgroundResource(R.color.colorPrimary);
             button.setTextColor(getResources().getColor(R.color.white));
             linearLayout.addView(button);
         }
 
-
     }
 
-
-    // check this function
-    /*
     public void goToActivity(Class<?> className) {
         Intent intent = new Intent(this, className);
         intent.putExtra("user", user);
         startActivity(intent);
         finish();
-    }*/// check
+    }
 
-/*    public void goToSetting() {
-        Intent intent = new Intent(this, SettingActivity.class);
-        intent.putExtra("user", user);
-        startActivity(intent);
-        finish();
-    }*/
-
+/*
     public void goToRate() {
         Intent intent = new Intent(this, RateActivity.class);
         intent.putExtra("user", user);
@@ -98,18 +95,18 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         intent.putExtra("user", user);
         startActivity(intent);
         finish();
-    }
+    }*/
 
     @Override
     public void onClick(View view) {
         if(view instanceof Button) {
             Button clickedButton = (Button) view;
             if (clickedButton == buttons.get("My Paycheck")){
-                goToPaycheck();
+                goToActivity(PaycheckActivity.class);
             } if (clickedButton == buttons.get("My Salary")) {
-                goToSalary();
+                goToActivity(SalaryActivity.class);
             } if (clickedButton == buttons.get("My Rate")) {
-                goToRate();
+                goToActivity(RateActivity.class);
             }
         }
     }
