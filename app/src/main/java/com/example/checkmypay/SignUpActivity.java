@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -22,6 +23,8 @@ import java.util.Map;
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener{
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference usersCollection = db.collection("Users");
+
 
     private EditText email, password;
     private Button btn_signup;
@@ -48,8 +51,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         user.put("email", this.user.getEmail());
         user.put("password", this.user.getPassword());
 
+        usersCollection.document(this.user.getEmail()).set(user);
+
         // Add a new document with a generated ID
-        db.collection("Users")
+        /*db.collection("Users")
                 .add(user)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -62,7 +67,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(SignUpActivity.this, "Signup failed!", Toast.LENGTH_SHORT).show();
                     }
-                });
+                });*/
 
     }
 

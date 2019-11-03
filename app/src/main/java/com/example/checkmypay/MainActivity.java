@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -90,23 +92,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;     // return if the user is not exist
         }
 
-        /*TODO: search this user in the DB
-            if (exist)
-                check the password
-                if (valid password)
-                    valid user
-                    goToMenuActivity()
-                else
-                    invalid password
-                    insert again
-            else
-                the user is not exist! should sign up first*/
-
     }
 
     public void checkIfUserInDB() {
 
-        db.collection("Users").whereEqualTo("email", this.user.getEmail())
+        DocumentReference userDocument = db.collection("Users").document(user.getEmail());
+        userDocument.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        isUserExist = true;
+                    } else {
+                        Toast.makeText(MainActivity.this, "This user is not in DB!", Toast.LENGTH_SHORT).show();
+                        isUserExist = false;
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "get failed with " + task.getException(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        /*db.collection("Users").whereEqualTo("email", this.user.getEmail())
                 .limit(1).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -122,12 +131,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             }
                         }
                     }
-                });
+                });*/
     }
 
     public void checkIfValidPassword() {
 
-        db.collection("Users").whereEqualTo("password", this.user.getPassword())
+        DocumentReference userDocument = db.collection("Users").document(user.getEmail());
+        userDocument.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        if(document.get("password").equals(user.getPassword())) {
+                            isValidPassword = true;
+                        }
+                        else {
+                            Toast.makeText(MainActivity.this, "Invalid password!", Toast.LENGTH_SHORT).show();
+                            isValidPassword = false;
+                        }
+                    } else {
+                        Toast.makeText(MainActivity.this, "This user is not in DB!", Toast.LENGTH_SHORT).show();
+                        isUserExist = false;
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "get failed with " + task.getException(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        /*db.collection("Users").whereEqualTo("password", this.user.getPassword())
                 .limit(1).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -143,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             }
                         }
                     }
-                });
+                });*/
     }
 
     public void initUser(EditText email, EditText password) {

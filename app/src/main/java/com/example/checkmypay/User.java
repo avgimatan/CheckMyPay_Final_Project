@@ -33,5 +33,83 @@ public class User implements Serializable {
         return password;
     }
 
+    public void setHourlyWage(float hourlyWage) {
+        this.hourlyWage = hourlyWage;
+    }
 
+    public void setProvidentFund(float providentFund) {
+        this.providentFund = providentFund;
+    }
+
+    public void setAdvancedStudyFund(float advancedStudyFund) {
+        this.advancedStudyFund = advancedStudyFund;
+    }
+
+    public void setCredits(float credits) {
+        this.credits = credits;
+    }
+
+    public void setStartDate(int startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(int endDate) {
+        this.endDate = endDate;
+    }
+
+    public void setShabbatFromHour(int shabbatFromHour) {
+        this.shabbatFromHour = shabbatFromHour;
+    }
+
+    public void setShabbatToHour(int shabbatToHour) {
+        this.shabbatToHour = shabbatToHour;
+    }
+
+    public void setShabbatFromMin(int shabbatFromMin) {
+        this.shabbatFromMin = shabbatFromMin;
+    }
+
+    public void setShabbatToMin(int shabbatToMin) {
+        this.shabbatToMin = shabbatToMin;
+    }
+
+    public float getHourlyWage() {
+        return hourlyWage;
+    }
+
+    public float getProvidentFund() {
+        return providentFund;
+    }
+
+    public float getAdvancedStudyFund() {
+        return advancedStudyFund;
+    }
+
+    public float getCredits() {
+        return credits;
+    }
+
+    public int getStartDate() {
+        return startDate;
+    }
+
+    public int getEndDate() {
+        return endDate;
+    }
+
+    public int getShabbatFromHour() {
+        return shabbatFromHour;
+    }
+
+    public int getShabbatToHour() {
+        return shabbatToHour;
+    }
+
+    public int getShabbatFromMin() {
+        return shabbatFromMin;
+    }
+
+    public int getShabbatToMin() {
+        return shabbatToMin;
+    }
 }
