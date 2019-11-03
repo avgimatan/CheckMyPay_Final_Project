@@ -3,6 +3,7 @@ package com.example.checkmypay;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -30,50 +31,37 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
 
         //create Grid
         LinearLayout mainLayout = findViewById(R.id.main_layout);
-        GridLayout gridLayout = createGridLayout(2, 2);
-        mainLayout.addView(gridLayout);
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        mainLayout.addView(linearLayout);
 
         buttons.put("My Paycheck",new Button(this));
         buttons.put("My Salary",new Button(this));
         buttons.put("My Rate",new Button(this));
-        buttons.put("My Setting",new Button(this));
+        //buttons.put("My Setting",new Button(this));
 
         buttons.get("My Paycheck").setText("My Paycheck");
         buttons.get("My Salary").setText("My Salary");
         buttons.get("My Rate").setText("My Rate");
-        buttons.get("My Setting").setText("My Setting");
+        //buttons.get("My Setting").setText("My Setting");
 
 
         for (Button button : buttons.values())
         {
-            button.setLayoutParams(new ViewGroup.LayoutParams(400,400));
+            button.setLayoutParams(
+                    new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT, GridLayout.LayoutParams.WRAP_CONTENT));
             button.setAllCaps(false);
             button.setOnClickListener(this);
-            gridLayout.addView(button);
+            //button.setPadding(100,100,100,100);
+            button.setBackgroundResource(R.color.colorPrimary);
+            button.setTextColor(getResources().getColor(R.color.white));
+            linearLayout.addView(button);
         }
 
 
     }
 
-
-    private GridLayout createGridLayout(int colsNum, int rowsNum) {
-
-        GridLayout gridLayout = new GridLayout(this);
-        gridLayout.setColumnCount(colsNum);
-        gridLayout.setRowCount(rowsNum);
-        gridLayout.setOrientation(GridLayout.HORIZONTAL);
-
-
-/*        LinearLayout.LayoutParams layoutParams =
-                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT);
-        LinearLayout parentRelativeLayout = new LinearLayout(this);
-        parentRelativeLayout.setLayoutParams(layoutParams);
-        parentRelativeLayout.setGravity(Gravity.CENTER);
-        parentRelativeLayout.addView(gridLayout);*/
-
-        return gridLayout;
-    }
 
     // check this function
     /*
@@ -84,12 +72,12 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         finish();
     }*/// check
 
-    public void goToSetting() {
+/*    public void goToSetting() {
         Intent intent = new Intent(this, SettingActivity.class);
         intent.putExtra("user", user);
         startActivity(intent);
         finish();
-    }
+    }*/
 
     public void goToRate() {
         Intent intent = new Intent(this, RateActivity.class);
@@ -122,8 +110,6 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                 goToSalary();
             } if (clickedButton == buttons.get("My Rate")) {
                 goToRate();
-            } if (clickedButton == buttons.get("My Setting")) {
-                goToSetting();
             }
         }
     }
