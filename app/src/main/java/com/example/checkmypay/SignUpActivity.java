@@ -50,6 +50,16 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         Map<String, Object> user = new HashMap<>();
         user.put("email", this.user.getEmail());
         user.put("password", this.user.getPassword());
+        user.put("hourlyWage", "");
+        user.put("startDate", "");
+        user.put("endDate", "");
+        user.put("fromHour", "");
+        user.put("fromMinute", "");
+        user.put("toHour", "");
+        user.put("toMinute", "");
+        user.put("providentFund", "");
+        user.put("advancedStudyFund", "");
+        user.put("credits", "");
 
         usersCollection.document(this.user.getEmail()).set(user);
 
