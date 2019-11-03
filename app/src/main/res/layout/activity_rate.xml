@@ -21,7 +21,7 @@
     <GridLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:rowCount="5"
+        android:rowCount="3"
         android:columnCount="2" >
 
         <TextView
@@ -33,7 +33,7 @@
 
         <EditText
             android:id="@+id/rate_input_hourly_wage"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <TextView
@@ -46,7 +46,8 @@
         <EditText
             android:id="@+id/rate_input_start_date"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_rate_startDate"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -58,35 +59,13 @@
         <EditText
             android:id="@+id/rate_input_end_date"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="casual"
-            android:text="Overtime: "
-            android:textColor="@color/colorPrimary" />
-
-        <EditText
-            android:id="@+id/rate_input_overtime"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="casual"
-            android:text="Credits: "
-            android:textColor="@color/colorPrimary" />
-
-        <EditText
-            android:id="@+id/rate_input_credits"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:hint="@string/hint_rate_endDate" />
 
     </GridLayout>
 
     <TextView
+        android:id="@+id/id_check"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/fab_margin"
@@ -97,37 +76,99 @@
         android:textStyle="bold"
         android:textColor="@color/colorPrimary" />
 
-    <GridLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:rowCount="2"
-        android:columnCount="2" >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="casual"
-            android:text="From Hour: "
-            android:textColor="@color/colorPrimary" />
+            <TextView
+                android:id="@+id/txt_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="casual"
+                android:text="From: "
+                android:textColor="@color/colorPrimary" />
 
-        <EditText
-            android:id="@+id/rate_input_from_hour"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/txt_from_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/id_check"
+                android:layout_toRightOf="@+id/txt_from"
+                android:fontFamily="casual"
+                android:text="hour: "
+                android:textColor="@color/colorPrimary" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="casual"
-            android:text="To Hour: "
-            android:textColor="@color/colorPrimary" />
+            <EditText
+                android:id="@+id/rate_input_from_hour"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/cardview_compat_inset_shadow"
+                android:layout_below="@+id/id_check"
+                android:layout_toRightOf="@+id/txt_from_hour"
+                android:inputType="time"/>
 
-        <EditText
-            android:id="@+id/rate_input_to_hour"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/txt_from_minute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/id_check"
+                android:layout_toRightOf="@+id/rate_input_from_hour"
+                android:fontFamily="casual"
+                android:text="minute: "
+                android:textColor="@color/colorPrimary" />
 
-    </GridLayout>
+            <EditText
+                android:id="@+id/rate_input_from_minute"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/cardview_compat_inset_shadow"
+                android:layout_below="@+id/id_check"
+                android:layout_toRightOf="@+id/txt_from_minute"
+                android:inputType="time" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="casual"
+                android:text="To: "
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="casual"
+                android:text="hour: "
+                android:textColor="@color/colorPrimary" />
+
+            <EditText
+                android:id="@+id/rate_input_to_hour"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/cardview_compat_inset_shadow"
+                android:inputType="time"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="casual"
+                android:text="minute: "
+                android:textColor="@color/colorPrimary" />
+
+            <EditText
+                android:id="@+id/rate_input_to_minute"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/cardview_compat_inset_shadow"
+                android:inputType="time"/>
+
+        </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -143,7 +184,7 @@
     <GridLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:rowCount="2"
+        android:rowCount="3"
         android:columnCount="2" >
 
         <TextView
@@ -156,7 +197,8 @@
         <EditText
             android:id="@+id/rate_input_provident_funds"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_provident_funds"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -168,7 +210,21 @@
         <EditText
             android:id="@+id/rate_input_advanced_study_fund"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_advanced_study_fund" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="casual"
+            android:text="Credits: "
+            android:textColor="@color/colorPrimary" />
+
+        <EditText
+            android:id="@+id/rate_input_credits"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_credits" />
 
     </GridLayout>
 

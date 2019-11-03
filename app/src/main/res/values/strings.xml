@@ -7,4 +7,9 @@
     <string name="title_activity_salary">Salary Activity</string>
     <string name="txt_shabbat_hours"><u>Shabbat Hours</u>.</string>
     <string name="txt_retirement"><u>Retirement</u>.</string>
+    <string name="hint_rate_startDate">Day to begin counting</string>
+    <string name="hint_rate_endDate">Day to stop counting</string>
+    <string name="hint_provident_funds">Precent of provident funds</string>
+    <string name="hint_advanced_study_fund">Precent of advanced study fund</string>
+    <string name="hint_credits">Number of credits</string>
 </resources>
