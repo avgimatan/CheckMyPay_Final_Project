@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
@@ -23,7 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -104,34 +106,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         isUserExist = true;
+                        return;
                     } else {
                         Toast.makeText(MainActivity.this, "This user is not in DB!", Toast.LENGTH_SHORT).show();
                         isUserExist = false;
+                        return;
                     }
                 } else {
                     Toast.makeText(MainActivity.this, "get failed with " + task.getException(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
-
-        /*db.collection("Users").whereEqualTo("email", this.user.getEmail())
-                .limit(1).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            //boolean isEmpty = task.getResult().isEmpty();
-                            if(task.getResult().isEmpty()) {
-                                Toast.makeText(MainActivity.this, "This user is not in DB!", Toast.LENGTH_SHORT).show();
-                                isUserExist = false;
-                            }
-                            else {
-                                isUserExist = true;
-                            }
-                        }
-                    }
-                });*/
     }
 
     public void checkIfValidPassword() {
@@ -145,10 +130,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (document.exists()) {
                         if(document.get("password").equals(user.getPassword())) {
                             isValidPassword = true;
+                            return;
                         }
                         else {
                             Toast.makeText(MainActivity.this, "Invalid password!", Toast.LENGTH_SHORT).show();
                             isValidPassword = false;
+                            return;
                         }
                     } else {
                         Toast.makeText(MainActivity.this, "This user is not in DB!", Toast.LENGTH_SHORT).show();
@@ -194,5 +181,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent.putExtra("user", user);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        return false;
     }
 }

@@ -55,9 +55,9 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
         input_credits = findViewById(R.id.rate_input_credits);
         btn_saveDetails = findViewById(R.id.rate_btn_save_details);
 
-        getDetails();
-
         btn_saveDetails.setOnClickListener(this);
+
+        getDetails();
 
     }
 
@@ -69,35 +69,35 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        if(!document.get("hourlyWage").equals("") && !document.get("hourlyWage").equals(null) && document.get("hourlyWage").equals(user.getHourlyWage())) {
-                            input_wage.setText(String.valueOf(user.getHourlyWage()));
+                        if(!document.get("hourlyWage").equals("") && !document.get("hourlyWage").equals(null)) {
+                            input_wage.setText(document.get("hourlyWage").toString());
                         }
-                        if(!document.get("startDate").equals("") && !document.get("startDate").equals(null) && document.get("startDate").equals(user.getStartDate())) {
-                            input_startDate.setText(String.valueOf(user.getStartDate()));
+                        if(!document.get("startDate").equals("") && !document.get("startDate").equals(null)) {
+                            input_startDate.setText(document.get("startDate").toString());
                         }
-                        if(!document.get("endDate").equals("") && !document.get("endDate").equals(null) && document.get("endDate").equals(user.getEndDate())) {
-                            input_endDate.setText(String.valueOf(user.getEndDate()));
+                        if(!document.get("endDate").equals("") && !document.get("endDate").equals(null)) {
+                            input_endDate.setText(document.get("endDate").toString());
                         }
-                        if(!document.get("fromHour").equals("") && !document.get("fromHour").equals(null) && document.get("fromHour").equals(user.getShabbatFromHour())) {
-                            input_fromHour.setText(String.valueOf(user.getShabbatFromHour()));
+                        if(!document.get("fromHour").equals("") && !document.get("fromHour").equals(null)) {
+                            input_fromHour.setText(document.get("fromHour").toString());
                         }
-                        if(!document.get("fromMinute").equals("") && !document.get("fromMinute").equals(null) && document.get("fromMinute").equals(user.getShabbatFromMin())) {
-                            input_fromMinute.setText(String.valueOf(user.getShabbatFromMin()));
+                        if(!document.get("fromMinute").equals("") && !document.get("fromMinute").equals(null)) {
+                            input_fromMinute.setText(document.get("fromMinute").toString());
                         }
-                        if(!document.get("toHour").equals("") && !document.get("toHour").equals(null) && document.get("toHour").equals(user.getShabbatToHour())) {
-                            input_toHour.setText(String.valueOf(user.getShabbatToHour()));
+                        if(!document.get("toHour").equals("") && !document.get("toHour").equals(null)) {
+                            input_toHour.setText(document.get("toHour").toString());
                         }
-                        if(!document.get("toMinute").equals("") && !document.get("toMinute").equals(null) && document.get("toMinute").equals(user.getShabbatToMin())) {
-                            input_toMinute.setText(String.valueOf(user.getShabbatToMin()));
+                        if(!document.get("toMinute").equals("") && !document.get("toMinute").equals(null)) {
+                            input_toMinute.setText(document.get("toMinute").toString());
                         }
-                        if(!document.get("providentFund").equals("") && !document.get("providentFund").equals(null) && document.get("providentFund").equals(user.getProvidentFund())) {
-                            input_providentFund.setText(String.valueOf(user.getProvidentFund()));
+                        if(!document.get("providentFund").equals("") && !document.get("providentFund").equals(null)) {
+                            input_providentFund.setText(document.get("providentFund").toString());
                         }
-                        if(!document.get("advancedStudyFund").equals("") && !document.get("advancedStudyFund").equals(null) && document.get("advancedStudyFund").equals(user.getAdvancedStudyFund())) {
-                            input_advancedStudyFund.setText(String.valueOf(user.getAdvancedStudyFund()));
+                        if(!document.get("advancedStudyFund").equals("") && !document.get("advancedStudyFund").equals(null)) {
+                            input_advancedStudyFund.setText(document.get("advancedStudyFund").toString());
                         }
-                        if(!document.get("credits").equals("") && !document.get("credits").equals(null) && document.get("credits").equals(user.getCredits())) {
-                            input_credits.setText(String.valueOf(user.getCredits()));
+                        if(!document.get("credits").equals("") && !document.get("credits").equals(null)) {
+                            input_credits.setText(document.get("credits").toString());
                         }
                     }
                 } else {
@@ -113,22 +113,30 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
         Map<String, Object> details = new HashMap<>();
         details.put("email", this.user.getEmail());
         details.put("password", this.user.getPassword());
-        details.put("hourlyWage", input_wage);
-        details.put("startDate", input_startDate);
-        details.put("endDate", input_endDate);
-        details.put("fromHour", input_fromHour);
-        details.put("fromMinute", input_fromMinute);
-        details.put("toHour", input_toHour);
-        details.put("toMinute", input_toMinute);
-        details.put("providentFund", input_providentFund);
-        details.put("advancedStudyFund", input_advancedStudyFund);
-        details.put("credits", input_credits);
+        details.put("hourlyWage", input_wage.getText().toString());
+        details.put("startDate", input_startDate.getText().toString());
+        details.put("endDate", input_endDate.getText().toString());
+        details.put("fromHour", input_fromHour.getText().toString());
+        details.put("fromMinute", input_fromMinute.getText().toString());
+        details.put("toHour", input_toHour.getText().toString());
+        details.put("toMinute", input_toMinute.getText().toString());
+        details.put("providentFund", input_providentFund.getText().toString());
+        details.put("advancedStudyFund", input_advancedStudyFund.getText().toString());
+        details.put("credits", input_credits.getText().toString());
 
         users.document(user.getEmail()).set(details);
     }
 
     @Override
     public void onClick(View v) {
+        if(Integer.parseInt(input_startDate.getText().toString()) < 1 || Integer.parseInt(input_startDate.getText().toString()) >31) {
+            Toast.makeText(RateActivity.this, "Start Date have to be between 1 -31!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(Integer.parseInt(input_endDate.getText().toString()) < 1 || Integer.parseInt(input_endDate.getText().toString()) >31) {
+            Toast.makeText(RateActivity.this, "End Date have to be between 1 -31!", Toast.LENGTH_SHORT).show();
+            return;
+        }
         writeDetailsToDB();
         goToMenuActivity();
     }

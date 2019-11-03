@@ -1,8 +1,20 @@
 package com.example.checkmypay;
 
-import com.google.type.Date;
-
 import java.io.Serializable;
+
+// user json:
+/**
+ *      hourlyWage
+ *      startDate
+ *      endDate
+ *      fromHour
+ *      fromMinute
+ *      toHour
+ *      toMinute
+ *      providentFund
+ *      advancedStudyFund
+ *      credits
+ */
 
 public class User implements Serializable {
     private String email, password;
