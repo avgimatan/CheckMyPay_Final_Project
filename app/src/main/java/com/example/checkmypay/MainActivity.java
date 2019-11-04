@@ -18,6 +18,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -96,8 +101,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    // check this function
     public void checkIfUserInDB() {
 
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getInstance().getReference();
+
+        ref.child("users").child("username").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // use "username" already exists
+                    // Let the user know he needs to pick another username.
+                } else {
+                    // User does not exist. NOW call createUserWithEmailAndPassword
+                    mAuth.createUserWithPassword();
+                    // Your previous code here.
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+/*    public void checkIfUserInDB() {
+
+        // user document == user input from txt area
         DocumentReference userDocument = db.collection("Users").document(user.getEmail());
         userDocument.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -117,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         });
-    }
+    }*/
 
     public void checkIfValidPassword() {
 
@@ -169,6 +203,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void initUser(EditText email, EditText password) {
         this.user = new User(email.getText().toString(), password.getText().toString());
     }
+
 
     public void goToSignUp() {
         Intent intent = new Intent(this, SignUpActivity.class);
