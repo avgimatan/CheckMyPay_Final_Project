@@ -27,12 +27,13 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseFirestore db;
 
     private EditText email, password;
     private TextView btn_signUp;
@@ -45,17 +46,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initFirebase();
+
         email = findViewById(R.id.input_email);
         password = findViewById(R.id.input_password);
         btn_signUp = findViewById(R.id.button_sign_up);
         btn_login = findViewById(R.id.btn_login);
-        btn_login.setOnClickListener(this);
+
         btn_signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 goToSignUp();
             }
         });
+
+        btn_login.setOnClickListener(this);
     }
 
     public boolean emailValidation() {
@@ -102,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     // check this function
-    public void checkIfUserInDB() {
+    /*public void checkIfUserInDB() {
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getInstance().getReference();
@@ -127,12 +132,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+    }*/
+
+    public void initFirebase() {
+        db = FirebaseFirestore.getInstance();
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setTimestampsInSnapshotsEnabled(true)
+                .build();
+        db.setFirestoreSettings(settings);
     }
 
-/*    public void checkIfUserInDB() {
+    public void checkIfUserInDB() {
 
         // user document == user input from txt area
-        DocumentReference userDocument = db.collection("Users").document(user.getEmail());
+        DocumentReference userDocument = db.collection("Users").document(email.getText().toString());
         userDocument.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -151,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         });
-    }*/
+    }
 
     public void checkIfValidPassword() {
 
