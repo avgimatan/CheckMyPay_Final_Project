@@ -63,6 +63,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
             button.setOnClickListener(this);
             button.setBackgroundResource(R.color.colorPrimary);
             button.setTextColor(getResources().getColor(R.color.white));
+            // TODO: set font for each button
             linearLayout.addView(button);
         }
 
