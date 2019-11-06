@@ -23,6 +23,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +33,7 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
 
     private User user;
 
-    private EditText input_wage, input_startDate, input_endDate, input_credits, input_fromHour,
+    private EditText input_wage, input_startDate, input_endDate, input_credits, input_fromHour, input_travelFee,
             input_fromMinute, input_toHour, input_toMinute, input_providentFund, input_advancedStudyFund;
 
     private Button btn_saveDetails;
@@ -53,6 +54,7 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
         input_providentFund = findViewById(R.id.rate_input_provident_funds);
         input_advancedStudyFund = findViewById(R.id.rate_input_advanced_study_fund);
         input_credits = findViewById(R.id.rate_input_credits);
+        input_travelFee = findViewById(R.id.rate_input_travel_fee);
         btn_saveDetails = findViewById(R.id.rate_btn_save_details);
 
         btn_saveDetails.setOnClickListener(this);
@@ -71,6 +73,9 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
                     if (document.exists()) {
                         if(!document.get("hourlyWage").equals("") && !document.get("hourlyWage").equals(null)) {
                             input_wage.setText(document.get("hourlyWage").toString());
+                        }
+                        if(!document.get("travelFee").equals("") && !document.get("travelFee").equals(null)) {
+                            input_travelFee.setText(document.get("travelFee").toString());
                         }
                         if(!document.get("startDate").equals("") && !document.get("startDate").equals(null)) {
                             input_startDate.setText(document.get("startDate").toString());
@@ -114,6 +119,7 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
         details.put("email", this.user.getEmail());
         details.put("password", this.user.getPassword());
         details.put("hourlyWage", input_wage.getText().toString());
+        details.put("travelFee", input_travelFee.getText().toString());
         details.put("startDate", input_startDate.getText().toString());
         details.put("endDate", input_endDate.getText().toString());
         details.put("fromHour", input_fromHour.getText().toString());
@@ -123,6 +129,8 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
         details.put("providentFund", input_providentFund.getText().toString());
         details.put("advancedStudyFund", input_advancedStudyFund.getText().toString());
         details.put("credits", input_credits.getText().toString());
+        details.put("shifts", this.user.getShifts());
+        details.put("paychecks", this.user.getPaychecks());
 
         users.document(user.getEmail()).set(details);
     }
@@ -141,13 +149,25 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
 
         String email = user.getEmail();
         String password = user.getPassword();
+        ArrayList<Shift> shifts = user.getShifts();
+        Map<String, Paycheck> paychecks = user.getPaychecks();
 
-        user = new User(email, password, Float.parseFloat(input_wage.getText().toString()), Float.parseFloat(input_providentFund.getText().toString()),
-                Float.parseFloat(input_advancedStudyFund.getText().toString()), Float.parseFloat(input_credits.getText().toString()),
-                Integer.parseInt(input_startDate.getText().toString()), Integer.parseInt(input_endDate.getText().toString()),
-                Integer.parseInt(input_fromHour.getText().toString()), Integer.parseInt(input_toHour.getText().toString()),
-                Integer.parseInt(input_fromMinute.getText().toString()), Integer.parseInt(input_toMinute.getText().toString()),
-                Float.parseFloat(input_travelFee.getText().toString()));
+        user = new User(email,
+                password,
+                Float.parseFloat(input_travelFee.getText().toString()),
+                Float.parseFloat(input_wage.getText().toString()),
+                Float.parseFloat(input_providentFund.getText().toString()),
+                Float.parseFloat(input_advancedStudyFund.getText().toString()),
+                Float.parseFloat(input_credits.getText().toString()),
+                Integer.parseInt(input_startDate.getText().toString()),
+                Integer.parseInt(input_endDate.getText().toString()),
+                Integer.parseInt(input_fromHour.getText().toString()),
+                Integer.parseInt(input_toHour.getText().toString()),
+                Integer.parseInt(input_fromMinute.getText().toString()),
+                Integer.parseInt(input_toMinute.getText().toString()),
+                shifts,
+                paychecks);
+
         goToMenuActivity();
     }
 

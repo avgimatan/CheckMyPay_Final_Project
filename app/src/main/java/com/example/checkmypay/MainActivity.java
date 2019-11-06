@@ -31,9 +31,12 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
-    private FirebaseFirestore db;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private EditText email, password;
     private TextView btn_signUp;
@@ -116,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         user.setHourlyWage(Float.parseFloat(document.get("hourlyWage").toString()));
+                        user.setTravelFee(Float.parseFloat(document.get("travelFee").toString()));
                         user.setStartDate(Integer.parseInt(document.get("startDate").toString()));
                         user.setEndDate(Integer.parseInt(document.get("endDate").toString()));
                         user.setShabbatFromHour(Integer.parseInt(document.get("fromHour").toString()));
@@ -125,14 +129,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         user.setProvidentFund(Float.parseFloat(document.get("providentFund").toString()));
                         user.setAdvancedStudyFund(Float.parseFloat(document.get("advancedStudyFund").toString()));
                         user.setCredits(Float.parseFloat(document.get("credits").toString()));
-                        //  TODO:
-                        //      user.setShifts(document.get("shifts").toString());
-                        //      user.setPaychecks(document.get("paychecks"));
+                        user.setShifts((ArrayList<Shift>) document.get("shifts"));
+                        user.setPaychecks((HashMap<String, Paycheck>) document.get("paychecks"));
 
                         // read all attributes of user in DB
                     }
                 } else {
-                    Toast.makeText(RateActivity.this, "failed with " + task.getException(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "failed with " + task.getException(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -167,7 +170,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }*/
 
     public void initFirebase() {
-        db = FirebaseFirestore.getInstance();
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setTimestampsInSnapshotsEnabled(true)
                 .build();

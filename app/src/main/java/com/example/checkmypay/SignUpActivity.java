@@ -17,6 +17,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,16 +51,19 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         Map<String, Object> user = new HashMap<>();
         user.put("email", this.user.getEmail());
         user.put("password", this.user.getPassword());
-        user.put("hourlyWage", "");
-        user.put("startDate", "");
-        user.put("endDate", "");
-        user.put("fromHour", "");
-        user.put("fromMinute", "");
-        user.put("toHour", "");
-        user.put("toMinute", "");
-        user.put("providentFund", "");
-        user.put("advancedStudyFund", "");
-        user.put("credits", "");
+        user.put("hourlyWage", 0);
+        user.put("travelFee", 0);
+        user.put("startDate", 0);
+        user.put("endDate", 0);
+        user.put("fromHour", 0);
+        user.put("fromMinute", 0);
+        user.put("toHour", 0);
+        user.put("toMinute", 0);
+        user.put("providentFund", 0);
+        user.put("advancedStudyFund", 0);
+        user.put("credits", 0);
+        user.put("shifts", new ArrayList<Shift>());
+        user.put("paychecks", new HashMap<String, Paycheck>());
 
         usersCollection.document(this.user.getEmail()).set(user);
 

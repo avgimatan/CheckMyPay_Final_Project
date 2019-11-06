@@ -38,13 +38,14 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    // Constructor without paychecks and shifts
-    public User(String email, String password, float hourlyWage, float providentFund, float advancedStudyFund,
+
+    public User(String email, String password, float hourlyWage, float travelFee, float providentFund, float advancedStudyFund,
                 float credits, int startDate, int endDate, int shabbatFromHour, int shabbatToHour, int shabbatFromMin,
-                int shabbatToMin, float travelFee) {
+                int shabbatToMin, ArrayList<Shift> shifts, Map<String, Paycheck> paychecks) {
         this.email = email;
         this.password = password;
         this.hourlyWage = hourlyWage;
+        this.travelFee = travelFee;
         this.providentFund = providentFund;
         this.advancedStudyFund = advancedStudyFund;
         this.credits = credits;
@@ -54,7 +55,8 @@ public class User implements Serializable {
         this.shabbatToHour = shabbatToHour;
         this.shabbatFromMin = shabbatFromMin;
         this.shabbatToMin = shabbatToMin;
-        this.travelFee = travelFee;
+        this.shifts = shifts;
+        this.paychecks = paychecks;
     }
 
     public void setEmail(String email) {
