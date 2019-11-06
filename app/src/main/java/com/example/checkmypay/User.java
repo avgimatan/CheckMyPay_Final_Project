@@ -1,9 +1,13 @@
 package com.example.checkmypay;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Map;
 
 // user json:
 /**
+ *      email
+ *      password
  *      hourlyWage
  *      startDate
  *      endDate
@@ -14,12 +18,17 @@ import java.io.Serializable;
  *      providentFund
  *      advancedStudyFund
  *      credits
+ *
+ *      ArrayList <Shift> shifts
+ *      Map <String(Date month and year), Paycheck> paychecks
  */
 
 public class User implements Serializable {
     private String email, password;
-    private float hourlyWage, providentFund, advancedStudyFund, credits;
+    private float hourlyWage, providentFund, advancedStudyFund, credits, travelFee;
     private int startDate, endDate, shabbatFromHour, shabbatToHour, shabbatFromMin, shabbatToMin;
+    private ArrayList<Shift> shifts;
+    private Map<String, Paycheck> paychecks;
 
     public User() {
     }
@@ -27,6 +36,25 @@ public class User implements Serializable {
     public User(String email, String password) {
         this.email = email;
         this.password = password;
+    }
+
+    // Constructor without paychecks and shifts
+    public User(String email, String password, float hourlyWage, float providentFund, float advancedStudyFund,
+                float credits, int startDate, int endDate, int shabbatFromHour, int shabbatToHour, int shabbatFromMin,
+                int shabbatToMin, float travelFee) {
+        this.email = email;
+        this.password = password;
+        this.hourlyWage = hourlyWage;
+        this.providentFund = providentFund;
+        this.advancedStudyFund = advancedStudyFund;
+        this.credits = credits;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.shabbatFromHour = shabbatFromHour;
+        this.shabbatToHour = shabbatToHour;
+        this.shabbatFromMin = shabbatFromMin;
+        this.shabbatToMin = shabbatToMin;
+        this.travelFee = travelFee;
     }
 
     public void setEmail(String email) {
@@ -85,6 +113,18 @@ public class User implements Serializable {
         this.shabbatToMin = shabbatToMin;
     }
 
+    public void setTravelFee(float travelFee) {
+        this.travelFee = travelFee;
+    }
+
+    public void setShifts(ArrayList<Shift> shifts) {
+        this.shifts = shifts;
+    }
+
+    public void setPaychecks(Map<String, Paycheck> paychecks) {
+        this.paychecks = paychecks;
+    }
+
     public float getHourlyWage() {
         return hourlyWage;
     }
@@ -123,5 +163,17 @@ public class User implements Serializable {
 
     public int getShabbatToMin() {
         return shabbatToMin;
+    }
+
+    public float getTravelFee() {
+        return travelFee;
+    }
+
+    public ArrayList<Shift> getShifts() {
+        return shifts;
+    }
+
+    public Map<String, Paycheck> getPaychecks() {
+        return paychecks;
     }
 }

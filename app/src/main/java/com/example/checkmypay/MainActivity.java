@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(isUserExist) {
             checkIfValidPassword();     // if the user exist, check the password
             if(isValidPassword) {
+                readUserFromDB();
                 goToMenuActivity();     // if all right, connect and go to MenuActivity
             }
             else {
@@ -104,6 +105,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;     // return if the user is not exist
         }
 
+    }
+
+    private void readUserFromDB() {
+        DocumentReference userDocument = db.collection("Users").document(user.getEmail());
+        userDocument.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        user.setHourlyWage(Float.parseFloat(document.get("hourlyWage").toString()));
+                        user.setStartDate(Integer.parseInt(document.get("startDate").toString()));
+                        user.setEndDate(Integer.parseInt(document.get("endDate").toString()));
+                        user.setShabbatFromHour(Integer.parseInt(document.get("fromHour").toString()));
+                        user.setShabbatFromMin(Integer.parseInt(document.get("fromMinute").toString()));
+                        user.setShabbatToHour(Integer.parseInt(document.get("toHour").toString()));
+                        user.setShabbatToMin(Integer.parseInt(document.get("toMinute").toString()));
+                        user.setProvidentFund(Float.parseFloat(document.get("providentFund").toString()));
+                        user.setAdvancedStudyFund(Float.parseFloat(document.get("advancedStudyFund").toString()));
+                        user.setCredits(Float.parseFloat(document.get("credits").toString()));
+                        //  TODO:
+                        //      user.setShifts(document.get("shifts").toString());
+                        //      user.setPaychecks(document.get("paychecks"));
+
+                        // read all attributes of user in DB
+                    }
+                } else {
+                    Toast.makeText(RateActivity.this, "failed with " + task.getException(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     // check this function

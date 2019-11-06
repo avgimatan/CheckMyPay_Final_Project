@@ -138,6 +138,16 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
         writeDetailsToDB();
+
+        String email = user.getEmail();
+        String password = user.getPassword();
+
+        user = new User(email, password, Float.parseFloat(input_wage.getText().toString()), Float.parseFloat(input_providentFund.getText().toString()),
+                Float.parseFloat(input_advancedStudyFund.getText().toString()), Float.parseFloat(input_credits.getText().toString()),
+                Integer.parseInt(input_startDate.getText().toString()), Integer.parseInt(input_endDate.getText().toString()),
+                Integer.parseInt(input_fromHour.getText().toString()), Integer.parseInt(input_toHour.getText().toString()),
+                Integer.parseInt(input_fromMinute.getText().toString()), Integer.parseInt(input_toMinute.getText().toString()),
+                Float.parseFloat(input_travelFee.getText().toString()));
         goToMenuActivity();
     }
 
