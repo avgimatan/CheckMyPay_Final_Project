@@ -271,4 +271,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         return false;
     }
+
 }

@@ -178,4 +178,22 @@ public class User implements Serializable {
     public Map<String, Paycheck> getPaychecks() {
         return paychecks;
     }
+
+    public String[] getMonthsPaychecks() {
+        String[] months;       // = new String[this.paychecks.size()];
+        if(this.paychecks != null)
+            months = (String[]) this.paychecks.keySet().toArray();
+        else
+            months = new String[0];
+        return months;
+    }
+
+    public String[] getYearsPaychecks() {
+        String[] years;
+        if(this.paychecks != null)
+            years = (String[]) this.paychecks.values().toArray();
+        else
+            years = new String[0];
+        return years;
+    }
 }
