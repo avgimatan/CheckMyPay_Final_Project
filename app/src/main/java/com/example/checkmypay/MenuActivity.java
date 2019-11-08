@@ -46,12 +46,12 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         buttons.put("My Paycheck",new Button(this));
         buttons.put("My Salary",new Button(this));
         buttons.put("My Rate",new Button(this));
-        //buttons.put("My Setting",new Button(this));
+        buttons.put("My Shifts",new Button(this));
 
         buttons.get("My Paycheck").setText("My Paycheck");
         buttons.get("My Salary").setText("My Salary");
         buttons.get("My Rate").setText("My Rate");
-        //buttons.get("My Setting").setText("My Setting");
+        buttons.get("My Shifts").setText("My Shifts");
 
         for (Button button : buttons.values())
         {
@@ -108,6 +108,8 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                 goToActivity(SalaryActivity.class);
             } if (clickedButton == buttons.get("My Rate")) {
                 goToActivity(RateActivity.class);
+            } if (clickedButton == buttons.get("My Shifts")) {
+                goToActivity(ShiftActivity.class);
             }
         }
     }

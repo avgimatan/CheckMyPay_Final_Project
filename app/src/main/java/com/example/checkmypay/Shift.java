@@ -5,6 +5,7 @@ class Shift {
     private int day, month, beginHour, endHour, beginMinute, endMinute;
     private float totalHours, shiftProfit;
 
+    // not full constructor
     public Shift(int day, int month, int beginHour, int endHour,
                  int beginMinute, int endMinute, float totalHours) {
         this.day = day;
@@ -44,6 +45,7 @@ class Shift {
         this.totalHours = totalHours;
     }
 
+    // calc the profit fore each shift using calender
     public void setShiftProfit(float shiftProfit) {
         this.shiftProfit = shiftProfit;
     }

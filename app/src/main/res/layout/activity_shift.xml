@@ -5,15 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/main_shift_layout"
+    android:orientation="vertical"
     tools:context=".ShiftActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="My Shifts"
+        android:gravity="center"
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="casual"
+        android:textSize="@android:dimen/app_icon_size"/>
 
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/shift_gridlayout">
 
-
     </GridLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/shift_updatedetails_btn"
+        android:fontFamily="casual"
+        android:textAllCaps="false"
+        android:gravity="center"
+        android:layout_gravity="bottom"
+        android:background="@color/colorPrimary"
+        android:text="Updated Details"
+        android:textColor="@color/white"
+        />
 
 </LinearLayout>
