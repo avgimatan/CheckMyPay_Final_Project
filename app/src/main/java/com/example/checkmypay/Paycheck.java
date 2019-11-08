@@ -1,10 +1,12 @@
 package com.example.checkmypay;
 
+import java.io.Serializable;
+
 /**
  * key: "month#year"
  */
 
-class Paycheck {
+class Paycheck implements Serializable {
 
     private String key;
     private float baseWage = 0, travelFee = 0, grossWage = 0, nationalInsurance = 0, incomeTax = 0 ,healthInsurance = 0, newWage = 0;

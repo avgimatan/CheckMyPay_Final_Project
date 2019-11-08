@@ -1,7 +1,11 @@
 package com.example.checkmypay;
 
+import android.widget.Button;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 // user json:
@@ -23,12 +27,15 @@ import java.util.Map;
  *      Map <String(Date month and year), Paycheck> paychecks
  */
 
+// TODO: Remeber every new paycheck (new month) initialize the shifts !!
+
 public class User implements Serializable {
     private String email, password;
     private float hourlyWage, providentFund, advancedStudyFund, credits, travelFee;
     private int startDate, endDate, shabbatFromHour, shabbatToHour, shabbatFromMin, shabbatToMin;
     private ArrayList<Shift> shifts;
     private Map<String, Paycheck> paychecks;
+    private Paycheck currentPaycheck;
 
     public User() {
     }
@@ -36,6 +43,14 @@ public class User implements Serializable {
     public User(String email, String password) {
         this.email = email;
         this.password = password;
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        int month = c.get(Calendar.MONTH);
+        int year = c.get(Calendar.YEAR);
+
+        this.currentPaycheck = new Paycheck(month + "#" + year);
+
     }
 
 
@@ -57,6 +72,13 @@ public class User implements Serializable {
         this.shabbatToMin = shabbatToMin;
         this.shifts = shifts;
         this.paychecks = paychecks;
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        int month = c.get(Calendar.MONTH);
+        int year = c.get(Calendar.YEAR);
+
+        this.currentPaycheck = new Paycheck(month + "#" + year);
     }
 
     public void setEmail(String email) {
@@ -127,6 +149,10 @@ public class User implements Serializable {
         this.paychecks = paychecks;
     }
 
+    public void setCurrentPaycheck(Paycheck currentPaycheck) {
+        this.currentPaycheck = currentPaycheck;
+    }
+
     public float getHourlyWage() {
         return hourlyWage;
     }
@@ -171,18 +197,31 @@ public class User implements Serializable {
         return travelFee;
     }
 
+    // TODO: check it
     public ArrayList<Shift> getShifts() {
-        return shifts;
+        //if(this.shifts != null)
+            return shifts;
+        //else
+            //return new ArrayList<Shift>();
+    }
+
+    public Paycheck getCurrentPaycheck() {
+        return currentPaycheck;
     }
 
     public Map<String, Paycheck> getPaychecks() {
         return paychecks;
     }
 
+    // TODO: month can not be duplicate
     public String[] getMonthsPaychecks() {
-        String[] months;       // = new String[this.paychecks.size()];
-        if(this.paychecks != null)
-            months = (String[]) this.paychecks.keySet().toArray();
+        String[] months = new String[paychecks.size()];       // = new String[this.paychecks.size()];
+        String[] keys = (String[]) this.paychecks.keySet().toArray();
+        if(this.paychecks != null) {
+            for(int i=0; i<keys.length; i++) {
+                months[i] = keys[i].split("#")[0];
+            }
+        }
         else
             months = new String[0];
         return months;
@@ -190,10 +229,18 @@ public class User implements Serializable {
 
     public String[] getYearsPaychecks() {
         String[] years;
-        if(this.paychecks != null)
-            years = (String[]) this.paychecks.values().toArray();
-        else
-            years = new String[0];
+        String[] keys;
+        if(this.paychecks != null) {
+            years = new String[paychecks.size()];
+            keys = (String[]) this.paychecks.keySet().toArray();
+            for(int i=0; i<keys.length; i++) {
+                years[i] = keys[i].split("#")[1];
+            }
+        }
+        else {
+            years = new String[1];
+            years[0] = "empty";
+        }
         return years;
     }
 }
