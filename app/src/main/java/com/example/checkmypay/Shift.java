@@ -3,7 +3,7 @@ package com.example.checkmypay;
 class Shift {
 
     private int day, month, beginHour, endHour, beginMinute, endMinute;
-    private float totalHours;
+    private float totalHours, shiftProfit;
 
     public Shift(int day, int month, int beginHour, int endHour,
                  int beginMinute, int endMinute, float totalHours) {
@@ -44,6 +44,10 @@ class Shift {
         this.totalHours = totalHours;
     }
 
+    public void setShiftProfit(float shiftProfit) {
+        this.shiftProfit = shiftProfit;
+    }
+
     public int getDay() {
         return day;
     }
@@ -70,5 +74,9 @@ class Shift {
 
     public float getTotalHours() {
         return totalHours;
+    }
+
+    public float getShiftProfit() {
+        return shiftProfit;
     }
 }
