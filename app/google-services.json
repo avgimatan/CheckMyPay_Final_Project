@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "639608576567-4o73ifr9ffbuello1u59cio7e27ni1if.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.checkmypay",
+            "certificate_hash": "3bd6f167bd0efd1d6fb6ea8b80b868549a261201"
+          }
+        },
+        {
           "client_id": "639608576567-1o0sesmca91je5n9icqk7nv0toah71tn.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class PaycheckActivity extends AppCompatActivity {
 
@@ -29,7 +30,7 @@ public class PaycheckActivity extends AppCompatActivity {
         month_spinner = findViewById(R.id.paycheck_month_spinner);
         gridLayout = findViewById(R.id.paycheck_grid);
 
-        String[] years = user.getYearsPaychecks();
+        List<String> years = user.getYearsPaychecks();
         //String[] months = user.getMonthsPaychecks();
         String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 
@@ -52,21 +53,21 @@ public class PaycheckActivity extends AppCompatActivity {
         month_spinner.setSelection(monthIndex);
         year_spinner.setSelection(yearsAdapter.getCount());
 
-        if(!years[0].equals("empty"))
+        if (!years.get(0).equals("empty"))
             key = (monthIndex + 1) + "#" + year_spinner.getSelectedItem().toString(); // TODO: maybe without  .toString()
 
-        for(int i=0; i < texts.length; i++) {
+        for (int i = 0; i < texts.length; i++) {
 
             textView1 = new TextView(this);
             textView2 = new TextView(this);
 
             textView1.setText(texts[i]);
             gridLayout.addView(textView1);
-            if(!key.equals("")) {
-                switch(i) {
+            if (!key.equals("")) {
+                switch (i) {
                     case 0: {
                         int baseWage = 0;
-                        for(Shift sh : user.getShifts()) {
+                        for (Shift sh : user.getShifts()) {
                             baseWage += sh.getShiftProfit();
                         }
                         textView2.setText(String.valueOf(baseWage));
@@ -98,8 +99,7 @@ public class PaycheckActivity extends AppCompatActivity {
                         textView2.setTextColor(Color.BLUE);
                     }
                 }
-            }
-            else {
+            } else {
                 textView2.setText("No details");
                 textView2.setTextColor(Color.GRAY);
             }

@@ -1,35 +1,36 @@
 package com.example.checkmypay;
 
-import android.widget.Button;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 // user json:
+
 /**
- *      email
- *      password
- *      hourlyWage
- *      startDate
- *      endDate
- *      fromHour
- *      fromMinute
- *      toHour
- *      toMinute
- *      providentFund
- *      advancedStudyFund
- *      credits
- *
- *      ArrayList <Shift> shifts
- *      Map <String(Date month and year), Paycheck> paychecks
+ * email
+ * password
+ * hourlyWage
+ * startDate
+ * endDate
+ * fromHour
+ * fromMinute
+ * toHour
+ * toMinute
+ * providentFund
+ * advancedStudyFund
+ * credits
+ * <p>
+ * ArrayList <Shift> shifts
+ * Map <String(Date month and year), Paycheck> paychecks
  */
 
 // TODO: Remeber every new paycheck (new month) initialize the shifts !!
 
 public class User implements Serializable {
+    private String id;
     private String email, password;
     private float hourlyWage, providentFund, advancedStudyFund, credits, travelFee;
     private int startDate, endDate, shabbatFromHour, shabbatToHour, shabbatFromMin, shabbatToMin;
@@ -50,6 +51,18 @@ public class User implements Serializable {
         int year = c.get(Calendar.YEAR);
 
         this.currentPaycheck = new Paycheck(month + "#" + year);
+        this.hourlyWage = 0;
+        this.providentFund = 0;
+        this.advancedStudyFund = 0;
+        this.credits = 0;
+        this.travelFee = 0;
+        this.startDate = 0;
+        this.endDate = 0;
+        this.shabbatFromHour = 0;
+        this.shabbatToHour = 0;
+        this.shabbatFromMin = 0;
+        this.shabbatToMin = 0;
+        this.shifts = new ArrayList<>();
 
     }
 
@@ -74,9 +87,9 @@ public class User implements Serializable {
         this.paychecks = paychecks;
 
         Calendar c = Calendar.getInstance();
-        c.setTime(new Date());
         int month = c.get(Calendar.MONTH);
         int year = c.get(Calendar.YEAR);
+
 
         this.currentPaycheck = new Paycheck(month + "#" + year);
     }
@@ -153,6 +166,10 @@ public class User implements Serializable {
         this.currentPaycheck = currentPaycheck;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public float getHourlyWage() {
         return hourlyWage;
     }
@@ -197,12 +214,16 @@ public class User implements Serializable {
         return travelFee;
     }
 
+    public String getId() {
+        return id;
+    }
+
     // TODO: check it
     public ArrayList<Shift> getShifts() {
         //if(this.shifts != null)
-            return shifts;
+        return shifts;
         //else
-            //return new ArrayList<Shift>();
+        //return new ArrayList<Shift>();
     }
 
     public Paycheck getCurrentPaycheck() {
@@ -214,32 +235,29 @@ public class User implements Serializable {
     }
 
     // TODO: month can not be duplicate
-    public String[] getMonthsPaychecks() {
-        String[] months = new String[paychecks.size()];       // = new String[this.paychecks.size()];
-        String[] keys = (String[]) this.paychecks.keySet().toArray();
-        if(this.paychecks != null) {
-            for(int i=0; i<keys.length; i++) {
-                months[i] = keys[i].split("#")[0];
+    public List<String> getMonthsPaychecks() {
+        List<String> months = new ArrayList<>();       // = new String[this.paychecks.size()];
+        List<String> keys;
+        if (this.paychecks != null) {
+            keys = new ArrayList<>(this.paychecks.keySet());
+            for (String s : keys) {
+                months.add(s.split("#")[0]);
             }
-        }
-        else
-            months = new String[0];
+        } else
+            months.add("empty");
         return months;
     }
 
-    public String[] getYearsPaychecks() {
-        String[] years;
-        String[] keys;
-        if(this.paychecks != null) {
-            years = new String[paychecks.size()];
-            keys = (String[]) this.paychecks.keySet().toArray();
-            for(int i=0; i<keys.length; i++) {
-                years[i] = keys[i].split("#")[1];
+    public List<String> getYearsPaychecks() {
+        List<String> years = new ArrayList<>();
+        List<String> keys;
+        if (this.paychecks != null) {
+            keys = new ArrayList<>(this.paychecks.keySet());
+            for (String s : keys) {
+                years.add(s.split("#")[1]);
             }
-        }
-        else {
-            years = new String[1];
-            years[0] = "empty";
+        } else {
+            years.add("empty");
         }
         return years;
     }

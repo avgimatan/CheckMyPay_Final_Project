@@ -1,32 +1,22 @@
 package com.example.checkmypay;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-public class SignUpActivity extends AppCompatActivity implements View.OnClickListener{
+public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference usersCollection = db.collection("Users");
-
-
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    //private CollectionReference usersCollection = db.collection("Users");
     private EditText email, password;
     private Button btn_signup;
     private User user;
@@ -42,13 +32,35 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         btn_signup.setOnClickListener(this);
     }
 
-    public void initUser(EditText email, EditText password) {
-        this.user = new User(email.getText().toString(), password.getText().toString());
+    private void signUp() {
+        if (!emailValidation()) {
+            Toast.makeText(this, "Invalid email!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        initUser(email, password);
+        mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        writeUserToDB();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "An error has occurred", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     public void writeUserToDB() {
+        user.setId(mAuth.getUid());
+        db.collection("Users")
+                .document(user.getId())
+                .set(user)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(getApplicationContext(), email.getText().toString() + " Registered Successfully", Toast.LENGTH_SHORT).show();
+                    goToSignInActivity();
+                }).addOnFailureListener(e -> Toast.makeText(getApplicationContext(), " An error has occurred", Toast.LENGTH_SHORT).show());
+
+
         // Create a new user with a email and password
-        Map<String, Object> user = new HashMap<>();
+        /*Map<String, Object> user = new HashMap<>();
         user.put("email", this.user.getEmail());
         user.put("password", this.user.getPassword());
         user.put("hourlyWage", 0);
@@ -63,9 +75,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         user.put("advancedStudyFund", 0);
         user.put("credits", 0);
         user.put("shifts", new ArrayList<Shift>());
-        user.put("paychecks", new HashMap<String, Paycheck>());
+        user.put("paychecks", new HashMap<String, Paycheck>());*/
 
-        usersCollection.document(this.user.getEmail()).set(user);
+        //db.document(this.user.getEmail()).set(user);
 
         // Add a new document with a generated ID
         /*db.collection("Users")
@@ -73,7 +85,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        goToMenuActivity();
+                        goToSignInActivity();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -83,6 +95,17 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 });*/
 
+    }
+
+    public void goToSignInActivity() {
+        Intent intent = new Intent(this, SignInActivity.class);
+        intent.putExtra("user", user);
+        startActivity(intent);
+        finish();
+    }
+
+    public void initUser(EditText email, EditText password) {
+        user = new User(email.getText().toString(), password.getText().toString());
     }
 
     public boolean emailValidation() {
@@ -100,23 +123,13 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         return true;
     }
 
-    public void goToMenuActivity() {
-        Intent intent = new Intent(this, MenuActivity.class);
-        intent.putExtra("user", user);
-        startActivity(intent);
-        finish();
-    }
-
     @Override
     public void onClick(View v) {
-        // if the email is invalid
-        if(!emailValidation()) {
-            Toast.makeText(this, "Invalid email!", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
-        initUser(email, password);
-        writeUserToDB();
-        goToMenuActivity();
+        switch (v.getId()) {
+            case R.id.btn_signup_signup:
+                signUp();
+                break;
+        }
     }
 }

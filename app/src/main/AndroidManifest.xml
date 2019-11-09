@@ -14,7 +14,7 @@
         <activity android:name=".RateActivity" />
         <activity android:name=".PaycheckActivity" />
         <activity android:name=".SignUpActivity" />
-        <activity android:name=".MenuActivity" />
+        <activity android:name=".SignInActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

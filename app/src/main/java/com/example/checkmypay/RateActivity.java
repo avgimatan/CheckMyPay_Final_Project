@@ -2,18 +2,13 @@ package com.example.checkmypay;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.ResourcesCompat;
 
 import android.content.Intent;
-import android.graphics.Typeface;
-import android.graphics.fonts.Font;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,6 +38,7 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rate);
         user = (User) getIntent().getSerializableExtra("user");
+        Log.e("Rate", "onCreate: " + user.getId());
 
         input_wage = findViewById(R.id.rate_input_hourly_wage);
         input_startDate = findViewById(R.id.rate_input_start_date);
@@ -64,53 +60,20 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void getDetails() {
-        DocumentReference userDocument = db.collection("Users").document(user.getEmail());
-        userDocument.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        if(!document.get("hourlyWage").equals("") && !document.get("hourlyWage").equals(null)) {
-                            input_wage.setText(document.get("hourlyWage").toString());
-                        }
-                        if(!document.get("travelFee").equals("") && !document.get("travelFee").equals(null)) {
-                            input_travelFee.setText(document.get("travelFee").toString());
-                        }
-                        if(!document.get("startDate").equals("") && !document.get("startDate").equals(null)) {
-                            input_startDate.setText(document.get("startDate").toString());
-                        }
-                        if(!document.get("endDate").equals("") && !document.get("endDate").equals(null)) {
-                            input_endDate.setText(document.get("endDate").toString());
-                        }
-                        if(!document.get("fromHour").equals("") && !document.get("fromHour").equals(null)) {
-                            input_fromHour.setText(document.get("fromHour").toString());
-                        }
-                        if(!document.get("fromMinute").equals("") && !document.get("fromMinute").equals(null)) {
-                            input_fromMinute.setText(document.get("fromMinute").toString());
-                        }
-                        if(!document.get("toHour").equals("") && !document.get("toHour").equals(null)) {
-                            input_toHour.setText(document.get("toHour").toString());
-                        }
-                        if(!document.get("toMinute").equals("") && !document.get("toMinute").equals(null)) {
-                            input_toMinute.setText(document.get("toMinute").toString());
-                        }
-                        if(!document.get("providentFund").equals("") && !document.get("providentFund").equals(null)) {
-                            input_providentFund.setText(document.get("providentFund").toString());
-                        }
-                        if(!document.get("advancedStudyFund").equals("") && !document.get("advancedStudyFund").equals(null)) {
-                            input_advancedStudyFund.setText(document.get("advancedStudyFund").toString());
-                        }
-                        if(!document.get("credits").equals("") && !document.get("credits").equals(null)) {
-                            input_credits.setText(document.get("credits").toString());
-                        }
-                    }
-                } else {
-                    Toast.makeText(RateActivity.this, "failed with " + task.getException(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+
+        input_wage.setText(user.getHourlyWage() + "");
+        input_travelFee.setText(user.getTravelFee() + "");
+        input_startDate.setText(user.getStartDate() + "");
+        input_endDate.setText(user.getEndDate() + "");
+        input_fromHour.setText(user.getShabbatFromHour() + "");
+        input_fromMinute.setText(user.getShabbatFromMin() + "");
+        input_toHour.setText(user.getShabbatToHour() + "");
+        input_toMinute.setText(user.getShabbatToMin() + "");
+        input_providentFund.setText(user.getProvidentFund() + "");
+        input_advancedStudyFund.setText(user.getAdvancedStudyFund() + "");
+        input_credits.setText(user.getCredits() + "");
     }
+
 
     public void writeDetailsToDB() {
         CollectionReference users = db.collection("Users");
@@ -137,11 +100,11 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if(Integer.parseInt(input_startDate.getText().toString()) < 1 || Integer.parseInt(input_startDate.getText().toString()) >31) {
+        if (Integer.parseInt(input_startDate.getText().toString()) < 1 || Integer.parseInt(input_startDate.getText().toString()) > 31) {
             Toast.makeText(RateActivity.this, "Start Date have to be between 1 -31!", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(Integer.parseInt(input_endDate.getText().toString()) < 1 || Integer.parseInt(input_endDate.getText().toString()) >31) {
+        if (Integer.parseInt(input_endDate.getText().toString()) < 1 || Integer.parseInt(input_endDate.getText().toString()) > 31) {
             Toast.makeText(RateActivity.this, "End Date have to be between 1 -31!", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -172,7 +135,7 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void goToMenuActivity() {
-        Intent intent = new Intent(this, MenuActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("user", user);
         startActivity(intent);
         finish();
