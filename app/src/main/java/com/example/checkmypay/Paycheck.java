@@ -11,6 +11,9 @@ class Paycheck implements Serializable {
     private String key;
     private float baseWage = 0, travelFee = 0, grossWage = 0, nationalInsurance = 0, incomeTax = 0 ,healthInsurance = 0, newWage = 0;
 
+    public Paycheck() {
+    }
+
     // key: "month#year"
     public Paycheck(String key) {
         this.key = key;
