@@ -2,12 +2,13 @@ package com.example.checkmypay;
 
 class Shift {
 
-    private int day, month, beginHour, endHour, beginMinute, endMinute;
-    private float totalHours, shiftProfit;
+    private String day, month, beginHour, endHour, beginMinute, endMinute;
+    private String totalHours, shiftProfit;
 
-    // not full constructor
-    public Shift(int day, int month, int beginHour, int endHour,
-                 int beginMinute, int endMinute, float totalHours) {
+    public Shift() {
+    }
+
+    public Shift(String day, String month, String beginHour, String endHour, String beginMinute, String endMinute, String totalHours, String shiftProfit) {
         this.day = day;
         this.month = month;
         this.beginHour = beginHour;
@@ -15,70 +16,70 @@ class Shift {
         this.beginMinute = beginMinute;
         this.endMinute = endMinute;
         this.totalHours = totalHours;
-    }
-
-    public void setDay(int day) {
-        this.day = day;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public void setBeginHour(int beginHour) {
-        this.beginHour = beginHour;
-    }
-
-    public void setEndHour(int endHour) {
-        this.endHour = endHour;
-    }
-
-    public void setBeginMinute(int beginMinute) {
-        this.beginMinute = beginMinute;
-    }
-
-    public void setEndMinute(int endMinute) {
-        this.endMinute = endMinute;
-    }
-
-    public void setTotalHours(float totalHours) {
-        this.totalHours = totalHours;
-    }
-
-    // calc the profit fore each shift using calender
-    public void setShiftProfit(float shiftProfit) {
         this.shiftProfit = shiftProfit;
     }
 
-    public int getDay() {
+    public String getDay() {
         return day;
     }
 
-    public int getMonth() {
+    public String getMonth() {
         return month;
     }
 
-    public int getBeginHour() {
+    public String getBeginHour() {
         return beginHour;
     }
 
-    public int getEndHour() {
+    public String getEndHour() {
         return endHour;
     }
 
-    public int getBeginMinute() {
+    public String getBeginMinute() {
         return beginMinute;
     }
 
-    public int getEndMinute() {
+    public String getEndMinute() {
         return endMinute;
     }
 
-    public float getTotalHours() {
+    public String getTotalHours() {
         return totalHours;
     }
 
-    public float getShiftProfit() {
+    public String getShiftProfit() {
         return shiftProfit;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
+    public void setBeginHour(String beginHour) {
+        this.beginHour = beginHour;
+    }
+
+    public void setEndHour(String endHour) {
+        this.endHour = endHour;
+    }
+
+    public void setBeginMinute(String beginMinute) {
+        this.beginMinute = beginMinute;
+    }
+
+    public void setEndMinute(String endMinute) {
+        this.endMinute = endMinute;
+    }
+
+    public void setTotalHours(String totalHours) {
+        this.totalHours = totalHours;
+    }
+
+    public void setShiftProfit(String shiftProfit) {
+        this.shiftProfit = shiftProfit;
     }
 }
