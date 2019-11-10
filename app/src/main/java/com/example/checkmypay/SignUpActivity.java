@@ -49,7 +49,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void writeUserToDB() {
-        user.setId(mAuth.getUid());
+        user.setId(mAuth.getCurrentUser().getUid());
         db.collection("Users")
                 .document(user.getId())
                 .set(user)

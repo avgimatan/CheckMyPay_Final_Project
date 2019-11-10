@@ -47,25 +47,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             getUserFromDB();
     }
 
-    private void getUserFromDB() {
-        db.collection("Users")
-                .document(mAuth.getUid())
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        user = documentSnapshot.toObject(User.class); //check how to get user from document
-                        Toast.makeText(MainActivity.this, user.getId(), Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                    }
-                });
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +64,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         createButtons();
         mainLayout.addView(linearLayout);
 
+    }
+
+    // get current user
+    private void getUserFromDB() {
+        db.collection("Users")
+                .document(mAuth.getCurrentUser().getUid())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        user = documentSnapshot.toObject(User.class); //check how to get user from document
+                        Toast.makeText(MainActivity.this, user.getId(), Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
     }
 
 
