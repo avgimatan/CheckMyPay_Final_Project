@@ -1,73 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/paycheck_main_linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="ltr"
     android:orientation="vertical"
     tools:context=".PaycheckActivity">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="My Paycheck"
-        android:fontFamily="casual"
-        android:gravity="center"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@android:dimen/app_icon_size" />
-
-    <GridLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:rowCount="2"
-        android:columnCount="2"
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="casual"
-            android:textColor="@color/colorPrimary"
-            android:text="Year: "/>
-
-        <Spinner
-            android:id="@+id/paycheck_year_spinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="100dp"
-            android:background="@android:drawable/btn_dropdown"
-            android:spinnerMode="dropdown"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="casual"
-            android:textColor="@color/colorPrimary"
-            android:text="Month: "/>
-
-        <Spinner
-            android:id="@+id/paycheck_month_spinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="100dp"
-            android:background="@android:drawable/btn_dropdown"
-            android:spinnerMode="dropdown"/>
-
-    </GridLayout>
-
-    <GridLayout
-        android:id="@+id/paycheck_grid"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:rowCount="7"
-        android:columnCount="2">
-    </GridLayout>
-
-
-
 
 </LinearLayout>
