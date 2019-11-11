@@ -9,4 +9,14 @@
     android:orientation="vertical"
     tools:context=".PaycheckActivity">
 
+    <TextView
+        android:id="@+id/paycheck_txt_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="casual"
+        android:gravity="center"
+        android:text="My Paycheck"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@android:dimen/app_icon_size" />
+
 </LinearLayout>

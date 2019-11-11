@@ -61,17 +61,17 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
 
     public void getDetails() {
 
-        input_wage.setText(user.getHourlyWage() + "");
-        input_travelFee.setText(user.getTravelFee() + "");
-        input_startDate.setText(user.getStartDate() + "");
-        input_endDate.setText(user.getEndDate() + "");
-        input_fromHour.setText(user.getShabbatFromHour() + "");
-        input_fromMinute.setText(user.getShabbatFromMin() + "");
-        input_toHour.setText(user.getShabbatToHour() + "");
-        input_toMinute.setText(user.getShabbatToMin() + "");
-        input_providentFund.setText(user.getProvidentFund() + "");
-        input_advancedStudyFund.setText(user.getAdvancedStudyFund() + "");
-        input_credits.setText(user.getCredits() + "");
+        input_wage.setText(String.valueOf(user.getHourlyWage()));
+        input_travelFee.setText(String.valueOf(user.getTravelFee()));
+        input_startDate.setText(String.valueOf(user.getStartDate()));
+        input_endDate.setText(String.valueOf(user.getEndDate()));
+        input_fromHour.setText(String.valueOf(user.getShabbatFromHour()));
+        input_fromMinute.setText(String.valueOf(user.getShabbatFromMin()));
+        input_toHour.setText(String.valueOf(user.getShabbatToHour()));
+        input_toMinute.setText(String.valueOf(user.getShabbatToMin()));
+        input_providentFund.setText(String.valueOf(user.getProvidentFund()));
+        input_advancedStudyFund.setText(String.valueOf(user.getAdvancedStudyFund()));
+        input_credits.setText(String.valueOf(user.getCredits()));
     }
 
 
@@ -106,8 +106,8 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
                 id,
                 email,
                 password,
-                Float.parseFloat(input_travelFee.getText().toString()),
                 Float.parseFloat(input_wage.getText().toString()),
+                Float.parseFloat(input_travelFee.getText().toString()),
                 Float.parseFloat(input_providentFund.getText().toString()),
                 Float.parseFloat(input_advancedStudyFund.getText().toString()),
                 Float.parseFloat(input_credits.getText().toString()),

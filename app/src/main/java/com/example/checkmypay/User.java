@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -63,6 +64,7 @@ public class User implements Serializable {
         this.shabbatFromMin = 0;
         this.shabbatToMin = 0;
         this.shifts = new ArrayList<>();
+        this.paychecks = new HashMap<String, Paycheck>();
 
     }
 
@@ -261,5 +263,19 @@ public class User implements Serializable {
             years.add("empty");
         }
         return years;
+    }
+
+    public List<String> getMonthPaychecks() {
+        List<String> months = new ArrayList<>();
+        List<String> keys;
+        if (this.paychecks != null) {
+            keys = new ArrayList<>(this.paychecks.keySet());
+            for (String s : keys) {
+                months.add(s.split("#")[0]);
+            }
+        } else {
+            months.add("empty");
+        }
+        return months;
     }
 }
