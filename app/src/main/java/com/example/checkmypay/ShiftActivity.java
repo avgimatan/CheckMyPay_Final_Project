@@ -12,8 +12,10 @@ import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class ShiftActivity extends AppCompatActivity implements Finals, View.OnClickListener{
@@ -68,6 +70,7 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
     public void initShiftGrid() {
 
         shifts = user.getShifts();
+
         isHoliday = new CheckBox(getApplicationContext());
 
         gridLayout = new GridLayout(getApplicationContext());
@@ -76,6 +79,11 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
         params.setMargins(10, 10, 10, 10);
         gridLayout.setLayoutParams(params);
         gridLayout.setColumnCount(GRID_SHIFT_COLUMN);
+        gridLayout.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        if (shifts.size() == 0)
+            gridLayout.setRowCount(1);
+        else
+            gridLayout.setRowCount(shifts.size() + 1);
         String[] headlines = {"Date ","Begin Hour ", "End Hour ", "Total Time ","Shift Profit ", "Holiday"};
 
         // add headlines view to grid
@@ -87,7 +95,8 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
         }
 
         // add shifts to grid
-        if (shifts != null) {
+        if (shifts.size() != 0) {
+            gridLayout.setRowCount(shifts.size() + 1);
             for (Shift shift : shifts) {
                 editDate = new EditText(this);
                 editDate.setText(shift.getDay() + "/" + shift.getMonth());
@@ -103,6 +112,7 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
                 gridLayout.addView(textTotalHours); // total hours
                 textShiftProfit = new TextView(this);
                 textShiftProfit.setText(String.valueOf(shift.getShiftProfit()));
+                isHoliday = new CheckBox(this);
                 gridLayout.addView(textShiftProfit); // total profit
                 gridLayout.addView(isHoliday); // checkbox
             }
@@ -115,24 +125,27 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
         Button button = (Button) view;
         switch (button.getText().toString()) {
             case "Add Shift":
-                if(shifts == null) {
-                    editDate = new EditText(this);
-                    editDate.setText("01/01");
-                    gridLayout.addView(editDate); // Date (editable)
-                    editFromTime = new EditText(this);
-                    editFromTime.setText("00:00");
-                    gridLayout.addView(editFromTime); // from time (editable)
-                    editEndTime = new EditText(this);
-                    editEndTime.setText("24:00");
-                    gridLayout.addView(editEndTime); // end time (editable)
-                    textTotalHours = new TextView(this);
-                    textTotalHours.setText("10.5");
-                    gridLayout.addView(textTotalHours); // total hours
-                    textShiftProfit = new TextView(this);
-                    textShiftProfit.setText("288.9");
-                    gridLayout.addView(textShiftProfit); // total profit
-                    gridLayout.addView(isHoliday); // checkbox
-                }
+
+                editDate = new EditText(this);
+                editDate.setText("01/01");
+                gridLayout.addView(editDate); // Date (editable)
+                editFromTime = new EditText(this);
+                editFromTime.setText("00:00");
+                gridLayout.addView(editFromTime); // from time (editable)
+                editEndTime = new EditText(this);
+                editEndTime.setText("24:00");
+                gridLayout.addView(editEndTime); // end time (editable)
+                textTotalHours = new TextView(this);
+
+                textTotalHours.setText("10.5");
+
+                gridLayout.addView(textTotalHours); // total hours
+                textShiftProfit = new TextView(this);
+                textShiftProfit.setText("288.9");
+                gridLayout.addView(textShiftProfit); // total profit
+                isHoliday = new CheckBox(this);
+                gridLayout.addView(isHoliday); // checkbox
+
 
                 Shift shift = new Shift(editDate.getText().toString().split("/")[0],
                         editDate.getText().toString().split("/")[1],
@@ -143,6 +156,8 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
                         textTotalHours.getText().toString(),
                         textShiftProfit.getText().toString());
                 shifts.add(shift);
+                gridLayout.setRowCount(shifts.size() + 1);
+                Toast.makeText(this,"shift size " + shifts.size() , Toast.LENGTH_SHORT).show();
 
                 break;
             case "Update Details":
