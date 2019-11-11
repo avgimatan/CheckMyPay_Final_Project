@@ -67,9 +67,10 @@ public class User implements Serializable {
     }
 
 
-    public User(String email, String password, float hourlyWage, float travelFee, float providentFund, float advancedStudyFund,
+    public User(String id, String email, String password, float hourlyWage, float travelFee, float providentFund, float advancedStudyFund,
                 float credits, int startDate, int endDate, int shabbatFromHour, int shabbatToHour, int shabbatFromMin,
                 int shabbatToMin, ArrayList<Shift> shifts, Map<String, Paycheck> paychecks) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.hourlyWage = hourlyWage;

@@ -59,7 +59,8 @@ public class PaycheckActivity extends AppCompatActivity {
         txt_title.setText("My Paycheck");
         txt_title.setGravity(Gravity.CENTER);
         txt_title.setTextColor(getResources().getColor(R.color.colorPrimary));
-        txt_title.setTextSize(40); //txt_title.setTextSize(R.dimen.app_icon_size);
+        //txt_title.setTextSize(40); //txt_title.setTextSize(R.dimen.app_icon_size);
+        //txt_title.setTextAppearance(this, android.R.style.TextAppearance_Large);
         txt_title.setTypeface(Typeface.create("casual", Typeface.NORMAL));
         linearLayout.addView(txt_title);
 
@@ -78,6 +79,7 @@ public class PaycheckActivity extends AppCompatActivity {
         txt_year.setText("Year: ");
         txt_year.setTextColor(getResources().getColor(R.color.colorPrimary));
         //txt_title.setTextSize(R.dimen.app_icon_size);
+        //txt_year.setTextAppearance(this, android.R.style.TextAppearance_DeviceDefault_Medium);
         // missing: android:fontFamily="casual"
         gridLayout1.addView(txt_year);
 
@@ -135,6 +137,8 @@ public class PaycheckActivity extends AppCompatActivity {
 
         if (!years.get(0).equals("empty"))
             key = (monthIndex + 1) + "#" + year_spinner.getSelectedItem().toString(); // TODO: maybe without  .toString()
+        else
+            key = (monthIndex + 1) + "#" + yearIndex; // TODO: maybe without  .toString()
 
         for (int i = 0; i < texts.length; i++) {
 
@@ -144,45 +148,58 @@ public class PaycheckActivity extends AppCompatActivity {
             textView1.setText(texts[i]);
             textView1.setTextColor(getResources().getColor(R.color.colorPrimary));
             gridLayout2.addView(textView1);
-            if (!key.equals("")) {
+
+            if((user.getShifts() != null && i == 0) || (user.getPaychecks().get(key) != null && i > 0)) {
                 switch (i) {
                     case 0: {
                         int baseWage = 0;
                         for (Shift sh : user.getShifts()) {
-                            baseWage += sh.getShiftProfit();
+                            baseWage += Integer.parseInt(sh.getShiftProfit());
                         }
                         textView2.setText(String.valueOf(baseWage));
                         //textView2.setText(String.valueOf(user.getPaychecks().get(key).getBaseWage()));
                         textView2.setTextColor(Color.GREEN);
+                        break;
                     }
                     case 1: {
                         textView2.setText(String.valueOf(user.getPaychecks().get(key).getTravelFee()));
                         textView2.setTextColor(Color.GREEN);
+                        break;
                     }
                     case 2: {
                         textView2.setText(String.valueOf(user.getPaychecks().get(key).getGrossWage()));
                         textView2.setTextColor(Color.BLUE);
+                        break;
                     }
                     case 3: {
                         textView2.setText(String.valueOf(user.getPaychecks().get(key).getNationalInsurance()));
                         textView2.setTextColor(Color.RED);
+                        break;
                     }
                     case 4: {
                         textView2.setText(String.valueOf(user.getPaychecks().get(key).getIncomeTax()));
                         textView2.setTextColor(Color.RED);
+                        break;
                     }
                     case 5: {
                         textView2.setText(String.valueOf(user.getPaychecks().get(key).getHealthInsurance()));
                         textView2.setTextColor(Color.RED);
+                        break;
                     }
                     case 6: {
                         textView2.setText(String.valueOf(user.getPaychecks().get(key).getNewWage()));
                         textView2.setTextColor(Color.BLUE);
+                        break;
+                    }
+                    default: {
+                        break;
                     }
                 }
-            } else {
+            }
+            else {
                 textView2.setText("No details");
-                textView2.setTextColor(Color.GRAY);
+                //textView2.setText(String.valueOf(user.getPaychecks().get(key).getBaseWage()));
+                textView2.setTextColor(Color.GREEN);
             }
 
             gridLayout2.addView(textView2);

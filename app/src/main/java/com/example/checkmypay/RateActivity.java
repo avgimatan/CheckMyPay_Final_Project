@@ -76,26 +76,13 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
 
 
     public void writeDetailsToDB() {
-        CollectionReference users = db.collection("Users");
 
-        Map<String, Object> details = new HashMap<>();
-        details.put("email", this.user.getEmail());
-        details.put("password", this.user.getPassword());
-        details.put("hourlyWage", input_wage.getText().toString());
-        details.put("travelFee", input_travelFee.getText().toString());
-        details.put("startDate", input_startDate.getText().toString());
-        details.put("endDate", input_endDate.getText().toString());
-        details.put("fromHour", input_fromHour.getText().toString());
-        details.put("fromMinute", input_fromMinute.getText().toString());
-        details.put("toHour", input_toHour.getText().toString());
-        details.put("toMinute", input_toMinute.getText().toString());
-        details.put("providentFund", input_providentFund.getText().toString());
-        details.put("advancedStudyFund", input_advancedStudyFund.getText().toString());
-        details.put("credits", input_credits.getText().toString());
-        details.put("shifts", this.user.getShifts());
-        details.put("paychecks", this.user.getPaychecks());
-
-        users.document(user.getEmail()).set(details);
+        db.collection("Users")
+                .document(user.getId())
+                .set(user)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(getApplicationContext(), "Save detailes Successfully", Toast.LENGTH_SHORT).show();
+                }).addOnFailureListener(e -> Toast.makeText(getApplicationContext(), " An error has occurred", Toast.LENGTH_SHORT).show());
     }
 
     @Override
@@ -108,14 +95,16 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(RateActivity.this, "End Date have to be between 1 -31!", Toast.LENGTH_SHORT).show();
             return;
         }
-        writeDetailsToDB();
 
+        String id = user.getId();
         String email = user.getEmail();
         String password = user.getPassword();
         ArrayList<Shift> shifts = user.getShifts();
         Map<String, Paycheck> paychecks = user.getPaychecks();
 
-        user = new User(email,
+        user = new User(
+                id,
+                email,
                 password,
                 Float.parseFloat(input_travelFee.getText().toString()),
                 Float.parseFloat(input_wage.getText().toString()),
@@ -130,6 +119,8 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
                 Integer.parseInt(input_toMinute.getText().toString()),
                 shifts,
                 paychecks);
+
+        writeDetailsToDB();
 
         goToMenuActivity();
     }
