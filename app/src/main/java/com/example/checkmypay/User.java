@@ -242,7 +242,7 @@ public class User implements Serializable {
     }
 
     @Exclude
-    public List<String> getYearsPaychecksAaaa() {
+    public List<String> getYearsPaychecks() {
         List<String> years = new ArrayList<>();
         List<String> keys;
         if (this.paychecks != null) {
@@ -257,7 +257,7 @@ public class User implements Serializable {
     }
 
     @Exclude
-    public List<String> getMonthsPaychecksAaaa() {
+    public List<String> getMonthsPaychecks() {
         List<String> months = new ArrayList<>();
         List<String> keys;
         if (this.paychecks != null) {
