@@ -81,6 +81,15 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
 
         ArrayList<Shift> shifts = new ArrayList<>();
         shifts.add(new Shift(user, "1", "5", "7", "15", "0", "0"));
+        shifts.add(new Shift(user, "2", "5", "15", "23", "15", "0"));
+        shifts.add(new Shift(user, "3", "7", "7", "15", "10", "10"));
+        user.setShifts(shifts);
+
+        Map<String, Paycheck> paychecks = new HashMap<>();
+        paychecks.put("5#2019", new Paycheck("5#2019", user));
+        paychecks.put("7#2019", new Paycheck("7#2019", user));
+        user.setPaychecks(paychecks);
+
 
 
         db.collection("Users")

@@ -91,7 +91,7 @@ public class PaycheckActivity extends AppCompatActivity implements View.OnClickL
         // year_spinner
         year_spinner = new Spinner(getApplicationContext());
         year_spinner.setLayoutMode(1); // 1 = dropdown
-        years = user.getYearsPaychecks();
+        years = user.getYearsPaychecksAaaa();
         ArrayAdapter yearsAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, years);
         year_spinner.setAdapter(yearsAdapter);
         // set default value to current current year
@@ -127,7 +127,7 @@ public class PaycheckActivity extends AppCompatActivity implements View.OnClickL
         // month_spinner
         month_spinner = new Spinner(getApplicationContext());
         month_spinner.setLayoutMode(1); // 1 = dropdown
-        months = user.getMonthsPaychecks();
+        months = user.getMonthsPaychecksAaaa();
         ArrayAdapter monthsAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, months);
         month_spinner.setAdapter(monthsAdapter);
         // set default value to current month

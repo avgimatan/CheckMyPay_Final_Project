@@ -1,5 +1,8 @@
 package com.example.checkmypay;
 
+import com.google.firebase.firestore.IgnoreExtraProperties;
+import com.google.firebase.firestore.Exclude;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,6 +33,7 @@ import java.util.Map;
 
 // TODO: Remeber every new paycheck (new month) initialize the shifts !!
 
+@IgnoreExtraProperties
 public class User implements Serializable {
     private String id;
     private String email, password;
@@ -237,21 +241,8 @@ public class User implements Serializable {
         return paychecks;
     }
 
-    // TODO: month can not be duplicate
-    public List<String> getMonthsPaychecks() {
-        List<String> months = new ArrayList<>();       // = new String[this.paychecks.size()];
-        List<String> keys;
-        if (this.paychecks != null) {
-            keys = new ArrayList<>(this.paychecks.keySet());
-            for (String s : keys) {
-                months.add(s.split("#")[0]);
-            }
-        } else
-            months.add("empty");
-        return months;
-    }
-
-    public List<String> getYearsPaychecks() {
+    @Exclude
+    public List<String> getYearsPaychecksAaaa() {
         List<String> years = new ArrayList<>();
         List<String> keys;
         if (this.paychecks != null) {
@@ -265,7 +256,8 @@ public class User implements Serializable {
         return years;
     }
 
-    public List<String> getMonthPaychecks() {
+    @Exclude
+    public List<String> getMonthsPaychecksAaaa() {
         List<String> months = new ArrayList<>();
         List<String> keys;
         if (this.paychecks != null) {

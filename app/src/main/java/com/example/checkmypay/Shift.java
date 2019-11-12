@@ -1,6 +1,8 @@
 package com.example.checkmypay;
 
-class Shift {
+import java.io.Serializable;
+
+class Shift implements Serializable {
 
     private String day, month, beginHour, endHour, beginMinute, endMinute;
     private String totalHours, shiftProfit;
