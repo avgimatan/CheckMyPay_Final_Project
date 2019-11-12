@@ -77,6 +77,12 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
 
     public void writeDetailsToDB() {
 
+        // TODO: Remove it! it is only for test
+
+        ArrayList<Shift> shifts = new ArrayList<>();
+        shifts.add(new Shift(user, "1", "5", "7", "15", "0", "0"));
+
+
         db.collection("Users")
                 .document(user.getId())
                 .set(user)
