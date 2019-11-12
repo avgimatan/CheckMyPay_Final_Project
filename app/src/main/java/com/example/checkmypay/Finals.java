@@ -6,6 +6,6 @@ public interface Finals {
     float SECOND_EXTRA_HOURS = 1.5f;
     float FIRST_SHABAT_EXTRA_HOURS = 1.75f;
     float SECOND_SHABAT_EXTRA_HOURS = 2.0f;
-    int GRID_SHIFT_COLUMN = 6;
+    int GRID_SHIFT_COLUMN = 7;
 
 }

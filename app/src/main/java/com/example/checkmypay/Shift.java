@@ -4,19 +4,21 @@ class Shift {
 
     private String day, month, beginHour, endHour, beginMinute, endMinute;
     private String totalHours, shiftProfit;
+    private User user;
 
     public Shift() {
     }
 
-    public Shift(String day, String month, String beginHour, String endHour, String beginMinute, String endMinute, String totalHours, String shiftProfit) {
+    public Shift(User user, String day, String month, String beginHour, String endHour, String beginMinute, String endMinute) {
         this.day = day;
         this.month = month;
         this.beginHour = beginHour;
         this.endHour = endHour;
         this.beginMinute = beginMinute;
         this.endMinute = endMinute;
-        this.totalHours = totalHours;
-        this.shiftProfit = shiftProfit;
+        this.user = user;
+        setTotalHours();
+        setShiftProfit();
     }
 
     public String getDay() {
@@ -75,11 +77,20 @@ class Shift {
         this.endMinute = endMinute;
     }
 
-    public void setTotalHours(String totalHours) {
-        this.totalHours = totalHours;
+    public void setTotalHours() {
+
+        String diffHour = String.valueOf(Integer.parseInt(this.endHour) - Integer.parseInt(this.beginHour));
+        String diffMinute = String.valueOf(Integer.parseInt(this.endMinute) - Integer.parseInt(this.beginMinute));
+
+        this.totalHours = diffHour + ":" + diffMinute;
     }
 
-    public void setShiftProfit(String shiftProfit) {
-        this.shiftProfit = shiftProfit;
+    public void setShiftProfit() {
+
+        String minute = this.totalHours.split(":")[1];
+        float minuteToDecimal = Float.parseFloat(minute) / 60;
+        String hour = this.totalHours.split(":")[0];
+        this.shiftProfit = String.valueOf((Float.parseFloat(hour) + minuteToDecimal) * this.user.getHourlyWage());
     }
+
 }
