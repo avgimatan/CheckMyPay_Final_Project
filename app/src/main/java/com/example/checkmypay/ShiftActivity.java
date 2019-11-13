@@ -46,8 +46,6 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
         mainLayout = findViewById(R.id.main_shift_layout);
         initShiftTable();
         mainLayout.addView(tableLayout);
-        //initShiftGrid();
-        //mainLayout.addView(gridLayout);
         initButton();
 
     }
@@ -266,7 +264,7 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
 
                 // create and add shift with the new details
                 Shift shift = new Shift(
-                        user,
+                        String.valueOf(user.getHourlyWage()),
                         editDate.getText().toString().split("/")[0],
                         editDate.getText().toString().split("/")[1],
                         editFromTime.getText().toString().split(":")[0],
