@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -169,8 +171,10 @@ public class PaycheckActivity extends AppCompatActivity implements View.OnClickL
         textView1.setPadding(40, 50, 0, 0);
         textView1.setTypeface(Typeface.create("casual", Typeface.NORMAL), Typeface.BOLD);
         textView1.setTextSize(TypedValue.COMPLEX_UNIT_PX,getResources().getDimension(R.dimen.label_size));
-        if(index == 6)
+        if(index == 5)
             textView1.setTextColor(Color.DKGRAY);
+        else if(index == 6)
+            textView1.setTextColor(Color.BLUE);
         else
             textView1.setTextColor(getResources().getColor(R.color.colorPrimary));
 
@@ -216,12 +220,14 @@ public class PaycheckActivity extends AppCompatActivity implements View.OnClickL
             }
             case 5: {
                 textView2.setText(String.valueOf(paycheck.getGrossWage()));
-                textView2.setTextColor(Color.BLUE);
+                textView2.setTextColor(Color.DKGRAY);
                 break;
             }
             case 6: {
-                textView2.setText(String.valueOf(paycheck.getNewWage()));
-                textView2.setTextColor(Color.DKGRAY);
+                SpannableString content = new SpannableString(String.valueOf(paycheck.getNewWage()));
+                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                textView2.setText(content);
+                textView2.setTextColor(Color.BLUE);
                 break;
             }
             default: {

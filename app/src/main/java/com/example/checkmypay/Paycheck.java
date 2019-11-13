@@ -34,9 +34,8 @@ class Paycheck implements Serializable, Finals {
 
         setNationalInsurance();
         setIncomeTax();
-        //this.healthInsurance = 0;
         setHealthInsurance();
-        this.newWage = 0;
+        setNewWage();
     }
 
     // key: "month#year"
@@ -66,29 +65,34 @@ class Paycheck implements Serializable, Finals {
     }
 
     private void setIncomeTax() {
-        if(this.grossWage <= INCOME_TAX_LEVEL_1)                                    // Level 1
-            this.incomeTax = this.grossWage * INCOME_TAX_LEVEL_1_PRECENT;
-        else if(this.grossWage <= INCOME_TAX_LEVEL_2)                               // Level 2
-            this.incomeTax = this.grossWage * INCOME_TAX_LEVEL_2_PRECENT;
-        else if(this.grossWage <= INCOME_TAX_LEVEL_3)                               // Level 3
-            this.incomeTax = this.grossWage * INCOME_TAX_LEVEL_3_PRECENT;
-        else if(this.grossWage <= INCOME_TAX_LEVEL_4)                               // Level 4
-            this.incomeTax = this.grossWage * INCOME_TAX_LEVEL_4_PRECENT;
-        else if(this.grossWage <= INCOME_TAX_LEVEL_5)                               // Level 5
-            this.incomeTax = this.grossWage * INCOME_TAX_LEVEL_5_PRECENT;
-        else if(this.grossWage <= INCOME_TAX_LEVEL_6)                               // Level 6
-            this.incomeTax = this.grossWage * INCOME_TAX_LEVEL_6_PRECENT;
-        else                                                                        // Level 7
-            this.incomeTax = this.grossWage * INCOME_TAX_LEVEL_7_PRECENT;
+        if(this.grossWage <= INCOME_TAX_1)                                    // Level 1
+            this.incomeTax = this.grossWage * INCOME_TAX_1_PRECENT;
+        else if(this.grossWage <= INCOME_TAX_2)                               // Level 2
+            this.incomeTax = this.grossWage * INCOME_TAX_2_PRECENT;
+        else if(this.grossWage <= INCOME_TAX_3)                               // Level 3
+            this.incomeTax = this.grossWage * INCOME_TAX_3_PRECENT;
+        else if(this.grossWage <= INCOME_TAX_4)                               // Level 4
+            this.incomeTax = this.grossWage * INCOME_TAX_4_PRECENT;
+        else if(this.grossWage <= INCOME_TAX_5)                               // Level 5
+            this.incomeTax = this.grossWage * INCOME_TAX_5_PRECENT;
+        else if(this.grossWage <= INCOME_TAX_6)                               // Level 6
+            this.incomeTax = this.grossWage * INCOME_TAX_6_PRECENT;
+        else                                                                  // Level 7
+            this.incomeTax = this.grossWage * INCOME_TAX_7_PRECENT;
     }
 
     private void setHealthInsurance() {
+        if(this.grossWage <= HEALTH_INSURANCE_1)                                  // Level 1
+            this.healthInsurance = this.grossWage * HEALTH_INSURANCE_1_PRECENT;
+        else if(this.grossWage <= HEALTH_INSURANCE_2)
+            this.healthInsurance = this.grossWage * HEALTH_INSURANCE_2_PRECENT;
+        else
+            this.healthInsurance = this.grossWage * HEALTH_INSURANCE_3_PRECENT;
 
-        this.healthInsurance = healthInsurance;
     }
 
-    public void setNewWage(float newWage) {
-        this.newWage = newWage;
+    public void setNewWage() {
+        this.newWage = this.grossWage - this.nationalInsurance - this.incomeTax - this.healthInsurance;
     }
 
     public String getKey() {
