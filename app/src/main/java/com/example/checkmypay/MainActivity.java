@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private User user;
     private HashMap<String, Button> buttons;
     private LinearLayout linearLayout;
+    private TextView nameText;
 
     //UI Elements
     private Button sign_out_btn;
@@ -43,8 +45,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (mAuth.getCurrentUser() == null) {
             startActivity(new Intent(getApplicationContext(), SignInActivity.class));
             finish();
-        } else
+        } else {
             getUserFromDB();
+        }
     }
 
     @Override
@@ -55,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // get user from other activities
         sign_out_btn = findViewById(R.id.sign_out_btn);
         sign_out_btn.setOnClickListener(this);
+
+        nameText = findViewById(R.id.text_username_menu);
 
         //create Linear and Buttons
         LinearLayout mainLayout = findViewById(R.id.main_layout);
@@ -75,6 +80,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         user = documentSnapshot.toObject(User.class); //check how to get user from document
+                        String name = String.valueOf(user.getEmail().charAt(0)).toUpperCase() + user.getEmail().split("@")[0].substring(1);
+                        nameText.setText("Hello " + name);
                         Toast.makeText(MainActivity.this, user.getId(), Toast.LENGTH_SHORT).show();
                     }
                 })

@@ -57,6 +57,10 @@ class Shift implements Serializable {
         return shiftProfit;
     }
 
+    public String getHourlyWage() {
+        return hourlyWage;
+    }
+
     public boolean isHoliday() {
         return isHoliday;
     }
@@ -87,6 +91,10 @@ class Shift implements Serializable {
 
     public void setHoliday(boolean holiday) {
         isHoliday = holiday;
+    }
+
+    public void setHourlyWage(String hourlyWage) {
+        this.hourlyWage = hourlyWage;
     }
 
     public void setTotalHours() {

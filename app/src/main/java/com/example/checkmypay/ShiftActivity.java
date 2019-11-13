@@ -123,7 +123,8 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
                 tableRowEdit.addView(textShiftProfit); // total profit
 
                 Button bu = new Button(this,null,android.R.attr.buttonBarButtonStyle);
-                bu.setId(editShiftIndex++);
+                bu.setId(editShiftIndex);
+                editShiftIndex++;
 /*                ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(2, 2, 2, 2);
@@ -248,7 +249,8 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
                 tableRowEdit.addView(textShiftProfit); // total profit
 
                 Button bu = new Button(this,null,android.R.attr.buttonBarButtonStyle);
-                bu.setId(editShiftIndex++);
+                bu.setId(editShiftIndex);
+                editShiftIndex++;
 /*                ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(2, 2, 2, 2);
@@ -280,15 +282,16 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
             case "Edit":
 
                 for (Button b : gridButtons) {
-                    if (button.getId() == b.getId()) {
+                    if (b.getId() == button.getId()) {
 
                         int shiftIndex = b.getId();
                         Shift editedShift = shifts.get(shiftIndex);
 
-                        TableRow editTableRow = (TableRow) tableLayout.getChildAt(shiftIndex);
+                        TableRow editTableRow = (TableRow) tableLayout.getChildAt(shiftIndex + 1);
 
                         EditText editShiftDate = (EditText) editTableRow.getChildAt(0);
-                        editedShift.setDay(editShiftDate.getText().toString());
+                        editedShift.setDay(editShiftDate.getText().toString().split("/")[0]);
+                        editedShift.setMonth(editShiftDate.getText().toString().split("/")[1]);
 
                         EditText editFromHour = (EditText) editTableRow.getChildAt(1);
                         editedShift.setBeginHour(editFromHour.getText().toString().split(":")[0]);
