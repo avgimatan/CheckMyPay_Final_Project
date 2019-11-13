@@ -9,32 +9,29 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Calendar;
-import java.util.List;
+import java.util.Set;
 
 public class PaycheckActivity extends AppCompatActivity implements View.OnClickListener {
 
     private User user;
     private String key = "";
     private Paycheck paycheck;
-    boolean isCurrentPaycheck;
+    boolean isCurrentPaycheck = true;
     private Spinner year_spinner, month_spinner;
     private LinearLayout linearLayout, buttonLinearLauout;
     private GridLayout gridLayout1, gridLayout2;
     private TextView txt_title, txt_year, txt_month;
-    //private String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-    private List<String> years, months;
+    private Set<String> years, months;
     private String[] texts = {"Base Wage", "Travel Fee", "National Insurance", "Income Tax", "Health Insurance", "Gross Wage", "Net Wage"};
-    private TextView textView1, textView2, txt_temp;
+    private TextView textView1, textView2;
     private Button btn_show;
 
     @Override
@@ -47,15 +44,12 @@ public class PaycheckActivity extends AppCompatActivity implements View.OnClickL
 
         initChooseGrid();
 
-        setIsCurrentPaycheck();
 
         setPaycheck();
 
         initPaycheckGrid();
 
         initButton();
-
-        // TODO: onClick to spinners. if he choose else paycheck ?
     }
 
     public void initChooseGrid() {
@@ -96,24 +90,11 @@ public class PaycheckActivity extends AppCompatActivity implements View.OnClickL
         year_spinner = new Spinner(getApplicationContext());
         year_spinner.setLayoutMode(1); // 1 = dropdown
         years = user.getYearsPaychecks();
-        //years.add(String.valueOf(currentYear));
-        ArrayAdapter yearsAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, years);
+        if(!years.contains(currentYear))
+            years.add(String.valueOf(currentYear));
+        ArrayAdapter yearsAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, years.toArray());
         year_spinner.setAdapter(yearsAdapter);
-        // set default value to current current year
-        year_spinner.setSelection(yearsAdapter.getCount() - 1);
-
-        /*year_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                //year_spinner.setSelection(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
-            }
-
-        });*/
+        year_spinner.setSelection(yearsAdapter.getPosition(String.valueOf(currentYear)));
 
         gridLayout1.addView(year_spinner);
 
@@ -133,11 +114,12 @@ public class PaycheckActivity extends AppCompatActivity implements View.OnClickL
         month_spinner = new Spinner(getApplicationContext());
         month_spinner.setLayoutMode(1); // 1 = dropdown
         months = user.getMonthsPaychecks();
-        //months.add(String.valueOf(currentMonth + 1));
-        ArrayAdapter monthsAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, months);
+        if(!months.contains(String.valueOf(currentMonth + 1)))
+            months.add(String.valueOf(currentMonth + 1));
+        ArrayAdapter monthsAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, months.toArray());
         month_spinner.setAdapter(monthsAdapter);
         // set default value to current month
-        month_spinner.setSelection(monthsAdapter.getCount() - 1);
+        month_spinner.setSelection(monthsAdapter.getPosition(String.valueOf(currentMonth + 1)));
         gridLayout1.addView(month_spinner);
     }
 
@@ -250,18 +232,20 @@ public class PaycheckActivity extends AppCompatActivity implements View.OnClickL
 
     public void setIsCurrentPaycheck() {
 
-        if (years.get(0).equals("empty") || months.get(0).equals("empty")) {
-            isCurrentPaycheck = true;
-        } else {
-            key = month_spinner.getSelectedItem().toString() + "#" + year_spinner.getSelectedItem().toString();
-            isCurrentPaycheck = false;
-        }
+        Calendar c = Calendar.getInstance();
+        int currentMonth = c.get(Calendar.MONTH);
+        int currentYear = c.get(Calendar.YEAR);
 
+        if(year_spinner.getSelectedItem().toString().equals(String.valueOf(currentYear)) &&
+                month_spinner.getSelectedItem().toString().equals(String.valueOf(currentMonth + 1)))
+            isCurrentPaycheck = true;
+        else
+            isCurrentPaycheck = false;
+
+        key = month_spinner.getSelectedItem().toString() + "#" + year_spinner.getSelectedItem().toString();
     }
 
     public void setPaycheck() {
-
-        //paycheck = new Paycheck(month_spinner.getSelectedItem().toString() + "#" + year_spinner.getSelectedItem().toString());
 
         setIsCurrentPaycheck();
 
@@ -271,7 +255,7 @@ public class PaycheckActivity extends AppCompatActivity implements View.OnClickL
 
         if( isCurrentPaycheck) {
             paycheck = new Paycheck((currentMonth+1) + "#" + currentYear, user);
-            user.setCurrentPaycheck(new Paycheck());
+            user.setCurrentPaycheck(paycheck);
         }
         else
             paycheck = user.getPaychecks().get(key);
@@ -305,7 +289,9 @@ public class PaycheckActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
 
         setPaycheck();
-        //paycheck = new Paycheck(month_spinner.getSelectedItem().toString() + "#" + year_spinner.getSelectedItem().toString());
+        linearLayout.removeView(gridLayout2);
+        linearLayout.removeView(buttonLinearLauout);
         initPaycheckGrid();
+        initButton();
     }
 }

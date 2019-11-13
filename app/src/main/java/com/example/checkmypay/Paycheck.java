@@ -6,21 +6,10 @@ import java.io.Serializable;
  * key: "month#year"
  */
 
-class Paycheck implements Serializable {
+class Paycheck implements Serializable, Finals {
 
     private String key;
     private float baseWage = 0, travelFee = 0, grossWage = 0, nationalInsurance = 0, incomeTax = 0 ,healthInsurance = 0, newWage = 0;
-
-    public Paycheck() {
-        this.key = "";
-        this.baseWage = 0;
-        this.travelFee = 0;
-        this.grossWage = 0;
-        this.nationalInsurance = 0;
-        this.incomeTax = 0;
-        this.healthInsurance = 0;
-        this.newWage = 0;
-    }
 
     // key: "month#year"
     public Paycheck(String key) {
@@ -39,23 +28,12 @@ class Paycheck implements Serializable {
 
         this.travelFee = user.getTravelFee();
         this.grossWage = this.travelFee + this.baseWage;
-        // TODO:
-        this.nationalInsurance = 0;
-        this.incomeTax = 0;
-        this.healthInsurance = 0;
-        this.newWage = 0;
-    }
 
-    public Paycheck(String key, float baseWage, float travelFee, float grossWage, float nationalInsurance,
-                    float incomeTax, float healthInsurance, float newWage) {
-        this.key = key;
-        this.baseWage = baseWage;
-        this.travelFee = travelFee;
-        this.grossWage = grossWage;
-        this.nationalInsurance = nationalInsurance;
-        this.incomeTax = incomeTax;
-        this.healthInsurance = healthInsurance;
-        this.newWage = newWage;
+        setNationalInsurance();
+        setIncomeTax();
+        //this.healthInsurance = 0;
+        setHealthInsurance();
+        this.newWage = 0;
     }
 
     // key: "month#year"
@@ -75,15 +53,34 @@ class Paycheck implements Serializable {
         this.grossWage = grossWage;
     }
 
-    public void setNationalInsurance(float nationalInsurance) {
-        this.nationalInsurance = nationalInsurance;
+    private void setNationalInsurance() {
+        if(this.grossWage <= NATIONAL_INSURANCE_1)                                  // Level 1
+            this.nationalInsurance = this.grossWage * NATIONAL_INSURANCE_1_PRECENT;
+        else if(this.grossWage <= NATIONAL_INSURANCE_2)                             // Level 2
+            this.nationalInsurance = this.grossWage * NATIONAL_INSURANCE_2_PRECENT;
+        else                                                                        // Level 3
+            this.nationalInsurance = this.grossWage * NATIONAL_INSURANCE_3_PRECENT;
     }
 
-    public void setIncomeTax(float incomeTax) {
-        this.incomeTax = incomeTax;
+    private void setIncomeTax() {
+        if(this.grossWage <= INCOME_TAX_LEVEL_1)                                    // Level 1
+            this.incomeTax = this.grossWage * INCOME_TAX_LEVEL_1_PRECENT;
+        else if(this.grossWage <= INCOME_TAX_LEVEL_2)                               // Level 2
+            this.incomeTax = this.grossWage * INCOME_TAX_LEVEL_2_PRECENT;
+        else if(this.grossWage <= INCOME_TAX_LEVEL_3)                               // Level 3
+            this.incomeTax = this.grossWage * INCOME_TAX_LEVEL_3_PRECENT;
+        else if(this.grossWage <= INCOME_TAX_LEVEL_4)                               // Level 4
+            this.incomeTax = this.grossWage * INCOME_TAX_LEVEL_4_PRECENT;
+        else if(this.grossWage <= INCOME_TAX_LEVEL_5)                               // Level 5
+            this.incomeTax = this.grossWage * INCOME_TAX_LEVEL_5_PRECENT;
+        else if(this.grossWage <= INCOME_TAX_LEVEL_6)                               // Level 6
+            this.incomeTax = this.grossWage * INCOME_TAX_LEVEL_6_PRECENT;
+        else                                                                        // Level 7
+            this.incomeTax = this.grossWage * INCOME_TAX_LEVEL_7_PRECENT;
     }
 
-    public void setHealthInsurance(float healthInsurance) {
+    private void setHealthInsurance() {
+
         this.healthInsurance = healthInsurance;
     }
 

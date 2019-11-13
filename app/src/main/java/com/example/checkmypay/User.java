@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 // user json:
 
@@ -233,6 +235,7 @@ public class User implements Serializable {
         //return new ArrayList<Shift>();
     }
 
+    @Exclude
     public Paycheck getCurrentPaycheck() {
         return currentPaycheck;
     }
@@ -242,11 +245,11 @@ public class User implements Serializable {
     }
 
     @Exclude
-    public List<String> getYearsPaychecks() {
-        List<String> years = new ArrayList<>();
-        List<String> keys;
+    public Set<String> getYearsPaychecks() {
+        Set<String> years = new HashSet<>();
+        Set<String> keys;
         if (this.paychecks != null) {
-            keys = new ArrayList<>(this.paychecks.keySet());
+            keys = new HashSet<>(this.paychecks.keySet());
             for (String s : keys) {
                 years.add(s.split("#")[1]);
             }
@@ -257,11 +260,11 @@ public class User implements Serializable {
     }
 
     @Exclude
-    public List<String> getMonthsPaychecks() {
-        List<String> months = new ArrayList<>();
-        List<String> keys;
+    public Set<String> getMonthsPaychecks() {
+        Set<String> months = new HashSet<>();
+        Set<String> keys;
         if (this.paychecks != null) {
-            keys = new ArrayList<>(this.paychecks.keySet());
+            keys = new HashSet<>(this.paychecks.keySet());
             for (String s : keys) {
                 months.add(s.split("#")[0]);
             }
@@ -270,4 +273,6 @@ public class User implements Serializable {
         }
         return months;
     }
+
+
 }
