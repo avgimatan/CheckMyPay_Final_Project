@@ -6,6 +6,7 @@ class Shift implements Serializable {
 
     private String day, month, beginHour, endHour, beginMinute, endMinute;
     private String totalHours, shiftProfit;
+    private boolean isHoliday;
     private User user;
 
     public Shift() {
@@ -21,6 +22,7 @@ class Shift implements Serializable {
         this.user = user;
         setTotalHours();
         setShiftProfit();
+        this.isHoliday = false;
     }
 
     public String getDay() {
@@ -55,6 +57,14 @@ class Shift implements Serializable {
         return shiftProfit;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public boolean isHoliday() {
+        return isHoliday;
+    }
+
     public void setDay(String day) {
         this.day = day;
     }
@@ -79,6 +89,14 @@ class Shift implements Serializable {
         this.endMinute = endMinute;
     }
 
+    public void setHoliday(boolean holiday) {
+        isHoliday = holiday;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public void setTotalHours() {
 
         String diffHour = String.valueOf(Integer.parseInt(this.endHour) - Integer.parseInt(this.beginHour));
@@ -89,10 +107,14 @@ class Shift implements Serializable {
 
     public void setShiftProfit() {
 
-        String minute = this.totalHours.split(":")[1];
-        float minuteToDecimal = Float.parseFloat(minute) / 60;
-        String hour = this.totalHours.split(":")[0];
-        this.shiftProfit = String.valueOf((Float.parseFloat(hour) + minuteToDecimal) * this.user.getHourlyWage());
+        if (isHoliday) {
+
+        }else {
+            String minute = this.totalHours.split(":")[1];
+            float minuteToDecimal = Float.parseFloat(minute) / 60;
+            String hour = this.totalHours.split(":")[0];
+            this.shiftProfit = String.valueOf((Float.parseFloat(hour) + minuteToDecimal) * this.user.getHourlyWage());
+        }
     }
 
 }
