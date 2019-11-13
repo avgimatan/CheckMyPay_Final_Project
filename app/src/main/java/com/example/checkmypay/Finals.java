@@ -33,6 +33,6 @@ public interface Finals {
     float NATIONAL_INSURANCE_3_PRECENT = 0;
 
     // Health Insurance levels
-    
+
 
 }
