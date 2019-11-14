@@ -30,8 +30,7 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
     private HashMap<String,Button> buttons;
     private ArrayList<Button> gridButtons;
     private EditText editDate, editFromTime, editEndTime;
-    private TextView textView, textTotalHours, textShiftProfit;
-    private GridLayout gridLayout;
+    private TextView textView, textShiftProfit;
     private LinearLayout mainLayout;
     private TableLayout tableLayout;
     private int editShiftIndex = 0;
@@ -141,70 +140,6 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
         }
     }
 
-    public void initShiftGrid() {
-
-        shifts = user.getShifts();
-        gridButtons = new ArrayList<>();
-        isHoliday = new CheckBox(this);
-
-        gridLayout = new GridLayout(this);
-        ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, GridLayout.LayoutParams.WRAP_CONTENT);
-        params.setMargins(10, 10, 10, 10);
-        gridLayout.setLayoutParams(params);
-        gridLayout.setColumnCount(GRID_SHIFT_COLUMN);
-        gridLayout.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-/*        if (shifts.size() == 0)
-            gridLayout.setRowCount(1);
-        else
-            gridLayout.setRowCount(shifts.size() + 1);*/
-        String[] headlines = {"Date ","Begin Hour ", "End Hour ", "Total Time ","Shift Profit ", "Holiday", "Edit"};
-
-        // add headlines view to grid
-        for (String str : headlines) {
-            textView = new TextView(this);
-            textView.setText(str);
-            gridLayout.addView(textView);
-        }
-
-/*        for (int i = 0; i < headlines.length; i++) {
-            textView = new TextView(this);
-            textView.setText(headlines[i]);
-            gridLayout.addView(textView);
-
-        }*/
-
-        // add shifts to grid
-        if (shifts.size() != 0) {
-            //gridLayout.setRowCount(shifts.size() + 1);
-            for (Shift shift : shifts) {
-                editDate = new EditText(this);
-                editDate.setText(shift.getDay() + "/" + shift.getMonth());
-                gridLayout.addView(editDate); // Date (editable)
-                editFromTime = new EditText(this);
-                editFromTime.setText(shift.getBeginHour() + ":" + shift.getBeginMinute());
-                gridLayout.addView(editFromTime); // from time (editable)
-                editEndTime = new EditText(this);
-                editEndTime.setText(shift.getEndHour() + ":" + shift.getEndMinute());
-                gridLayout.addView(editEndTime); // end time (editable)
-                textTotalHours = new TextView(this);
-                textTotalHours.setText(String.valueOf(shift.getTotalHours()));
-                gridLayout.addView(textTotalHours); // total hours
-                textShiftProfit = new TextView(this);
-                textShiftProfit.setText(String.valueOf(shift.getShiftProfit()));
-                isHoliday = new CheckBox(this);
-                gridLayout.addView(textShiftProfit); // total profit
-                gridLayout.addView(isHoliday); // checkbox
-                Button bu = new Button(this);
-                //bu.setId(btnCounter++);
-                //bu.setText("Edit");
-                gridButtons.add(bu);
-
-                gridLayout.addView(bu);
-            }
-        }
-    }
-
 
     @Override
     public void onClick(View view) {
@@ -229,17 +164,6 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
 
                 editEndTime = new EditText(this);
                 editEndTime.setText("24:00");
-                tableRowEdit.addView(editEndTime); // end time (editable)
-
-                // calc total hour (try other approach)
-                String beginHour = editFromTime.getText().toString().split(":")[0];
-                String endHour = editEndTime.getText().toString().split(":")[0];
-                String hourDiff = String.valueOf(Integer.parseInt(endHour) - Integer.parseInt(beginHour));
-                String beginMinute = editFromTime.getText().toString().split(":")[1];
-                String endMinute = editEndTime.getText().toString().split(":")[1];
-                String minuteDiff = String.valueOf(Integer.parseInt(endMinute) - Integer.parseInt(beginMinute));
-                //textTotalHours.setText(hourDiff + ":" + minuteDiff); //
-                //tableRowViews.addView(textTotalHours); // total hours
 
                 isHoliday = new CheckBox(this);
                 tableRowEdit.addView(isHoliday); // checkbox
@@ -311,7 +235,7 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
 
                         shifts.set(shiftIndex, editedShift);
 
-                        Toast.makeText(this,"Successful Edit" , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this,"Edit detail's Successfully" , Toast.LENGTH_SHORT).show();
                     }
                 }
 

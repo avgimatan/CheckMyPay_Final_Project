@@ -1,8 +1,9 @@
 package com.example.checkmypay;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
-class Shift implements Serializable {
+class Shift implements Serializable, Finals{
 
     private String day, month, beginHour, endHour, beginMinute, endMinute;
     private String totalHours, shiftProfit;
@@ -107,13 +108,42 @@ class Shift implements Serializable {
 
     public void setShiftProfit() {
 
+        float minuteToDecimal = Float.parseFloat(this.totalHours.split(":")[1]) / 60;
+        float hourToDecimal = Float.parseFloat(this.totalHours.split(":")[0]);
+        float totalDecimal = hourToDecimal + minuteToDecimal;
+        float hourlyWageDecimal = Float.parseFloat(this.hourlyWage);
+
+        Calendar rightNow = Calendar.getInstance();
+
+
+        // night shift condition
+        if ( (hourToDecimal < 22 && (22 - hourToDecimal) > 2) || hourToDecimal > 22 ) {
+
+
+
+        } else { // day shift
+
+
+
+        }
+
+
+
+
         if (isHoliday) {
 
-        }else {
-            String minute = this.totalHours.split(":")[1];
-            float minuteToDecimal = Float.parseFloat(minute) / 60;
-            String hour = this.totalHours.split(":")[0];
-            this.shiftProfit = String.valueOf((Float.parseFloat(hour) + minuteToDecimal) * Float.parseFloat(this.hourlyWage));
+
+        } else { // calc regular days with extra hours
+
+            if (totalDecimal < 8)
+                this.shiftProfit = String.valueOf(hourlyWageDecimal * totalDecimal);
+            else if (totalDecimal > 8 && totalDecimal <= 10)
+                this.shiftProfit = String.valueOf(hourlyWageDecimal * 8
+                                                + (totalDecimal - 8) * FIRST_EXTRA_HOURS * hourlyWageDecimal);
+            else if (totalDecimal > 10)
+                this.shiftProfit = String.valueOf(hourlyWageDecimal * 8
+                                                + hourlyWageDecimal * 2 * FIRST_EXTRA_HOURS
+                                                + hourlyWageDecimal * (totalDecimal - 10) * SECOND_EXTRA_HOURS);
         }
     }
 
