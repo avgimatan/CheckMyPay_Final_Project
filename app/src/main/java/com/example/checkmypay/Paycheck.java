@@ -35,7 +35,7 @@ class Paycheck implements Serializable, Finals {
         setNationalInsurance();
         setIncomeTax();
         setHealthInsurance();
-        setNewWage();
+        setNewWage(user.getCredits());
     }
 
     // key: "month#year"
@@ -91,8 +91,11 @@ class Paycheck implements Serializable, Finals {
 
     }
 
-    public void setNewWage() {
-        this.newWage = this.grossWage - this.nationalInsurance - this.incomeTax - this.healthInsurance;
+    private void setNewWage(float credit) {
+        if( (credit*CREDIT_VALUE) >= this.incomeTax )
+            this.newWage = this.grossWage - this.nationalInsurance - this.healthInsurance;
+        else
+            this.newWage = this.grossWage - this.nationalInsurance - this.healthInsurance - (this.incomeTax - (credit*CREDIT_VALUE));
     }
 
     public String getKey() {

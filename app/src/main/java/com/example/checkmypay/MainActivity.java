@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // get user from other activities
+        // Get user from other activities
         sign_out_btn = findViewById(R.id.sign_out_btn);
         sign_out_btn.setOnClickListener(this);
 
@@ -96,8 +97,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void createButtons() {
 
+        while(user == null);
+
+        int numOfShifts = user.getShifts().size();
+        /**
+         * TODO: in onClick():
+         *          if there is endHour
+         *              we should start and create new shift with startHour and endHour (and insert it to user.getShifts)
+         *          else
+         *              we should take the last shift from user.getShifts and insert him endHour and endMinutes
+         **/
+        if(user.getShifts().get(numOfShifts - 1).getEndHour() != null) {
+            buttons.put("Start Shift", new Button(this));
+        }
+        else {
+            buttons.put("End Shift", new Button(this));
+        }
+        //buttons.put("Start Shift", new Button(this));
+
         buttons.put("My Paycheck", new Button(this));
-        buttons.put("My Salary", new Button(this));
         buttons.put("My Rate", new Button(this));
         buttons.put("My Shifts", new Button(this));
 
@@ -115,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             button.setOnClickListener(this);
             button.setBackgroundResource(R.color.colorPrimary);
             button.setTextColor(getResources().getColor(R.color.white));
-            // TODO: set font for each button
+            button.setTypeface(Typeface.create("casual", Typeface.NORMAL), Typeface.NORMAL);
             linearLayout.addView(button);
         }
 
@@ -161,24 +179,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         if (view instanceof Button) {
             Button clickedButton = (Button) view;
-            if (clickedButton == buttons.get("My Paycheck")) {
-                goToActivity(PaycheckActivity.class);
-            }
-            if (clickedButton == buttons.get("My Salary")) {
-                goToActivity(SalaryActivity.class);
-            }
-            if (clickedButton == buttons.get("My Rate")) {
-                Intent intent = new Intent(getApplicationContext(), RateActivity.class);
-                intent.putExtra("user", user);
-                startActivity(intent);
-                //goToActivity(RateActivity.class);
-            }
-            if (clickedButton == buttons.get("My Shifts")) {
-                goToActivity(ShiftActivity.class);
-            }
-            if (clickedButton.getId() == R.id.sign_out_btn) {
-                logOut();
+            switch(clickedButton.getText().toString()) {
+                case "My Paycheck":
+                    goToActivity(PaycheckActivity.class);
+                    break;
+
+                case "My Rate":
+                    Intent intent = new Intent(getApplicationContext(), RateActivity.class);
+                    intent.putExtra("user", user);
+                    startActivity(intent);
+                    //goToActivity(RateActivity.class);
+                    break;
+
+                case "My Shifts":
+                    goToActivity(ShiftActivity.class);
+                    break;
+
+                case "Log out":
+                    logOut();
+                    break;
+
+                case "Start Shift":
+                    startShift();
+                    break;
+
+                case "End Shift":
+                    endShift();
+                    break;
+
+                default:
+                    // do nothing
+                    break;
             }
         }
+    }
+
+    public void startShift() {
+
+    }
+
+    public void endShift() {
+
     }
 }

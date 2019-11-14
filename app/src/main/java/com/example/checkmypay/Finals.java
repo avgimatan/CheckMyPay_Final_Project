@@ -8,6 +8,10 @@ public interface Finals {
     float SECOND_SHABAT_EXTRA_HOURS = 2.0f;
     int GRID_SHIFT_COLUMN = 7;
 
+
+    // Credit Value
+    float CREDIT_VALUE = 218;
+
     // Income Tax levels
     float INCOME_TAX_1 = 6310;
     float INCOME_TAX_2 = 9050;
