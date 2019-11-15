@@ -24,13 +24,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static boolean isFirstTime = true;
     private User user;
-    private HashMap<String, Button> buttons;
-    private LinearLayout linearLayout;
+    private ArrayList<Button> buttons;
+    private LinearLayout linearLayout, mainLayout;
     private TextView nameText;
 
     //UI Elements
@@ -63,16 +65,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         nameText = findViewById(R.id.text_username_menu);
 
         //create Linear and Buttons
-        LinearLayout mainLayout = findViewById(R.id.main_layout);
+        mainLayout = findViewById(R.id.main_layout);
         linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-        buttons = new HashMap<>();
-        createButtons();
-        mainLayout.addView(linearLayout);
-
+        buttons = new ArrayList<>();
+        if(!isFirstTime) {
+            createButtons();
+        }
     }
 
-    // get current user
+    // Get current user
     private void getUserFromDB() {
         db.collection("Users")
                 .document(mAuth.getCurrentUser().getUid())
@@ -83,6 +85,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         user = documentSnapshot.toObject(User.class); //check how to get user from document
                         String name = String.valueOf(user.getEmail().charAt(0)).toUpperCase() + user.getEmail().split("@")[0].substring(1);
                         nameText.setText("Hello " + name);
+                        if(isFirstTime) {
+                            createButtons();
+                            isFirstTime = false;
+                        }
+                        else {
+                            startShiftEndShiftDecide();
+                        }
                         Toast.makeText(MainActivity.this, user.getId(), Toast.LENGTH_SHORT).show();
                     }
                 })
@@ -96,35 +105,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void createButtons() {
-
-        while(user == null);
+        buttons.add(new Button(this));
+        buttons.get(0).setText("My Paycheck");
+        buttons.add(new Button(this));
+        buttons.get(1).setText("My Rate");
+        buttons.add(new Button(this));
+        buttons.get(2).setText("My Shifts");
 
         int numOfShifts = user.getShifts().size();
-        /**
-         * TODO: in onClick():
-         *          if there is endHour
-         *              we should start and create new shift with startHour and endHour (and insert it to user.getShifts)
-         *          else
-         *              we should take the last shift from user.getShifts and insert him endHour and endMinutes
-         **/
         if(user.getShifts().get(numOfShifts - 1).getEndHour() != null) {
-            buttons.put("Start Shift", new Button(this));
+            buttons.add(new Button(this));
+            buttons.get(3).setText("Start Shift");
         }
         else {
-            buttons.put("End Shift", new Button(this));
+            buttons.add(new Button(this));
+            buttons.get(3).setText("End Shift");
         }
-        //buttons.put("Start Shift", new Button(this));
 
-        buttons.put("My Paycheck", new Button(this));
-        buttons.put("My Rate", new Button(this));
-        buttons.put("My Shifts", new Button(this));
-
-        buttons.get("My Paycheck").setText("My Paycheck");
-        buttons.get("My Salary").setText("My Salary");
-        buttons.get("My Rate").setText("My Rate");
-        buttons.get("My Shifts").setText("My Shifts");
-
-        for (Button button : buttons.values()) {
+        for (Button button : buttons) {
             ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, GridLayout.LayoutParams.WRAP_CONTENT);
             params.setMargins(10, 10, 10, 10);
@@ -133,10 +131,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             button.setOnClickListener(this);
             button.setBackgroundResource(R.color.colorPrimary);
             button.setTextColor(getResources().getColor(R.color.white));
-            button.setTypeface(Typeface.create("casual", Typeface.NORMAL), Typeface.NORMAL);
+            if(button.getText().toString().equals("Start Shift") || button.getText().toString().equals("End Shift")) {
+                button.setTypeface(Typeface.create("casual", Typeface.NORMAL), Typeface.BOLD);
+                // TODO: set type of this button
+            }
+            else
+                button.setTypeface(Typeface.create("casual", Typeface.NORMAL), Typeface.NORMAL);
             linearLayout.addView(button);
         }
-
+        mainLayout.addView(linearLayout);
     }
 
     public void goToActivity(Class<?> className) {
@@ -216,9 +219,68 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void startShift() {
 
+        Calendar c = Calendar.getInstance();
+        int currentDay = c.get(Calendar.DAY_OF_MONTH);
+        int currentMonth = c.get(Calendar.MONTH);
+        int currentHour = c.get(Calendar.HOUR_OF_DAY); // Return the hour in 24 hrs format (ranging from 0-23)
+        int currentMinute = c.get(Calendar.MINUTE);
+        String currentTime = String.format("%02d:%02d", currentHour, currentMinute);
+
+        ArrayList<Shift> shifts;
+
+        // Start Shift(String hourlyWage, String day, String month, String beginHour, String beginMinute)
+        if(user.getShifts() != null) {
+            shifts = user.getShifts();
+        }
+        else {
+            shifts = new ArrayList<>();
+        }
+
+        shifts.add(new Shift(String.valueOf(user.getHourlyWage()), String.valueOf(currentDay),String.valueOf(currentMonth+1),
+                currentTime.split(":")[0], currentTime.split(":")[1]));
+        user.setShifts(shifts);
+        updateUserInDB();
+        buttons.get(3).setText("End Shift");
     }
 
     public void endShift() {
 
+        Calendar c = Calendar.getInstance();
+        int currentHour = c.get(Calendar.HOUR_OF_DAY); // Return the hour in 24 hrs format (ranging from 0-23)
+        int currentMinute = c.get(Calendar.MINUTE);
+        String currentTime = String.format("%02d:%02d", currentHour, currentMinute);
+
+        int numOfShifts = user.getShifts().size();
+        ArrayList<Shift> shifts = user.getShifts();
+
+        Shift oldShift = shifts.get(numOfShifts - 1);
+        Shift newShift = new Shift(oldShift.getHourlyWage(), oldShift.getDay(), oldShift.getMonth(), oldShift.getBeginHour(),
+                                    currentTime.split(":")[0], oldShift.getBeginMinute(), currentTime.split(":")[1]);
+
+        shifts.remove(numOfShifts - 1);
+        shifts.add(numOfShifts - 1, newShift);
+        user.setShifts(shifts);
+        updateUserInDB();
+        buttons.get(3).setText("Start Shift");
+    }
+
+    public void updateUserInDB() {
+        db.collection("Users")
+                .document(user.getId())
+                .set(user)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(getApplicationContext(), "Save detailes Successfully", Toast.LENGTH_SHORT).show();
+                }).addOnFailureListener(e -> Toast.makeText(getApplicationContext(), " An error has occurred", Toast.LENGTH_SHORT).show());
+    }
+
+    public void startShiftEndShiftDecide() {
+        int numOfShifts = user.getShifts().size();
+
+        if(user.getShifts().get(numOfShifts - 1).getEndHour() != null) {
+            buttons.get(3).setText("Start Shift");
+        }
+        else {
+            buttons.get(3).setText("End Shift");
+        }
     }
 }

@@ -25,8 +25,10 @@ class Paycheck implements Serializable, Finals {
 
         this.baseWage = 0;
         if(user.getShifts() != null) {
-            for(Shift shift : user.getShifts())
-                this.baseWage += Float.parseFloat(shift.getShiftProfit());
+            for(Shift shift : user.getShifts()) {
+                if(shift.getShiftProfit() != null)
+                    this.baseWage += Float.parseFloat(shift.getShiftProfit());
+            }
         }
 
         this.travelFee = user.getTravelFee();

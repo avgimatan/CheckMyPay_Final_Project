@@ -13,14 +13,23 @@ class Shift implements Serializable, Finals{
     public Shift() {
     }
 
+    // Start shift
+    public Shift(String hourlyWage, String day, String month, String beginHour, String beginMinute) {
+        this.hourlyWage = hourlyWage;
+        this.day = day;
+        this.month = month;
+        this.beginHour = beginHour;
+        this.beginMinute = beginMinute;
+    }
+
     public Shift(String hourlyWage, String day, String month, String beginHour, String endHour, String beginMinute, String endMinute) {
+        this.hourlyWage = hourlyWage;
         this.day = day;
         this.month = month;
         this.beginHour = beginHour;
         this.endHour = endHour;
         this.beginMinute = beginMinute;
         this.endMinute = endMinute;
-        this.hourlyWage = hourlyWage;
         setTotalHours();
         setShiftProfit();
         this.isHoliday = false;

@@ -46,7 +46,6 @@ public class PaycheckActivity extends AppCompatActivity implements View.OnClickL
 
         initChooseGrid();
 
-
         setPaycheck();
 
         initPaycheckGrid();
