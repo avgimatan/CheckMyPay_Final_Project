@@ -30,13 +30,14 @@ class Shift implements Serializable, Finals {
         this.endHour = endHour;
         this.beginMinute = beginMinute;
         this.endMinute = endMinute;
-        setTotalHours();
-        setShiftProfit();
         this.isHoliday = false;
         this.shabbatFromHour = String.valueOf(user.getShabbatFromHour());
         this.shabbatToMin = String.valueOf(user.getShabbatToMin());
         this.shabbatFromMin = String.valueOf(user.getShabbatFromMin());
         this.shabbatToHour = String.valueOf(user.getShabbatToHour());
+        setTotalHours();
+        setShiftProfit();
+
     }
 
 
@@ -133,103 +134,120 @@ class Shift implements Serializable, Finals {
         float shabbatFromMinuteDecimal = Float.parseFloat(this.shabbatFromMin);
         float beginHourDecimal = Float.parseFloat(this.beginHour);
         float beginMinuteDecimal = Float.parseFloat(this.beginMinute);
+
+        float shabbatToHourDecimal = Float.parseFloat(this.shabbatToHour);
+        float shabbatToMinuteDecimal = Float.parseFloat(this.shabbatToMin);
+        float endHourDecimal = Float.parseFloat(this.endHour);
+        float endMinuteDecimal = Float.parseFloat(this.endMinute);
         float diffBeginShabbatHours = (shabbatFromHourDecimal + shabbatFromMinuteDecimal) - (beginHourDecimal + beginMinuteDecimal);
-        //float numOfExtraHours;
-        // check shabbat hours
-        if (currentDay == 6 ) { // Friday
-
-            if (diffBeginShabbatHours <= totalDecimal) {
-
-                if (totalDecimal < 8)
-                    this.shiftProfit = String.valueOf(diffBeginShabbatHours * hourlyWageDecimal
-                            + (totalDecimal - diffBeginShabbatHours) * SECOND_EXTRA_HOURS * hourlyWageDecimal);
-                else if (totalDecimal > 8 && totalDecimal <= 10)
-                    this.shiftProfit = String.valueOf(diffBeginShabbatHours * hourlyWageDecimal
-                            + (8 - diffBeginShabbatHours) * hourlyWageDecimal * SECOND_EXTRA_HOURS
-                            + (totalDecimal - 8) * hourlyWageDecimal * FIRST_SHABAT_EXTRA_HOURS);
-                else if (totalDecimal > 10)
-                    this.shiftProfit = String.valueOf(diffBeginShabbatHours * hourlyWageDecimal
-                            + (8 - diffBeginShabbatHours) * hourlyWageDecimal * SECOND_EXTRA_HOURS
-                            + 2 * hourlyWageDecimal * FIRST_SHABAT_EXTRA_HOURS
-                            + (totalDecimal - 10) * hourlyWageDecimal * SECOND_SHABAT_EXTRA_HOURS);
-            } else if (beginHourDecimal >= shabbatFromHourDecimal ) {
-
-            }
-
-        }
+        float diffEndShabbatHours = (shabbatToHourDecimal + shabbatToMinuteDecimal) - (endHourDecimal + endMinuteDecimal);
 
         // night shift condition
-        if ( (hourToDecimal < 22 && (22 - hourToDecimal) > 2) || hourToDecimal > 22 ) {
-            //numOfExtraHours = totalDecimal -7;
-            if(isHoliday) {
-                if (totalDecimal < 7)
-                    this.shiftProfit = String.valueOf(hourlyWageDecimal * totalDecimal * SECOND_EXTRA_HOURS);
-                else if (totalDecimal > 7 && totalDecimal <= 9)
-                    this.shiftProfit = String.valueOf(hourlyWageDecimal * 7 * SECOND_EXTRA_HOURS
-                            + (totalDecimal - 7) * FIRST_SHABAT_EXTRA_HOURS * hourlyWageDecimal);
-                else if (totalDecimal > 9)
-                    this.shiftProfit = String.valueOf(hourlyWageDecimal * 7 * SECOND_EXTRA_HOURS
-                            + hourlyWageDecimal * 2 * FIRST_SHABAT_EXTRA_HOURS
-                            + hourlyWageDecimal * (totalDecimal - 9) * SECOND_SHABAT_EXTRA_HOURS);
-            }else {
-                if (totalDecimal < 7)
-                    this.shiftProfit = String.valueOf(hourlyWageDecimal * totalDecimal);
-                else if (totalDecimal > 7 && totalDecimal <= 9)
-                    this.shiftProfit = String.valueOf(hourlyWageDecimal * 7
-                            + (totalDecimal - 7) * FIRST_EXTRA_HOURS * hourlyWageDecimal);
-                else if (totalDecimal > 9)
-                    this.shiftProfit = String.valueOf(hourlyWageDecimal * 7
-                            + hourlyWageDecimal * 2 * FIRST_EXTRA_HOURS
-                            + hourlyWageDecimal * (totalDecimal - 9) * SECOND_EXTRA_HOURS);
-            }
+        if ( (beginHourDecimal < 22 && (22 - beginHourDecimal) >= 2) || beginHourDecimal >= 22 ) {
 
+            if (isHoliday) // calc Holiday
+               calcHolidayProfit(NIGHT_HOURS, totalDecimal, hourlyWageDecimal);
+            else if (currentDay == 6) // calc Friday
+                calcBeginShabbatProfit(NIGHT_HOURS, totalDecimal, hourlyWageDecimal, diffBeginShabbatHours
+                        , beginHourDecimal, shabbatFromHourDecimal, endHourDecimal);
+            else if (currentDay == 7) // calc Saturday
+                calcEndShabbatProfit(NIGHT_HOURS, totalDecimal, hourlyWageDecimal, diffEndShabbatHours,
+                        beginHourDecimal, shabbatToHourDecimal, endHourDecimal);
+            else // calc regular hours
+                calcRegularProfit(NIGHT_HOURS, totalDecimal, hourlyWageDecimal);
 
         } else { // day shift
 
-            if (isHoliday) {
-
-                if (totalDecimal < 8)
-                    this.shiftProfit = String.valueOf(hourlyWageDecimal * totalDecimal * SECOND_EXTRA_HOURS);
-                else if (totalDecimal > 8 && totalDecimal <= 10)
-                    this.shiftProfit = String.valueOf(hourlyWageDecimal * 8 * SECOND_EXTRA_HOURS
-                            + (totalDecimal - 8) * FIRST_SHABAT_EXTRA_HOURS * hourlyWageDecimal);
-                else if (totalDecimal > 10)
-                    this.shiftProfit = String.valueOf(hourlyWageDecimal * 8 * SECOND_EXTRA_HOURS
-                            + hourlyWageDecimal * 2 * FIRST_SHABAT_EXTRA_HOURS
-                            + hourlyWageDecimal * (totalDecimal - 10) * SECOND_SHABAT_EXTRA_HOURS);
-
-            } else { // calc regular days with extra hours
-
-                if (totalDecimal < 8)
-                    this.shiftProfit = String.valueOf(hourlyWageDecimal * totalDecimal);
-                else if (totalDecimal > 8 && totalDecimal <= 10)
-                    this.shiftProfit = String.valueOf(hourlyWageDecimal * 8
-                            + (totalDecimal - 8) * FIRST_EXTRA_HOURS * hourlyWageDecimal);
-                else if (totalDecimal > 10)
-                    this.shiftProfit = String.valueOf(hourlyWageDecimal * 8
-                            + hourlyWageDecimal * 2 * FIRST_EXTRA_HOURS
-                            + hourlyWageDecimal * (totalDecimal - 10) * SECOND_EXTRA_HOURS);
-            }
-
-
+            if (isHoliday) // calc Holiday
+                calcHolidayProfit(DAY_HOURS, totalDecimal, hourlyWageDecimal);
+            else if (currentDay == 6) // calc Friday
+                calcBeginShabbatProfit(DAY_HOURS, totalDecimal, hourlyWageDecimal, diffBeginShabbatHours
+                        , beginHourDecimal, shabbatFromHourDecimal, endHourDecimal);
+            else if (currentDay == 7) // calc Saturday
+                calcEndShabbatProfit(DAY_HOURS, totalDecimal, hourlyWageDecimal, diffEndShabbatHours
+                        , beginHourDecimal, shabbatToHourDecimal, endHourDecimal);
+            else // calc regular days with extra hours
+                calcRegularProfit(DAY_HOURS, totalDecimal, hourlyWageDecimal);
         }
 
     }
 
-
     public void calcHolidayProfit(float dayNightHours, float totalDecimal, float hourlyWageDecimal) {
 
-        if (totalDecimal < dayNightHours)
+        if (totalDecimal <= dayNightHours)
             this.shiftProfit = String.valueOf(hourlyWageDecimal * totalDecimal * SECOND_EXTRA_HOURS);
-        else if (totalDecimal > dayNightHours && totalDecimal <= dayNightHours + 2)
+        else if (totalDecimal > dayNightHours && totalDecimal <= (dayNightHours + 2))
             this.shiftProfit = String.valueOf(hourlyWageDecimal * dayNightHours * SECOND_EXTRA_HOURS
-                    + (totalDecimal - dayNightHours) * FIRST_SHABAT_EXTRA_HOURS * hourlyWageDecimal);
-        else if (totalDecimal > dayNightHours + 2)
+                    + (totalDecimal - dayNightHours) * hourlyWageDecimal * FIRST_SHABAT_EXTRA_HOURS);
+        else if (totalDecimal > (dayNightHours + 2) )
             this.shiftProfit = String.valueOf(hourlyWageDecimal * dayNightHours * SECOND_EXTRA_HOURS
                     + hourlyWageDecimal * 2 * FIRST_SHABAT_EXTRA_HOURS
-                    + hourlyWageDecimal * (totalDecimal - dayNightHours + 2) * SECOND_SHABAT_EXTRA_HOURS);
+                    + hourlyWageDecimal * (totalDecimal - (dayNightHours + 2) ) * SECOND_SHABAT_EXTRA_HOURS);
 
 
+    }
+
+    public void calcRegularProfit(float dayNightHours, float totalDecimal, float hourlyWageDecimal) {
+        if (totalDecimal <= dayNightHours)
+            this.shiftProfit = String.valueOf(hourlyWageDecimal * totalDecimal);
+        else if (totalDecimal > dayNightHours && totalDecimal <= (dayNightHours + 2) )
+            this.shiftProfit = String.valueOf(hourlyWageDecimal * dayNightHours
+                    + (totalDecimal - dayNightHours) * FIRST_EXTRA_HOURS * hourlyWageDecimal);
+        else if (totalDecimal > (dayNightHours + 2) )
+            this.shiftProfit = String.valueOf(hourlyWageDecimal * dayNightHours
+                    + hourlyWageDecimal * 2 * FIRST_EXTRA_HOURS
+                    + hourlyWageDecimal * (totalDecimal - (dayNightHours + 2) ) * SECOND_EXTRA_HOURS);
+    }
+
+    public void calcBeginShabbatProfit(float dayNightHours, float totalDecimal, float hourlyWageDecimal, float diff,
+                                  float beginHourDecimal, float shabbatFromHourDecimal, float endHourDecimal) {
+
+        if (diff < totalDecimal) {
+            if (totalDecimal <= dayNightHours)
+                this.shiftProfit = String.valueOf(diff * hourlyWageDecimal
+                        + (totalDecimal - diff) * SECOND_EXTRA_HOURS * hourlyWageDecimal);
+            else if (totalDecimal > dayNightHours && totalDecimal <= (dayNightHours + 2) )
+                this.shiftProfit = String.valueOf(diff * hourlyWageDecimal
+                        + (dayNightHours - diff) * hourlyWageDecimal * SECOND_EXTRA_HOURS
+                        + (totalDecimal - dayNightHours) * hourlyWageDecimal * FIRST_SHABAT_EXTRA_HOURS);
+            else if (totalDecimal > (dayNightHours + 2) )
+                this.shiftProfit = String.valueOf(diff * hourlyWageDecimal
+                        + (dayNightHours - diff) * hourlyWageDecimal * SECOND_EXTRA_HOURS
+                        + 2 * hourlyWageDecimal * FIRST_SHABAT_EXTRA_HOURS
+                        + (totalDecimal - (dayNightHours + 2) ) * hourlyWageDecimal * SECOND_SHABAT_EXTRA_HOURS);
+        }
+        else if (beginHourDecimal >= shabbatFromHourDecimal ) {
+            calcHolidayProfit(NIGHT_HOURS, totalDecimal, hourlyWageDecimal);
+        }
+        else if (endHourDecimal <= shabbatFromHourDecimal) {
+            calcRegularProfit(DAY_HOURS, totalDecimal, hourlyWageDecimal);
+        }
+    }
+
+    public void calcEndShabbatProfit(float dayNightHours, float totalDecimal, float hourlyWageDecimal, float diff,
+                                       float beginHourDecimal, float shabbatToHourDecimal, float endHourDecimal) {
+
+        if (diff < totalDecimal) {
+            if (totalDecimal <= dayNightHours)
+                this.shiftProfit = String.valueOf(diff * hourlyWageDecimal * SECOND_EXTRA_HOURS
+                        + (totalDecimal - diff) * hourlyWageDecimal);
+            else if (totalDecimal > dayNightHours && totalDecimal <= (dayNightHours + 2) )
+                this.shiftProfit = String.valueOf(diff * hourlyWageDecimal * SECOND_EXTRA_HOURS
+                        + (dayNightHours - diff) * hourlyWageDecimal
+                        + (totalDecimal - dayNightHours) * hourlyWageDecimal * FIRST_EXTRA_HOURS);
+            else if (totalDecimal > (dayNightHours + 2) )
+                this.shiftProfit = String.valueOf(diff * hourlyWageDecimal * SECOND_EXTRA_HOURS
+                        + (dayNightHours - diff) * hourlyWageDecimal
+                        + 2 * hourlyWageDecimal * FIRST_EXTRA_HOURS
+                        + (totalDecimal - (dayNightHours + 2) ) * hourlyWageDecimal * SECOND_EXTRA_HOURS);
+
+        }
+        else if (beginHourDecimal >= shabbatToHourDecimal ) {
+            calcRegularProfit(NIGHT_HOURS,totalDecimal,hourlyWageDecimal);
+        }
+        else if (endHourDecimal <= shabbatToHourDecimal ) {
+            calcHolidayProfit(DAY_HOURS, totalDecimal, hourlyWageDecimal);
+        }
     }
 
 }
