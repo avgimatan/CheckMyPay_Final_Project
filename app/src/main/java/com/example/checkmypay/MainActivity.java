@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        user = (User) getIntent().getSerializableExtra("user");
 
         // Get location permission
         getGoogleMapsPermissions();
@@ -362,4 +363,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onProviderDisabled(String provider) {
 
     }
+
+
 }
