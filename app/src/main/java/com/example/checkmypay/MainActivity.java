@@ -3,9 +3,16 @@ package com.example.checkmypay;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,14 +33,20 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, LocationListener, Finals {
 
     private static boolean isFirstTime = true;
     private User user;
     private ArrayList<Button> buttons;
     private LinearLayout linearLayout, mainLayout;
     private TextView nameText;
+
+    // Location
+    private Location currentLocation = null;
+    private LocationManager locationManager;
 
     //UI Elements
     private Button sign_out_btn;
@@ -58,6 +71,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Get location permission
+        getGoogleMapsPermissions();
+
         // Get user from other activities
         sign_out_btn = findViewById(R.id.sign_out_btn);
         sign_out_btn.setOnClickListener(this);
@@ -71,6 +87,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttons = new ArrayList<>();
         if(!isFirstTime) {
             createButtons();
+        }
+
+        if (checkPermission()){
+            locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
         }
     }
 
@@ -111,15 +131,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttons.get(1).setText("My Rate");
         buttons.add(new Button(this));
         buttons.get(2).setText("My Shifts");
+        buttons.add(new Button(this));
+        buttons.get(3).setText("This is my work location!");
 
         int numOfShifts = user.getShifts().size();
         if(user.getShifts().get(numOfShifts - 1).getEndHour() != null) {
             buttons.add(new Button(this));
-            buttons.get(3).setText("Start Shift");
+            buttons.get(4).setText("Start Shift");
         }
         else {
             buttons.add(new Button(this));
-            buttons.get(3).setText("End Shift");
+            buttons.get(4).setText("End Shift");
         }
 
         for (Button button : buttons) {
@@ -210,6 +232,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     endShift();
                     break;
 
+                case "This is my work location!":
+                    setLocation();
+                    updateUserInDB();
                 default:
                     // do nothing
                     break;
@@ -240,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 currentTime.split(":")[0], currentTime.split(":")[1]));
         user.setShifts(shifts);
         updateUserInDB();
-        buttons.get(3).setText("End Shift");
+        buttons.get(4).setText("End Shift");
     }
 
     public void endShift() {
@@ -262,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         shifts.add(numOfShifts - 1, newShift);
         user.setShifts(shifts);
         updateUserInDB();
-        buttons.get(3).setText("Start Shift");
+        buttons.get(4).setText("Start Shift");
     }
 
     public void updateUserInDB() {
@@ -278,10 +303,63 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int numOfShifts = user.getShifts().size();
 
         if(user.getShifts().get(numOfShifts - 1).getEndHour() != null) {
-            buttons.get(3).setText("Start Shift");
+            buttons.get(4).setText("Start Shift");
         }
         else {
-            buttons.get(3).setText("End Shift");
+            buttons.get(4).setText("End Shift");
         }
+    }
+
+    public boolean checkPermission() {
+        return ContextCompat.checkSelfPermission(this.getApplicationContext(), FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this.getApplicationContext(), COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public void getGoogleMapsPermissions() {
+        String[] permissions = {FINE_LOCATION, COARSE_LOCATION};
+        if (!checkPermission()) {
+            ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    private void setLocation() {
+        locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (getApplicationContext().checkSelfPermission(FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                    getApplicationContext().checkSelfPermission(COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+        }
+        if (currentLocation == null) {
+            currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        }
+        float metersToUpdate = 1;
+        long intervalMilliseconds = 1000;
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, intervalMilliseconds, metersToUpdate, this);
+        Map<String, Double> workLocation = new HashMap<>();
+        workLocation.put("lat", currentLocation.getLatitude());
+        workLocation.put("lon", currentLocation.getLongitude());
+        user.setWorkLocation(workLocation);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        this.currentLocation = location;
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 }

@@ -1,12 +1,18 @@
 package com.example.checkmypay;
 
+import android.Manifest;
+
 public interface Finals {
 
     float FIRST_EXTRA_HOURS = 1.25f;
     float SECOND_EXTRA_HOURS = 1.5f;
     float FIRST_SHABAT_EXTRA_HOURS = 1.75f;
     float SECOND_SHABAT_EXTRA_HOURS = 2.0f;
-    int GRID_SHIFT_COLUMN = 7;
+
+    // Google maps
+    int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    String FINE_LOCATION = android.Manifest.permission.ACCESS_FINE_LOCATION;
+    String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
 
 
     // Credit Value

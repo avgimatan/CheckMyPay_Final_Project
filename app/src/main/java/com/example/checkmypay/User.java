@@ -9,7 +9,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -44,6 +43,7 @@ public class User implements Serializable {
     private ArrayList<Shift> shifts;
     private Map<String, Paycheck> paychecks;
     private Paycheck currentPaycheck;
+    private Map<String, Double> workLocation;
 
     public User() {
     }
@@ -70,7 +70,8 @@ public class User implements Serializable {
         this.shabbatFromMin = 0;
         this.shabbatToMin = 0;
         this.shifts = new ArrayList<>();
-        this.paychecks = new HashMap<String, Paycheck>();
+        this.paychecks = new HashMap<>();
+        this.workLocation = new HashMap<>();
 
     }
 
@@ -179,6 +180,10 @@ public class User implements Serializable {
         this.id = id;
     }
 
+    public void setWorkLocation(Map<String, Double> workLocation) {
+        this.workLocation = workLocation;
+    }
+
     public float getHourlyWage() {
         return hourlyWage;
     }
@@ -233,6 +238,10 @@ public class User implements Serializable {
         return shifts;
         //else
         //return new ArrayList<Shift>();
+    }
+
+    public Map<String, Double> getWorkLocation() {
+        return workLocation;
     }
 
     @Exclude
