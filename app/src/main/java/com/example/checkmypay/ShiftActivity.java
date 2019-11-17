@@ -164,12 +164,13 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
 
                 editEndTime = new EditText(this);
                 editEndTime.setText("24:00");
+                tableRowEdit.addView(editEndTime);
 
                 isHoliday = new CheckBox(this);
                 tableRowEdit.addView(isHoliday); // checkbox
 
                 textShiftProfit = new TextView(this);
-                textShiftProfit.setText("288.9");
+                textShiftProfit.setText("0.0");
                 tableRowEdit.addView(textShiftProfit); // total profit
 
                 Button bu = new Button(this,null,android.R.attr.buttonBarButtonStyle);
@@ -196,7 +197,9 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
                         editFromTime.getText().toString().split(":")[0],
                         editEndTime.getText().toString().split(":")[0],
                         editFromTime.getText().toString().split(":")[1],
-                        editEndTime.getText().toString().split(":")[1]);
+                        editEndTime.getText().toString().split(":")[1],
+                        user);
+
                 shifts.add(shift);
                 user.setShifts(shifts);
                 Toast.makeText(this,"shift size " + shifts.size() , Toast.LENGTH_SHORT).show();

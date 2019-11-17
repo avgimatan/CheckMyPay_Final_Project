@@ -255,7 +255,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Shift oldShift = shifts.get(numOfShifts - 1);
         Shift newShift = new Shift(oldShift.getHourlyWage(), oldShift.getDay(), oldShift.getMonth(), oldShift.getBeginHour(),
-                                    currentTime.split(":")[0], oldShift.getBeginMinute(), currentTime.split(":")[1]);
+                                    currentTime.split(":")[0], oldShift.getBeginMinute(), currentTime.split(":")[1],
+                                    user);
 
         shifts.remove(numOfShifts - 1);
         shifts.add(numOfShifts - 1, newShift);

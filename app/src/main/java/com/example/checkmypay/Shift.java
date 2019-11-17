@@ -8,7 +8,7 @@ class Shift implements Serializable, Finals{
     private String day, month, beginHour, endHour, beginMinute, endMinute;
     private String totalHours, shiftProfit;
     private boolean isHoliday;
-    private String hourlyWage;
+    private String hourlyWage, shabbatFromHour, shabbatToHour, shabbatFromMin, shabbatToMin;
 
     public Shift() {
     }
@@ -22,7 +22,7 @@ class Shift implements Serializable, Finals{
         this.beginMinute = beginMinute;
     }
 
-    public Shift(String hourlyWage, String day, String month, String beginHour, String endHour, String beginMinute, String endMinute) {
+    public Shift(String hourlyWage, String day, String month, String beginHour, String endHour, String beginMinute, String endMinute,User user) {
         this.hourlyWage = hourlyWage;
         this.day = day;
         this.month = month;
@@ -33,7 +33,12 @@ class Shift implements Serializable, Finals{
         setTotalHours();
         setShiftProfit();
         this.isHoliday = false;
+        this.shabbatFromHour = String.valueOf(user.getShabbatFromHour());
+        this.shabbatToMin = String.valueOf(user.getShabbatToMin());
+        this.shabbatFromMin = String.valueOf(user.getShabbatFromMin());
+        this.shabbatToHour = String.valueOf(user.getShabbatToHour());
     }
+    
 
     public String getDay() {
         return day;
@@ -122,38 +127,72 @@ class Shift implements Serializable, Finals{
         float totalDecimal = hourToDecimal + minuteToDecimal;
         float hourlyWageDecimal = Float.parseFloat(this.hourlyWage);
 
-        Calendar rightNow = Calendar.getInstance();
+        Calendar c = Calendar.getInstance();
+        int currentDay = c.get(Calendar.DAY_OF_WEEK);
+        //int currentMonth = c.get(Calendar.MONTH);
+        //int currentHour = c.get(Calendar.HOUR_OF_DAY); // Return the hour in 24 hrs format (ranging from 0-23)
+        //int currentMinute = c.get(Calendar.MINUTE);
+        //String currentTime = String.format("%02d:%02d", currentHour, currentMinute);
+
 
 
         // night shift condition
         if ( (hourToDecimal < 22 && (22 - hourToDecimal) > 2) || hourToDecimal > 22 ) {
 
+            if(isHoliday) {
+                if (totalDecimal < 7)
+                    this.shiftProfit = String.valueOf(hourlyWageDecimal * totalDecimal * SECOND_EXTRA_HOURS);
+                else if (totalDecimal > 7 && totalDecimal <= 9)
+                    this.shiftProfit = String.valueOf(hourlyWageDecimal * 7 * SECOND_EXTRA_HOURS
+                            + (totalDecimal - 7) * FIRST_SHABAT_EXTRA_HOURS * hourlyWageDecimal);
+                else if (totalDecimal > 9)
+                    this.shiftProfit = String.valueOf(hourlyWageDecimal * 7 * SECOND_EXTRA_HOURS
+                            + hourlyWageDecimal * 2 * FIRST_SHABAT_EXTRA_HOURS
+                            + hourlyWageDecimal * (totalDecimal - 9) * SECOND_SHABAT_EXTRA_HOURS);
+            }else {
+                if (totalDecimal < 7)
+                    this.shiftProfit = String.valueOf(hourlyWageDecimal * totalDecimal);
+                else if (totalDecimal > 7 && totalDecimal <= 9)
+                    this.shiftProfit = String.valueOf(hourlyWageDecimal * 7
+                            + (totalDecimal - 7) * FIRST_EXTRA_HOURS * hourlyWageDecimal);
+                else if (totalDecimal > 9)
+                    this.shiftProfit = String.valueOf(hourlyWageDecimal * 7
+                            + hourlyWageDecimal * 2 * FIRST_EXTRA_HOURS
+                            + hourlyWageDecimal * (totalDecimal - 9) * SECOND_EXTRA_HOURS);
+            }
 
 
         } else { // day shift
 
+            if (isHoliday) {
+
+                if (totalDecimal < 8)
+                    this.shiftProfit = String.valueOf(hourlyWageDecimal * totalDecimal * SECOND_EXTRA_HOURS);
+                else if (totalDecimal > 8 && totalDecimal <= 10)
+                    this.shiftProfit = String.valueOf(hourlyWageDecimal * 8 * SECOND_EXTRA_HOURS
+                            + (totalDecimal - 8) * FIRST_SHABAT_EXTRA_HOURS * hourlyWageDecimal);
+                else if (totalDecimal > 10)
+                    this.shiftProfit = String.valueOf(hourlyWageDecimal * 8 * SECOND_EXTRA_HOURS
+                            + hourlyWageDecimal * 2 * FIRST_SHABAT_EXTRA_HOURS
+                            + hourlyWageDecimal * (totalDecimal - 10) * SECOND_SHABAT_EXTRA_HOURS);
+
+            } else { // calc regular days with extra hours
+
+                if (totalDecimal < 8)
+                    this.shiftProfit = String.valueOf(hourlyWageDecimal * totalDecimal);
+                else if (totalDecimal > 8 && totalDecimal <= 10)
+                    this.shiftProfit = String.valueOf(hourlyWageDecimal * 8
+                            + (totalDecimal - 8) * FIRST_EXTRA_HOURS * hourlyWageDecimal);
+                else if (totalDecimal > 10)
+                    this.shiftProfit = String.valueOf(hourlyWageDecimal * 8
+                            + hourlyWageDecimal * 2 * FIRST_EXTRA_HOURS
+                            + hourlyWageDecimal * (totalDecimal - 10) * SECOND_EXTRA_HOURS);
+            }
 
 
         }
 
-
-
-
-        if (isHoliday) {
-
-
-        } else { // calc regular days with extra hours
-
-            if (totalDecimal < 8)
-                this.shiftProfit = String.valueOf(hourlyWageDecimal * totalDecimal);
-            else if (totalDecimal > 8 && totalDecimal <= 10)
-                this.shiftProfit = String.valueOf(hourlyWageDecimal * 8
-                                                + (totalDecimal - 8) * FIRST_EXTRA_HOURS * hourlyWageDecimal);
-            else if (totalDecimal > 10)
-                this.shiftProfit = String.valueOf(hourlyWageDecimal * 8
-                                                + hourlyWageDecimal * 2 * FIRST_EXTRA_HOURS
-                                                + hourlyWageDecimal * (totalDecimal - 10) * SECOND_EXTRA_HOURS);
-        }
     }
+
 
 }
