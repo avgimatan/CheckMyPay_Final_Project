@@ -3,7 +3,7 @@ package com.example.checkmypay;
 import java.io.Serializable;
 import java.util.Calendar;
 
-class Shift implements Serializable, Finals{
+class Shift implements Serializable, Finals {
 
     private String day, month, beginHour, endHour, beginMinute, endMinute;
     private String totalHours, shiftProfit;
@@ -38,7 +38,7 @@ class Shift implements Serializable, Finals{
         this.shabbatFromMin = String.valueOf(user.getShabbatFromMin());
         this.shabbatToHour = String.valueOf(user.getShabbatToHour());
     }
-    
+
 
     public String getDay() {
         return day;
@@ -129,16 +129,38 @@ class Shift implements Serializable, Finals{
 
         Calendar c = Calendar.getInstance();
         int currentDay = c.get(Calendar.DAY_OF_WEEK);
-        //int currentMonth = c.get(Calendar.MONTH);
-        //int currentHour = c.get(Calendar.HOUR_OF_DAY); // Return the hour in 24 hrs format (ranging from 0-23)
-        //int currentMinute = c.get(Calendar.MINUTE);
-        //String currentTime = String.format("%02d:%02d", currentHour, currentMinute);
+        float shabbatFromHourDecimal = Float.parseFloat(this.shabbatFromHour);
+        float shabbatFromMinuteDecimal = Float.parseFloat(this.shabbatFromMin);
+        float beginHourDecimal = Float.parseFloat(this.beginHour);
+        float beginMinuteDecimal = Float.parseFloat(this.beginMinute);
+        float diffBeginShabbatHours = (shabbatFromHourDecimal + shabbatFromMinuteDecimal) - (beginHourDecimal + beginMinuteDecimal);
+        //float numOfExtraHours;
+        // check shabbat hours
+        if (currentDay == 6 ) { // Friday
 
+            if (diffBeginShabbatHours <= totalDecimal) {
 
+                if (totalDecimal < 8)
+                    this.shiftProfit = String.valueOf(diffBeginShabbatHours * hourlyWageDecimal
+                            + (totalDecimal - diffBeginShabbatHours) * SECOND_EXTRA_HOURS * hourlyWageDecimal);
+                else if (totalDecimal > 8 && totalDecimal <= 10)
+                    this.shiftProfit = String.valueOf(diffBeginShabbatHours * hourlyWageDecimal
+                            + (8 - diffBeginShabbatHours) * hourlyWageDecimal * SECOND_EXTRA_HOURS
+                            + (totalDecimal - 8) * hourlyWageDecimal * FIRST_SHABAT_EXTRA_HOURS);
+                else if (totalDecimal > 10)
+                    this.shiftProfit = String.valueOf(diffBeginShabbatHours * hourlyWageDecimal
+                            + (8 - diffBeginShabbatHours) * hourlyWageDecimal * SECOND_EXTRA_HOURS
+                            + 2 * hourlyWageDecimal * FIRST_SHABAT_EXTRA_HOURS
+                            + (totalDecimal - 10) * hourlyWageDecimal * SECOND_SHABAT_EXTRA_HOURS);
+            } else if (beginHourDecimal >= shabbatFromHourDecimal ) {
+
+            }
+
+        }
 
         // night shift condition
         if ( (hourToDecimal < 22 && (22 - hourToDecimal) > 2) || hourToDecimal > 22 ) {
-
+            //numOfExtraHours = totalDecimal -7;
             if(isHoliday) {
                 if (totalDecimal < 7)
                     this.shiftProfit = String.valueOf(hourlyWageDecimal * totalDecimal * SECOND_EXTRA_HOURS);
@@ -194,5 +216,20 @@ class Shift implements Serializable, Finals{
 
     }
 
+
+    public void calcHolidayProfit(float dayNightHours, float totalDecimal, float hourlyWageDecimal) {
+
+        if (totalDecimal < dayNightHours)
+            this.shiftProfit = String.valueOf(hourlyWageDecimal * totalDecimal * SECOND_EXTRA_HOURS);
+        else if (totalDecimal > dayNightHours && totalDecimal <= dayNightHours + 2)
+            this.shiftProfit = String.valueOf(hourlyWageDecimal * dayNightHours * SECOND_EXTRA_HOURS
+                    + (totalDecimal - dayNightHours) * FIRST_SHABAT_EXTRA_HOURS * hourlyWageDecimal);
+        else if (totalDecimal > dayNightHours + 2)
+            this.shiftProfit = String.valueOf(hourlyWageDecimal * dayNightHours * SECOND_EXTRA_HOURS
+                    + hourlyWageDecimal * 2 * FIRST_SHABAT_EXTRA_HOURS
+                    + hourlyWageDecimal * (totalDecimal - dayNightHours + 2) * SECOND_SHABAT_EXTRA_HOURS);
+
+
+    }
 
 }

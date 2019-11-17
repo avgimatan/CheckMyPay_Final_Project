@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class ShiftActivity extends AppCompatActivity implements Finals, View.OnClickListener{
@@ -227,6 +228,12 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
                         EditText editToHour = (EditText) editTableRow.getChildAt(2);
                         editedShift.setEndHour(editToHour.getText().toString().split(":")[0]);
                         editedShift.setEndMinute(editToHour.getText().toString().split(":")[1]);
+
+                        //calc how much shabbat hours
+                        Calendar c = Calendar.getInstance();
+                        int currentDay = c.get(Calendar.DAY_OF_WEEK);
+
+
 
                         CheckBox editIsHoliday = (CheckBox) editTableRow.getChildAt(3);
                         if (editIsHoliday.isChecked()) {
