@@ -77,6 +77,22 @@ class Shift implements Serializable, Finals {
         return hourlyWage;
     }
 
+    public String getShabbatFromHour() {
+        return shabbatFromHour;
+    }
+
+    public String getShabbatToHour() {
+        return shabbatToHour;
+    }
+
+    public String getShabbatFromMin() {
+        return shabbatFromMin;
+    }
+
+    public String getShabbatToMin() {
+        return shabbatToMin;
+    }
+
     public boolean isHoliday() {
         return isHoliday;
     }
