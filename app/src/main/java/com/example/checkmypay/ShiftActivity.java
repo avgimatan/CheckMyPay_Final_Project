@@ -116,6 +116,7 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
                 tableRowEdit.addView(editEndTime); // end time (editable)
 
                 isHoliday = new CheckBox(this);
+                isHoliday.setChecked(shift.isHoliday());
                 tableRowEdit.addView(isHoliday); // checkbox
 
                 textShiftProfit = new TextView(this);
@@ -230,9 +231,10 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
                         editedShift.setEndMinute(editToHour.getText().toString().split(":")[1]);
 
                         CheckBox editIsHoliday = (CheckBox) editTableRow.getChildAt(3);
-                        if (editIsHoliday.isChecked()) {
+                        if (editIsHoliday.isChecked())
                             editedShift.setHoliday(true);
-                        }
+                        else
+                            editedShift.setHoliday(false);
 
                         editedShift.setTotalHours();
                         editedShift.setShiftProfit();
