@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
+        mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() == null) {
             startActivity(new Intent(getApplicationContext(), SignInActivity.class));
             finish();
@@ -71,9 +72,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         user = (User) getIntent().getSerializableExtra("user");
-
-        // Get location permission
-        getGoogleMapsPermissions();
 
         // Get user from other activities
         sign_out_btn = findViewById(R.id.sign_out_btn);
@@ -90,9 +88,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             createButtons();
         }
 
-        if (checkPermission()){
-            locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
-        }
+        // Get location permission
+        getGoogleMapsPermissions();
     }
 
     // Get current user
@@ -136,15 +133,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttons.get(3).setText("This is my work location!");
 
         int numOfShifts = user.getShifts().size();
-        if(user.getShifts().get(numOfShifts - 1).getEndHour() != null) {
+        if(numOfShifts == 0) {
             buttons.add(new Button(this));
             buttons.get(4).setText("Start Shift");
         }
         else {
-            buttons.add(new Button(this));
-            buttons.get(4).setText("End Shift");
+            if (user.getShifts().get(numOfShifts - 1).getEndHour() != null) {
+                buttons.add(new Button(this));
+                buttons.get(4).setText("Start Shift");
+            } else {
+                buttons.add(new Button(this));
+                buttons.get(4).setText("End Shift");
+            }
         }
-
         for (Button button : buttons) {
             ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, GridLayout.LayoutParams.WRAP_CONTENT);
@@ -234,8 +235,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
 
                 case "This is my work location!":
-                    setLocation();
-                    updateUserInDB();
+                    if(checkPermission()) {
+                        setLocation();
+                        updateUserInDB();
+                    }
+                    else
+                        Toast.makeText(MainActivity.this, "You should let a permission location first!", Toast.LENGTH_SHORT).show();
                 default:
                     // do nothing
                     break;
@@ -302,12 +307,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void startShiftEndShiftDecide() {
         int numOfShifts = user.getShifts().size();
-
-        if(user.getShifts().get(numOfShifts - 1).getEndHour() != null) {
+        if(numOfShifts == 0) {
             buttons.get(4).setText("Start Shift");
         }
         else {
-            buttons.get(4).setText("End Shift");
+            if (user.getShifts().get(numOfShifts - 1).getEndHour() != null) {
+                buttons.get(4).setText("Start Shift");
+            } else {
+                buttons.get(4).setText("End Shift");
+            }
         }
     }
 
