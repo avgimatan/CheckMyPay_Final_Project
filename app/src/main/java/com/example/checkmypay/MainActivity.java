@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        user = (User) getIntent().getSerializableExtra("user");
 
         // Get user from other activities
         sign_out_btn = findViewById(R.id.sign_out_btn);
@@ -376,6 +375,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onProviderDisabled(String provider) {
 
     }
-
-
 }
