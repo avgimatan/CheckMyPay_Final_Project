@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
-        mAuth = FirebaseAuth.getInstance();
+       // mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() == null) {
             startActivity(new Intent(getApplicationContext(), SignInActivity.class));
             finish();
@@ -88,8 +88,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             createButtons();
         }
 
+
         // Get location permission
         getGoogleMapsPermissions();
+
+        if (checkPermission()){
+            locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+        }
     }
 
     // Get current user
