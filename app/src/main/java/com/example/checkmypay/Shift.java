@@ -178,7 +178,8 @@ class Shift implements Serializable, Finals {
         float diffEndShabbatHours = shabbatFromTime - beginTimeDecimal;
 
         // night shift condition
-        if ( (beginHourDecimal < 22 && (22 - endHourDecimal) >= 2) || beginHourDecimal >= 22 ) {
+        //if ( (beginHourDecimal < 22 && (22 - endHourDecimal) >= 2) || beginHourDecimal >= 22 ) {
+        if ( endHourDecimal + 2 >= 22 ) {
 
             if (isHoliday) // calc Holiday
                calcHolidayProfit(NIGHT_HOURS, totalDecimal, this.hourlyWage);
