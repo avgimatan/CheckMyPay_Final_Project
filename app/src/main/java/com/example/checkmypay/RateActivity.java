@@ -38,7 +38,7 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rate);
         user = (User) getIntent().getSerializableExtra("user");
-        Log.e("Rate", "onCreate: " + user.getId());
+        //Log.e("Rate", "onCreate: " + user.getId());
 
         input_wage = findViewById(R.id.rate_input_hourly_wage);
         input_startDate = findViewById(R.id.rate_input_start_date);

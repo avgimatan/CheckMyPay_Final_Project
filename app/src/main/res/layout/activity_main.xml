@@ -29,5 +29,11 @@
         android:fontFamily="casual"
         android:gravity="center"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Do it!"
+        android:id="@+id/check_button" />
+
 
 </LinearLayout>

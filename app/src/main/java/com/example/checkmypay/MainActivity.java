@@ -4,14 +4,22 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -36,6 +44,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.app.Notification.EXTRA_NOTIFICATION_ID;
+import static com.example.checkmypay.App.CHANNEL_1;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, LocationListener, Finals {
 
     private static boolean isFirstTime = true;
@@ -49,16 +60,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LocationManager locationManager;
 
     //UI Elements
-    private Button sign_out_btn;
+    private Button sign_out_btn, check_btn;
 
     //Firebase
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
+    //Notification
+    private NotificationManagerCompat mNotificationManager;
+
     @Override
     protected void onStart() {
         super.onStart();
-       // mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() == null) {
             startActivity(new Intent(getApplicationContext(), SignInActivity.class));
             finish();
@@ -75,7 +88,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Get user from other activities
         sign_out_btn = findViewById(R.id.sign_out_btn);
         sign_out_btn.setOnClickListener(this);
-
+        check_btn = findViewById(R.id.check_button);
+        check_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendNotification(v);
+            }
+        });
         nameText = findViewById(R.id.text_username_menu);
 
         //create Linear and Buttons
@@ -94,6 +113,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (checkPermission()){
             locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
         }
+
+        mNotificationManager = NotificationManagerCompat.from(this);
+
     }
 
     // Get current user
@@ -271,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             shifts = new ArrayList<>();
         }
 
-        shifts.add(new Shift(String.valueOf(user.getHourlyWage()), String.valueOf(currentDay),String.valueOf(currentMonth+1),
+        shifts.add(new Shift(user.getHourlyWage(), String.valueOf(currentDay),String.valueOf(currentMonth+1),
                 currentTime.split(":")[0], currentTime.split(":")[1]));
         user.setShifts(shifts);
         updateUserInDB();
@@ -345,6 +367,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         if (currentLocation == null) {
+            assert locationManager != null;
             currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
         float metersToUpdate = 1;
@@ -358,7 +381,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onLocationChanged(Location location) {
-        this.currentLocation = location;
+        float[] results = new float[1];
+        if(location != null) {
+            this.currentLocation = location;
+
+            Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(),
+                    user.getWorkLocation().get("lat"), user.getWorkLocation().get("lon"), results);
+
+            if(results[0] <= 1) {
+                //sendNotification();
+                user.setHourlyWage(77);
+                updateUserInDB();
+            }
+        }
     }
 
     @Override
@@ -374,5 +409,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+
+    public void sendNotification(View v) {
+
+        Intent snoozeIntent = new Intent(this, MyBroadcastReceiver.class);
+        //snoozeIntent.setAction(".MyBroadcastReceiver");
+        //snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
+        PendingIntent snoozePendingIntent =
+                PendingIntent.getBroadcast(this, 0, snoozeIntent, 0);
+
+
+
+        NotificationCompat.Builder notification = new NotificationCompat.Builder(this, CHANNEL_1)
+                .setSmallIcon(R.drawable.notification_icon)
+                .setContentTitle("My notification")
+                .setContentText("Hello World!")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .setContentIntent(snoozePendingIntent)
+                .addAction(R.drawable.notification_icon, "fuck you", snoozePendingIntent);
+
+
+        mNotificationManager.notify(1, notification.build());
     }
 }
