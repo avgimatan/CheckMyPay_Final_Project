@@ -3,18 +3,19 @@ package com.example.checkmypay;
 import java.io.Serializable;
 import java.util.Calendar;
 
+
 class Shift implements Serializable, Finals {
 
     private String day, month, beginHour, endHour, beginMinute, endMinute;
     private String totalHours, shiftProfit;
     private boolean isHoliday;
-    private String hourlyWage, shabbatFromHour, shabbatToHour, shabbatFromMin, shabbatToMin;
+    private float hourlyWage, shabbatFromHour, shabbatToHour, shabbatFromMin, shabbatToMin;
 
     public Shift() {
     }
 
     // Start shift
-    public Shift(String hourlyWage, String day, String month, String beginHour, String beginMinute) {
+    public Shift(float hourlyWage, String day, String month, String beginHour, String beginMinute) {
         this.hourlyWage = hourlyWage;
         this.day = day;
         this.month = month;
@@ -22,7 +23,7 @@ class Shift implements Serializable, Finals {
         this.beginMinute = beginMinute;
     }
 
-    public Shift(String hourlyWage, String day, String month, String beginHour, String endHour, String beginMinute, String endMinute,User user) {
+    public Shift(float hourlyWage, String day, String month, String beginHour, String endHour, String beginMinute, String endMinute,User user) {
         this.hourlyWage = hourlyWage;
         this.day = day;
         this.month = month;
@@ -31,10 +32,10 @@ class Shift implements Serializable, Finals {
         this.beginMinute = beginMinute;
         this.endMinute = endMinute;
         this.isHoliday = false;
-        this.shabbatFromHour = String.valueOf(user.getShabbatFromHour());
-        this.shabbatToMin = String.valueOf(user.getShabbatToMin());
-        this.shabbatFromMin = String.valueOf(user.getShabbatFromMin());
-        this.shabbatToHour = String.valueOf(user.getShabbatToHour());
+        this.shabbatFromHour = user.getShabbatFromHour();
+        this.shabbatToMin = user.getShabbatToMin();
+        this.shabbatFromMin = user.getShabbatFromMin();
+        this.shabbatToHour = user.getShabbatToHour();
         setTotalHours();
         setShiftProfit();
 
@@ -73,23 +74,23 @@ class Shift implements Serializable, Finals {
         return shiftProfit;
     }
 
-    public String getHourlyWage() {
+    public float getHourlyWage() {
         return hourlyWage;
     }
 
-    public String getShabbatFromHour() {
+    public float getShabbatFromHour() {
         return shabbatFromHour;
     }
 
-    public String getShabbatToHour() {
+    public float getShabbatToHour() {
         return shabbatToHour;
     }
 
-    public String getShabbatFromMin() {
+    public float getShabbatFromMin() {
         return shabbatFromMin;
     }
 
-    public String getShabbatToMin() {
+    public float getShabbatToMin() {
         return shabbatToMin;
     }
 
@@ -125,13 +126,18 @@ class Shift implements Serializable, Finals {
         isHoliday = holiday;
     }
 
-    public void setHourlyWage(String hourlyWage) {
+    public void setHourlyWage(float hourlyWage) {
         this.hourlyWage = hourlyWage;
     }
 
     public void setTotalHours() {
 
-        String diffHour = String.valueOf(Integer.parseInt(this.endHour) - Integer.parseInt(this.beginHour));
+        int endHourDecimal = Integer.parseInt(this.endHour);
+        int beginHourDecimal = Integer.parseInt(this.beginHour);
+        if (endHourDecimal < beginHourDecimal) {
+            endHourDecimal+=24;
+        }
+        String diffHour = String.valueOf(endHourDecimal - beginHourDecimal);
         String diffMinute = String.valueOf(Integer.parseInt(this.endMinute) - Integer.parseInt(this.beginMinute));
 
         this.totalHours = diffHour + ":" + diffMinute;
@@ -139,51 +145,64 @@ class Shift implements Serializable, Finals {
 
     public void setShiftProfit() {
 
-        float minuteToDecimal = Float.parseFloat(this.totalHours.split(":")[1]) / 60;
         float hourToDecimal = Float.parseFloat(this.totalHours.split(":")[0]);
+        float minuteToDecimal = Float.parseFloat(this.totalHours.split(":")[1]) / 60;
         float totalDecimal = hourToDecimal + minuteToDecimal;
-        float hourlyWageDecimal = Float.parseFloat(this.hourlyWage);
 
-        Calendar c = Calendar.getInstance();
-        int currentDay = c.get(Calendar.DAY_OF_WEEK);
-        float shabbatFromHourDecimal = Float.parseFloat(this.shabbatFromHour);
-        float shabbatFromMinuteDecimal = Float.parseFloat(this.shabbatFromMin);
+        float shabbatFromTime = this.shabbatFromHour + (this.shabbatFromMin/60);
+        //float shabbatToTime = this.shabbatToHour + (this.shabbatToMin/60);
+
         float beginHourDecimal = Float.parseFloat(this.beginHour);
         float beginMinuteDecimal = Float.parseFloat(this.beginMinute);
+        float beginTimeDecimal = beginHourDecimal + (beginMinuteDecimal/60);
 
-        float shabbatToHourDecimal = Float.parseFloat(this.shabbatToHour);
-        float shabbatToMinuteDecimal = Float.parseFloat(this.shabbatToMin);
         float endHourDecimal = Float.parseFloat(this.endHour);
-        float endMinuteDecimal = Float.parseFloat(this.endMinute);
-        float diffBeginShabbatHours = (shabbatFromHourDecimal + shabbatFromMinuteDecimal) - (beginHourDecimal + beginMinuteDecimal);
-        float diffEndShabbatHours = (shabbatToHourDecimal + shabbatToMinuteDecimal) - (endHourDecimal + endMinuteDecimal);
+        //float endMinuteDecimal = Float.parseFloat(this.endMinute);
+        if (endHourDecimal < beginHourDecimal) {
+            endHourDecimal+=24;
+        }
+        //float endTimeDecimal = endHourDecimal + endMinuteDecimal;
+
+
+
+        Calendar shiftCalendar = Calendar.getInstance();
+        //Calendar shabbatToHourCalendar = Calendar.getInstance();
+        //Calendar endHourCalendar = Calendar.getInstance();
+        // set the day of the shift
+        shiftCalendar.set(Calendar.YEAR, Integer.parseInt(this.month), Integer.parseInt(this.day));
+        // set the day of the shift with shabbat finish hour
+        //shabbatToHourCalendar.set(Calendar.YEAR, Integer.parseInt(this.month), Integer.parseInt(this.day),(int)shabbatToHourDecimal,(int)shabbatToMinuteDecimal);
+        int shabbatDay = shiftCalendar.get(Calendar.DAY_OF_WEEK);
+
+        float diffBeginShabbatHours = shabbatFromTime - beginTimeDecimal;
+        float diffEndShabbatHours = shabbatFromTime - beginTimeDecimal;
 
         // night shift condition
-        if ( (beginHourDecimal < 22 && (22 - beginHourDecimal) >= 2) || beginHourDecimal >= 22 ) {
+        if ( (beginHourDecimal < 22 && (22 - endHourDecimal) >= 2) || beginHourDecimal >= 22 ) {
 
             if (isHoliday) // calc Holiday
-               calcHolidayProfit(NIGHT_HOURS, totalDecimal, hourlyWageDecimal);
-            else if (currentDay == 6) // calc Friday
-                calcBeginShabbatProfit(NIGHT_HOURS, totalDecimal, hourlyWageDecimal, diffBeginShabbatHours
-                        , beginHourDecimal, shabbatFromHourDecimal, endHourDecimal);
-            else if (currentDay == 7) // calc Saturday
-                calcEndShabbatProfit(NIGHT_HOURS, totalDecimal, hourlyWageDecimal, diffEndShabbatHours,
-                        beginHourDecimal, shabbatToHourDecimal, endHourDecimal);
+               calcHolidayProfit(NIGHT_HOURS, totalDecimal, this.hourlyWage);
+            else if (shabbatDay == 5) // calc Friday
+                calcBeginShabbatProfit(NIGHT_HOURS, totalDecimal, this.hourlyWage, diffBeginShabbatHours
+                        , beginHourDecimal, this.shabbatFromHour, endHourDecimal);
+            else if (shabbatDay == 6) // calc Saturday
+                calcEndShabbatProfit(NIGHT_HOURS, totalDecimal, this.hourlyWage, diffEndShabbatHours,
+                        beginHourDecimal, this.shabbatToHour, endHourDecimal);
             else // calc regular hours
-                calcRegularProfit(NIGHT_HOURS, totalDecimal, hourlyWageDecimal);
+                calcRegularProfit(NIGHT_HOURS, totalDecimal, this.hourlyWage);
 
         } else { // day shift
 
             if (isHoliday) // calc Holiday
-                calcHolidayProfit(DAY_HOURS, totalDecimal, hourlyWageDecimal);
-            else if (currentDay == 6) // calc Friday
-                calcBeginShabbatProfit(DAY_HOURS, totalDecimal, hourlyWageDecimal, diffBeginShabbatHours
-                        , beginHourDecimal, shabbatFromHourDecimal, endHourDecimal);
-            else if (currentDay == 7) // calc Saturday
-                calcEndShabbatProfit(DAY_HOURS, totalDecimal, hourlyWageDecimal, diffEndShabbatHours
-                        , beginHourDecimal, shabbatToHourDecimal, endHourDecimal);
+                calcHolidayProfit(DAY_HOURS, totalDecimal, this.hourlyWage);
+            else if (shabbatDay == 5) // calc Friday
+                calcBeginShabbatProfit(DAY_HOURS, totalDecimal, this.hourlyWage, diffBeginShabbatHours
+                        , beginHourDecimal, this.shabbatFromHour, endHourDecimal);
+            else if (shabbatDay == 6) // calc Saturday
+                calcEndShabbatProfit(DAY_HOURS, totalDecimal, this.hourlyWage, diffEndShabbatHours
+                        , beginHourDecimal, this.shabbatToHour, endHourDecimal);
             else // calc regular days with extra hours
-                calcRegularProfit(DAY_HOURS, totalDecimal, hourlyWageDecimal);
+                calcRegularProfit(DAY_HOURS, totalDecimal, this.hourlyWage);
         }
 
     }
@@ -218,7 +237,7 @@ class Shift implements Serializable, Finals {
     public void calcBeginShabbatProfit(float dayNightHours, float totalDecimal, float hourlyWageDecimal, float diff,
                                   float beginHourDecimal, float shabbatFromHourDecimal, float endHourDecimal) {
 
-        if (diff < totalDecimal) {
+        if (diff < totalDecimal && diff >= 0) {
             if (totalDecimal <= dayNightHours)
                 this.shiftProfit = String.valueOf(diff * hourlyWageDecimal
                         + (totalDecimal - diff) * SECOND_EXTRA_HOURS * hourlyWageDecimal);
@@ -243,7 +262,7 @@ class Shift implements Serializable, Finals {
     public void calcEndShabbatProfit(float dayNightHours, float totalDecimal, float hourlyWageDecimal, float diff,
                                        float beginHourDecimal, float shabbatToHourDecimal, float endHourDecimal) {
 
-        if (diff < totalDecimal) {
+        if (diff < totalDecimal && diff >= 0) {
             if (totalDecimal <= dayNightHours)
                 this.shiftProfit = String.valueOf(diff * hourlyWageDecimal * SECOND_EXTRA_HOURS
                         + (totalDecimal - diff) * hourlyWageDecimal);
@@ -264,6 +283,8 @@ class Shift implements Serializable, Finals {
         else if (endHourDecimal <= shabbatToHourDecimal ) {
             calcHolidayProfit(DAY_HOURS, totalDecimal, hourlyWageDecimal);
         }
+
+
     }
 
 }

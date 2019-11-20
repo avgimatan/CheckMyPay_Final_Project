@@ -193,7 +193,7 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
 
                 // create and add shift with the new details
                 Shift shift = new Shift(
-                        String.valueOf(user.getHourlyWage()),
+                        user.getHourlyWage(),
                         editDate.getText().toString().split("/")[0],
                         editDate.getText().toString().split("/")[1],
                         editFromTime.getText().toString().split(":")[0],
