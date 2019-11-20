@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        user = (User) getIntent().getSerializableExtra("user");
 
         // Get user from other activities
         sign_out_btn = findViewById(R.id.sign_out_btn);
@@ -157,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttons.get(2).setText("My Shifts");
         buttons.add(new Button(this));
         buttons.get(3).setText("This is my work location!");
+
 
         int numOfShifts = user.getShifts().size();
         if(numOfShifts == 0) {
@@ -414,8 +416,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void sendNotification(View v) {
 
         Intent snoozeIntent = new Intent(this, MyBroadcastReceiver.class);
-        //snoozeIntent.setAction(".MyBroadcastReceiver");
-        //snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
+        snoozeIntent.setAction(".MyBroadcastReceiver");
+        snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
         PendingIntent snoozePendingIntent =
                 PendingIntent.getBroadcast(this, 0, snoozeIntent, 0);
 

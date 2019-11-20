@@ -82,16 +82,16 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
         ArrayList<Shift> shifts = new ArrayList<>();
         Map<String, Paycheck> paychecks = new HashMap<>();
 
-        shifts.add(new Shift(String.valueOf(user.getHourlyWage()), "1", "5", "7", "15", "0", "0",user));
-        shifts.add(new Shift(String.valueOf(user.getHourlyWage()), "2", "5", "15", "23", "15", "0",user));
+        shifts.add(new Shift(user.getHourlyWage(), "1", "5", "7", "15", "0", "0",user));
+        shifts.add(new Shift(user.getHourlyWage(), "2", "5", "15", "23", "15", "0",user));
         user.setShifts(shifts);
         paychecks.put("5#2019", new Paycheck("5#2019", user));
         user.setPaychecks(paychecks);
 
         shifts = new ArrayList<>();
-        shifts.add(new Shift(String.valueOf(user.getHourlyWage()), "1", "7", "7", "15", "10", "10",user));
-        shifts.add(new Shift(String.valueOf(user.getHourlyWage()), "2", "7", "15", "23", "0", "0",user));
-        shifts.add(new Shift(String.valueOf(user.getHourlyWage()), "3", "7", "7", "15", "10", "10",user));
+        shifts.add(new Shift(user.getHourlyWage(), "1", "7", "7", "15", "10", "10",user));
+        shifts.add(new Shift(user.getHourlyWage(), "2", "7", "15", "23", "0", "0",user));
+        shifts.add(new Shift(user.getHourlyWage(), "3", "7", "7", "15", "10", "10",user));
         user.setShifts(shifts);
         paychecks.put("7#2019", new Paycheck("7#2019", user));
         user.setPaychecks(paychecks);

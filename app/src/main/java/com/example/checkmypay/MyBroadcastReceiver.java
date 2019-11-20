@@ -73,7 +73,7 @@ class MyBroadcastReceiver extends Application {
             shifts = new ArrayList<>();
         }
 
-        shifts.add(new Shift(String.valueOf(user.getHourlyWage()), String.valueOf(currentDay),String.valueOf(currentMonth+1),
+        shifts.add(new Shift(user.getHourlyWage(), String.valueOf(currentDay),String.valueOf(currentMonth+1),
                 currentTime.split(":")[0], currentTime.split(":")[1]));
         user.setShifts(shifts);
         updateUserInDB();
