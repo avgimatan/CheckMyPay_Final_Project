@@ -67,8 +67,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button sign_out_btn;
 
     //Firebase
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
 
     //Notification
     private NotificationManagerCompat mNotificationManager;
@@ -90,6 +90,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         user = (User) getIntent().getSerializableExtra("user");
+
+        // Initialize Firebase
+        db = FirebaseFirestore.getInstance();
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
 
         mNotificationManager = NotificationManagerCompat.from(this);
 
@@ -275,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
 
                 case "Show route to my work":
-                    if(user.getWorkLocation() != null && checkPermission())
+                    if(user.getWorkLocation().size() != 0 && checkPermission())
                         goToMapsActivity();
                     else
                         Toast.makeText(MainActivity.this, "You should set your work location first!", Toast.LENGTH_SHORT).show();

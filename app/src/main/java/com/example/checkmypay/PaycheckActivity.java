@@ -192,38 +192,37 @@ public class PaycheckActivity extends AppCompatActivity implements View.OnClickL
 
         switch (index) {
             case 0: {
-                textView2.setText(String.valueOf(paycheck.getBaseWage()));
-                //textView2.setText(String.valueOf(user.getPaychecks().get(key).getBaseWage()));
+                textView2.setText(String.format("%.02f", paycheck.getBaseWage()));
                 textView2.setTextColor(Color.GREEN);
                 break;
             }
             case 1: {
-                textView2.setText(String.valueOf(paycheck.getTravelFee()));
+                textView2.setText(String.format("%.02f", paycheck.getTravelFee()));
                 textView2.setTextColor(Color.GREEN);
                 break;
             }
             case 2: {
-                textView2.setText(String.valueOf(paycheck.getNationalInsurance()));
+                textView2.setText(String.format("%.02f", paycheck.getNationalInsurance()));
                 textView2.setTextColor(Color.RED);
                 break;
             }
             case 3: {
-                textView2.setText(String.valueOf(paycheck.getIncomeTax()));
+                textView2.setText(String.format("%.02f", paycheck.getIncomeTax()));
                 textView2.setTextColor(Color.RED);
                 break;
             }
             case 4: {
-                textView2.setText(String.valueOf(paycheck.getHealthInsurance()));
+                textView2.setText(String.format("%.02f", paycheck.getHealthInsurance()));
                 textView2.setTextColor(Color.RED);
                 break;
             }
             case 5: {
-                textView2.setText(String.valueOf(paycheck.getGrossWage()));
+                textView2.setText(String.format("%.02f", paycheck.getGrossWage()));
                 textView2.setTextColor(Color.DKGRAY);
                 break;
             }
             case 6: {
-                SpannableString content = new SpannableString(String.valueOf(paycheck.getNewWage()));
+                SpannableString content = new SpannableString(String.format("%.02f", paycheck.getNewWage()));
                 content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
                 textView2.setText(content);
                 textView2.setTextColor(Color.BLUE);

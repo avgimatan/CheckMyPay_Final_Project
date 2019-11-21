@@ -24,8 +24,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.directions.route.RoutingListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, RoutingListener, LocationListener, Finals {
 
@@ -100,32 +98,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
-
-/*
-        // Creating a marker
-        MarkerOptions markerOptions = new MarkerOptions();
-
-        // Setting the position for the marker
-        markerOptions.position(latLng);
-
-        // Setting the title for the marker.
-        // This will be displayed on taping the marker
-        markerOptions.title(latLng.latitude + " : " + latLng.longitude);
-
-        // Clears the previously touched position
-        googleMap.clear();
-
-        // Animating to the touched position
-        googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-
-        // Placing a marker on the touched position
-        googleMap.addMarker(markerOptions);
-*/
-
-        // Add a marker in Sydney and move the camera
-        /*LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
     }
 
     @Override
