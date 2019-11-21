@@ -33,6 +33,7 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
     private EditText editDate, editFromTime, editEndTime;
     private TextView textView, textShiftProfit;
     private LinearLayout mainLayout;
+
     private TableLayout tableLayout;
     private int editShiftIndex = 0;
 
