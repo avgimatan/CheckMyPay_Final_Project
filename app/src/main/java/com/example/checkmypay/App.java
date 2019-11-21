@@ -3,9 +3,11 @@ package com.example.checkmypay;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 
-public class App extends Application {
+public class App extends Application{
 
     public static final String CHANNEL_1 = "channel1";
 
@@ -30,4 +32,5 @@ public class App extends Application {
             notificationManager.createNotificationChannel(channel);
         }
     }
+
 }

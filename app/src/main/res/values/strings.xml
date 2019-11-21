@@ -12,4 +12,5 @@
     <string name="hint_provident_funds">Precent of provident funds</string>
     <string name="hint_advanced_study_fund">Precent of advanced study fund</string>
     <string name="hint_credits">Number of credits</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

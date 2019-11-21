@@ -1,50 +1,42 @@
 {
   "project_info": {
-    "project_number": "639608576567",
-    "firebase_url": "https://checkmypay-b0321.firebaseio.com",
-    "project_id": "checkmypay-b0321",
-    "storage_bucket": "checkmypay-b0321.appspot.com"
+    "project_number": "1097484036881",
+    "firebase_url": "https://whack-a-mole-252209.firebaseio.com",
+    "project_id": "whack-a-mole-252209",
+    "storage_bucket": "whack-a-mole-252209.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:639608576567:android:bb0f621fe0b913b216bdb2",
+        "mobilesdk_app_id": "1:1097484036881:android:ff6ff5884a7ffe6489bab0",
         "android_client_info": {
-          "package_name": "com.example.checkmypay"
+          "package_name": "com.example.whackamolegame"
         }
       },
       "oauth_client": [
         {
-          "client_id": "639608576567-4o73ifr9ffbuello1u59cio7e27ni1if.apps.googleusercontent.com",
+          "client_id": "1097484036881-d3amhbef2b91emojik669isheffs4vs9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.checkmypay",
-            "certificate_hash": "3bd6f167bd0efd1d6fb6ea8b80b868549a261201"
-          }
-        },
-        {
-          "client_id": "639608576567-1o0sesmca91je5n9icqk7nv0toah71tn.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.checkmypay",
+            "package_name": "com.example.whackamolegame",
             "certificate_hash": "816aef7732c3462fc58c4d59875c5304d94fb89e"
           }
         },
         {
-          "client_id": "639608576567-n9493eadb4q9edsaksb423u5p21jhj6k.apps.googleusercontent.com",
+          "client_id": "1097484036881-j7v9jj7g4hmfiucbvnt0nfo42qtig378.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCnS1OkZZkVSYtfylsJF4P8UHTWxdFt8mQ"
+          "current_key": "AIzaSyAnvm1VhMKyl3eONFu6dajQD0dk0-n-umo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "639608576567-n9493eadb4q9edsaksb423u5p21jhj6k.apps.googleusercontent.com",
+              "client_id": "1097484036881-j7v9jj7g4hmfiucbvnt0nfo42qtig378.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -12,16 +12,20 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -60,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LocationManager locationManager;
 
     //UI Elements
-    private Button sign_out_btn, check_btn;
+    private Button sign_out_btn;
 
     //Firebase
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -68,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //Notification
     private NotificationManagerCompat mNotificationManager;
+    private boolean isStart;
 
     @Override
     protected void onStart() {
@@ -86,16 +91,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         user = (User) getIntent().getSerializableExtra("user");
 
+        mNotificationManager = NotificationManagerCompat.from(this);
+
         // Get user from other activities
         sign_out_btn = findViewById(R.id.sign_out_btn);
         sign_out_btn.setOnClickListener(this);
-        check_btn = findViewById(R.id.check_button);
-        check_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendNotification(v);
-            }
-        });
         nameText = findViewById(R.id.text_username_menu);
 
         //create Linear and Buttons
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         buttons = new ArrayList<>();
-        if(!isFirstTime) {
+        if (!isFirstTime) {
             createButtons();
         }
 
@@ -111,12 +111,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Get location permission
         getGoogleMapsPermissions();
 
-        if (checkPermission()){
-            locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+        if (checkPermission()) {
+            initLocation();
         }
-
-        mNotificationManager = NotificationManagerCompat.from(this);
-
     }
 
     // Get current user
@@ -130,11 +127,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         user = documentSnapshot.toObject(User.class); //check how to get user from document
                         String name = String.valueOf(user.getEmail().charAt(0)).toUpperCase() + user.getEmail().split("@")[0].substring(1);
                         nameText.setText("Hello " + name);
-                        if(isFirstTime) {
+                        if (isFirstTime) {
                             createButtons();
                             isFirstTime = false;
-                        }
-                        else {
+                        } else {
                             startShiftEndShiftDecide();
                         }
                         Toast.makeText(MainActivity.this, user.getId(), Toast.LENGTH_SHORT).show();
@@ -158,20 +154,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttons.get(2).setText("My Shifts");
         buttons.add(new Button(this));
         buttons.get(3).setText("This is my work location!");
+        buttons.add(new Button(this));
+        buttons.get(4).setText("Show route to my work");
 
 
         int numOfShifts = user.getShifts().size();
-        if(numOfShifts == 0) {
+        if (numOfShifts == 0) {
             buttons.add(new Button(this));
-            buttons.get(4).setText("Start Shift");
-        }
-        else {
+            buttons.get(5).setText("Start Shift");
+        } else {
             if (user.getShifts().get(numOfShifts - 1).getEndHour() != null) {
                 buttons.add(new Button(this));
-                buttons.get(4).setText("Start Shift");
+                buttons.get(5).setText("Start Shift");
             } else {
                 buttons.add(new Button(this));
-                buttons.get(4).setText("End Shift");
+                buttons.get(5).setText("End Shift");
             }
         }
         for (Button button : buttons) {
@@ -183,11 +180,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             button.setOnClickListener(this);
             button.setBackgroundResource(R.color.colorPrimary);
             button.setTextColor(getResources().getColor(R.color.white));
-            if(button.getText().toString().equals("Start Shift") || button.getText().toString().equals("End Shift")) {
+            if (button.getText().toString().equals("Start Shift") || button.getText().toString().equals("End Shift")) {
                 button.setTypeface(Typeface.create("casual", Typeface.NORMAL), Typeface.BOLD);
                 // TODO: set type of this button
-            }
-            else
+            } else
                 button.setTypeface(Typeface.create("casual", Typeface.NORMAL), Typeface.NORMAL);
             linearLayout.addView(button);
         }
@@ -196,6 +192,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void goToActivity(Class<?> className) {
         Intent intent = new Intent(this, className);
+        intent.putExtra("user", user);
+        startActivity(intent);
+    }
+
+    public void goToMapsActivity() {
+        Intent intent = new Intent(this, MapsActivity.class);
         intent.putExtra("user", user);
         startActivity(intent);
     }
@@ -234,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         if (view instanceof Button) {
             Button clickedButton = (Button) view;
-            switch(clickedButton.getText().toString()) {
+            switch (clickedButton.getText().toString()) {
                 case "My Paycheck":
                     goToActivity(PaycheckActivity.class);
                     break;
@@ -256,19 +258,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 case "Start Shift":
                     startShift();
+                    sendStartNotification(view);
                     break;
 
                 case "End Shift":
                     endShift();
+                    sendEndNotification(view);
                     break;
 
                 case "This is my work location!":
-                    if(checkPermission()) {
+                    if (checkPermission()) {
                         setLocation();
                         updateUserInDB();
-                    }
-                    else
+                    } else
                         Toast.makeText(MainActivity.this, "You should let a permission location first!", Toast.LENGTH_SHORT).show();
+                    break;
+
+                case "Show route to my work":
+                    if(user.getWorkLocation() != null && checkPermission())
+                        goToMapsActivity();
+                    else
+                        Toast.makeText(MainActivity.this, "You should set your work location first!", Toast.LENGTH_SHORT).show();
+                    break;
+
                 default:
                     // do nothing
                     break;
@@ -288,18 +300,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ArrayList<Shift> shifts;
 
         // Start Shift(String hourlyWage, String day, String month, String beginHour, String beginMinute)
-        if(user.getShifts() != null) {
+        if (user.getShifts() != null) {
             shifts = user.getShifts();
-        }
-        else {
+        } else {
             shifts = new ArrayList<>();
         }
 
-        shifts.add(new Shift(user.getHourlyWage(), String.valueOf(currentDay),String.valueOf(currentMonth+1),
+        shifts.add(new Shift(user.getHourlyWage(), String.valueOf(currentDay), String.valueOf(currentMonth + 1),
                 currentTime.split(":")[0], currentTime.split(":")[1]));
         user.setShifts(shifts);
         updateUserInDB();
-        buttons.get(4).setText("End Shift");
+        buttons.get(5).setText("End Shift");
     }
 
     public void endShift() {
@@ -314,14 +325,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Shift oldShift = shifts.get(numOfShifts - 1);
         Shift newShift = new Shift(oldShift.getHourlyWage(), oldShift.getDay(), oldShift.getMonth(), oldShift.getBeginHour(),
-                                    currentTime.split(":")[0], oldShift.getBeginMinute(), currentTime.split(":")[1],
-                                    user);
+                currentTime.split(":")[0], oldShift.getBeginMinute(), currentTime.split(":")[1],
+                user);
 
         shifts.remove(numOfShifts - 1);
         shifts.add(numOfShifts - 1, newShift);
         user.setShifts(shifts);
         updateUserInDB();
-        buttons.get(4).setText("Start Shift");
+        buttons.get(5).setText("Start Shift");
     }
 
     public void updateUserInDB() {
@@ -335,14 +346,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void startShiftEndShiftDecide() {
         int numOfShifts = user.getShifts().size();
-        if(numOfShifts == 0) {
-            buttons.get(4).setText("Start Shift");
-        }
-        else {
+        if (numOfShifts == 0) {
+            buttons.get(5).setText("Start Shift");
+            isStart = true;
+        } else {
             if (user.getShifts().get(numOfShifts - 1).getEndHour() != null) {
-                buttons.get(4).setText("Start Shift");
+                buttons.get(5).setText("Start Shift");
+                isStart = true;
             } else {
-                buttons.get(4).setText("End Shift");
+                buttons.get(5).setText("End Shift");
+                isStart = false;
             }
         }
     }
@@ -360,6 +373,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setLocation() {
+        Map<String, Double> workLocation = new HashMap<>();
+        workLocation.put("lat", currentLocation.getLatitude());
+        workLocation.put("lon", currentLocation.getLongitude());
+        user.setWorkLocation(workLocation);
+        updateUserInDB();
+    }
+
+    private void initLocation() {
         locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -372,29 +393,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             assert locationManager != null;
             currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
-        float metersToUpdate = 1;
+        float metersToUpdate = 0;
         long intervalMilliseconds = 1000;
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, intervalMilliseconds, metersToUpdate, this);
-        Map<String, Double> workLocation = new HashMap<>();
-        workLocation.put("lat", currentLocation.getLatitude());
-        workLocation.put("lon", currentLocation.getLongitude());
-        user.setWorkLocation(workLocation);
     }
 
     @Override
     public void onLocationChanged(Location location) {
         float[] results = new float[1];
-        if(location != null) {
+        if (location != null) {
             this.currentLocation = location;
 
-            Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(),
+            /*Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(),
                     user.getWorkLocation().get("lat"), user.getWorkLocation().get("lon"), results);
 
-            if(results[0] <= 1) {
-                //sendNotification();
-                user.setHourlyWage(77);
+            if (results[0] <= 100) {
+                sendNotification();
+                user.setHourlyWage(888);
                 updateUserInDB();
-            }
+            }*/
         }
     }
 
@@ -413,26 +430,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public void sendNotification(View v) {
+    public void sendStartNotification(View view) {
+
+        String contentText;
+        contentText = "You started shift!\nPress here to end this shift";
 
         Intent snoozeIntent = new Intent(this, MyBroadcastReceiver.class);
-        snoozeIntent.setAction(".MyBroadcastReceiver");
-        snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
+        snoozeIntent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+
         PendingIntent snoozePendingIntent =
                 PendingIntent.getBroadcast(this, 0, snoozeIntent, 0);
 
 
-
         NotificationCompat.Builder notification = new NotificationCompat.Builder(this, CHANNEL_1)
                 .setSmallIcon(R.drawable.notification_icon)
-                .setContentTitle("My notification")
-                .setContentText("Hello World!")
+                .setContentTitle("Shift Notification")
+                .setContentText(contentText)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(contentText))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setContentIntent(snoozePendingIntent)
-                .addAction(R.drawable.notification_icon, "fuck you", snoozePendingIntent);
-
+                .setAutoCancel(true);
 
         mNotificationManager.notify(1, notification.build());
+    }
+
+    public void sendEndNotification(View view) {
+
+        int numOfShifts = user.getShifts().size();
+        String contentText = "The shift ended.\nYour profit: " + user.getShifts().get(numOfShifts - 1).getShiftProfit();
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_1)
+                .setSmallIcon(R.drawable.notification_icon)
+                .setContentTitle("Shift Notification")
+                .setContentText(contentText)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true);
+
+        buttons.get(5).setText("Start Shift");
+
+        mNotificationManager.notify(1, builder.build());
     }
 }
