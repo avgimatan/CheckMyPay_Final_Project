@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         } else {
                             startShiftEndShiftDecide();
                         }
-                        Toast.makeText(MainActivity.this, user.getId(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MainActivity.this, user.getId(), Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

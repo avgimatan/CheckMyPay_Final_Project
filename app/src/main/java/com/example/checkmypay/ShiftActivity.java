@@ -210,7 +210,7 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
 
                 shifts.add(shift);
                 user.setShifts(shifts);
-                Toast.makeText(this,"shift size " + shifts.size() , Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this,"shift size " + shifts.size() , Toast.LENGTH_SHORT).show();
 
                 break;
 
