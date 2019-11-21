@@ -187,7 +187,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             button.setTextColor(getResources().getColor(R.color.white));
             if (button.getText().toString().equals("Start Shift") || button.getText().toString().equals("End Shift")) {
                 button.setTypeface(Typeface.create("casual", Typeface.NORMAL), Typeface.BOLD);
-                // TODO: set type of this button
             } else
                 button.setTypeface(Typeface.create("casual", Typeface.NORMAL), Typeface.NORMAL);
             linearLayout.addView(button);
@@ -280,8 +279,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
 
                 case "Show route to my work":
-                    if(user.getWorkLocation().size() != 0 && checkPermission())
-                        goToMapsActivity();
+                    if (user.getWorkLocation() != null) {
+                        if (user.getWorkLocation().size() != 0 && checkPermission()) {
+                            goToMapsActivity();
+                        }
+                    }
                     else
                         Toast.makeText(MainActivity.this, "You should set your work location first!", Toast.LENGTH_SHORT).show();
                     break;
@@ -303,6 +305,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String currentTime = String.format("%02d:%02d", currentHour, currentMinute);
 
         ArrayList<Shift> shifts;
+
+        if(currentDay <= user.getStartDate()) {
+
+        }
 
         // Start Shift(String hourlyWage, String day, String month, String beginHour, String beginMinute)
         if (user.getShifts() != null) {

@@ -12,27 +12,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-// user json:
-
-/**
- * email
- * password
- * hourlyWage
- * startDate
- * endDate
- * fromHour
- * fromMinute
- * toHour
- * toMinute
- * providentFund
- * advancedStudyFund
- * credits
- * <p>
- * ArrayList <Shift> shifts
- * Map <String(Date month and year), Paycheck> paychecks
- */
-
-// TODO: Remeber every new paycheck (new month) initialize the shifts !!
 
 @IgnoreExtraProperties
 public class User implements Serializable {
@@ -232,12 +211,8 @@ public class User implements Serializable {
         return id;
     }
 
-    // TODO: check it
     public ArrayList<Shift> getShifts() {
-        //if(this.shifts != null)
         return shifts;
-        //else
-        //return new ArrayList<Shift>();
     }
 
     public Map<String, Double> getWorkLocation() {

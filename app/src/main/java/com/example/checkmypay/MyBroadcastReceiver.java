@@ -57,9 +57,6 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
-                        // TODO: Send notification that start shift failed
-
                     }
                 });
     }

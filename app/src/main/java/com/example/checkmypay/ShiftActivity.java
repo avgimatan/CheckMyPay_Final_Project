@@ -56,9 +56,7 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
         // create and init buttons
         buttons = new HashMap<>();
         buttons.put("Add Shift", new Button(this));
-        buttons.put("Update Details", new Button(this));
         buttons.get("Add Shift").setText("Add Shift");
-        buttons.get("Update Details").setText("Update Details");
         for (Button button : buttons.values()) {
             ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, GridLayout.LayoutParams.WRAP_CONTENT);
@@ -121,7 +119,7 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
                 tableRowEdit.addView(isHoliday); // checkbox
 
                 textShiftProfit = new TextView(this);
-                textShiftProfit.setText(String.valueOf(shift.getShiftProfit()));
+                textShiftProfit.setText(String.format("%.2f", Float.parseFloat(shift.getShiftProfit())));
                 tableRowEdit.addView(textShiftProfit); // total profit
 
                 Button bu = new Button(this,null,android.R.attr.buttonBarButtonStyle);
@@ -133,7 +131,7 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
                 bu.setLayoutParams(params);*/
                 bu.setAllCaps(false);
                 bu.setBackgroundResource(R.color.colorPrimary);
-                bu.setText("Edit");
+                bu.setText("Save");
                 bu.setTextColor(getResources().getColor(R.color.white));
                 gridButtons.add(bu);
                 bu.setOnClickListener(this);
@@ -151,6 +149,13 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
 
             case "Add Shift":
 
+                Calendar c = Calendar.getInstance();
+                int currentDay = c.get(Calendar.DAY_OF_MONTH);
+                int currentMonth = c.get(Calendar.MONTH);
+                int currentHour = c.get(Calendar.HOUR_OF_DAY); // Return the hour in 24 hrs format (ranging from 0-23)
+                int currentMinute = c.get(Calendar.MINUTE);
+                String currentTime = String.format("%02d:%02d", currentHour, currentMinute);
+
                 // init table row for each shift
                 TableRow tableRowEdit = new TableRow(this);
                 tableRowEdit.setLayoutParams(new TableRow.LayoutParams(
@@ -158,11 +163,11 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
 
                 // set data to views
                 editDate = new EditText(this);
-                editDate.setText("01/01");
+                editDate.setText(currentDay + "/" + (currentMonth+1));
                 tableRowEdit.addView(editDate); // Date (editable)
 
                 editFromTime = new EditText(this);
-                editFromTime.setText("00:00");
+                editFromTime.setText(currentTime);
                 tableRowEdit.addView(editFromTime); // from time (editable)
 
                 editEndTime = new EditText(this);
@@ -185,7 +190,7 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
                 bu.setLayoutParams(params);*/
                 bu.setAllCaps(false);
                 bu.setBackgroundResource(R.color.colorPrimary);
-                bu.setText("Edit");
+                bu.setText("Save");
                 bu.setTextColor(getResources().getColor(R.color.white));
                 gridButtons.add(bu);
                 bu.setOnClickListener(this);
@@ -209,7 +214,7 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
 
                 break;
 
-            case "Edit":
+            case "Save":
 
                 for (Button b : gridButtons) {
                     if (b.getId() == button.getId()) {
@@ -237,31 +242,32 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
                         else
                             editedShift.setHoliday(false);
 
+                        TextView shiftProfit = (TextView) editTableRow.getChildAt(4);
+
                         editedShift.setTotalHours();
                         editedShift.setShiftProfit();
+                        shiftProfit.setText(String.format("%.02f", Float.parseFloat(editedShift.getShiftProfit())));
 
                         shifts.set(shiftIndex, editedShift);
 
-                        Toast.makeText(this,"Edit detail's Successfully" , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this,"Save detail's Successfully" , Toast.LENGTH_SHORT).show();
                     }
                 }
-
-                break;
-
-            case "Update Details":
-
-                db.collection("Users")
-                        .document(user.getId())
-                        .set(user)
-                        .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(getApplicationContext(), "Updated detail's Successfully", Toast.LENGTH_SHORT).show();
-                        }).addOnFailureListener(
-                                e -> Toast.makeText(getApplicationContext(), " An error has occurred", Toast.LENGTH_SHORT).show());
-
+                updateUserInDB();
                 break;
         }
 
 
 
+    }
+
+    public void updateUserInDB() {
+        db.collection("Users")
+                .document(user.getId())
+                .set(user)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(getApplicationContext(), "Updated detail's Successfully", Toast.LENGTH_SHORT).show();
+                }).addOnFailureListener(
+                e -> Toast.makeText(getApplicationContext(), " An error has occurred", Toast.LENGTH_SHORT).show());
     }
 }
