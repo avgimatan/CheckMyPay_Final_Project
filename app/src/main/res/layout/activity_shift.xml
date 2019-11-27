@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/main_shift_layout"
-    android:layoutDirection="ltr"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ShiftActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/main_shift_layout"
+        android:layoutDirection="ltr"
+        android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
@@ -19,4 +22,8 @@
         android:textSize="@android:dimen/app_icon_size"/>
 
 
-</LinearLayout>
+    </LinearLayout>
+
+
+</ScrollView>
+

@@ -2,10 +2,13 @@ package com.example.checkmypay;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -84,7 +87,7 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
                 TableRow.LayoutParams.MATCH_PARENT,TableRow.LayoutParams.WRAP_CONTENT));
 
         // add headlines view to grid
-        String[] headlines = {"Date ","Begin Hour ", "End Hour ","Holiday ", "Shift Profit ", "Edit"};
+        String[] headlines = {"Date ","Begin Hour ", "End Hour ","Holiday ", "Shift Profit ", "Save"};
         for (String str : headlines) {
             textView = new TextView(this);
             textView.setText(str);
@@ -97,46 +100,44 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
 
             for (Shift shift : shifts) {
 
-                TableRow tableRowEdit = new TableRow(this);
-                tableRowEdit.setId(editShiftIndex);
-                tableRowEdit.setLayoutParams(new TableRow.LayoutParams(
-                        TableRow.LayoutParams.MATCH_PARENT,TableRow.LayoutParams.WRAP_CONTENT));
+                if (shift.getEndHour() != null) {
+                    TableRow tableRowEdit = new TableRow(this);
+                    tableRowEdit.setId(editShiftIndex);
+                    tableRowEdit.setLayoutParams(new TableRow.LayoutParams(
+                            TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
 
-                editDate = new EditText(this);
-                editDate.setText(shift.getDay() + "/" + shift.getMonth());
-                tableRowEdit.addView(editDate); // Date (editable)
+                    editDate = new EditText(this);
+                    editDate.setText(shift.getDay() + "/" + shift.getMonth());
+                    tableRowEdit.addView(editDate); // Date (editable)
 
-                editFromTime = new EditText(this);
-                editFromTime.setText(shift.getBeginHour() + ":" + shift.getBeginMinute());
-                tableRowEdit.addView(editFromTime); // from time (editable)
+                    editFromTime = new EditText(this);
+                    editFromTime.setText(shift.getBeginHour() + ":" + shift.getBeginMinute());
+                    tableRowEdit.addView(editFromTime); // from time (editable)
 
-                editEndTime = new EditText(this);
-                editEndTime.setText(shift.getEndHour() + ":" + shift.getEndMinute());
-                tableRowEdit.addView(editEndTime); // end time (editable)
+                    editEndTime = new EditText(this);
+                    editEndTime.setText(shift.getEndHour() + ":" + shift.getEndMinute());
+                    tableRowEdit.addView(editEndTime); // end time (editable)
 
-                isHoliday = new CheckBox(this);
-                isHoliday.setChecked(shift.isHoliday());
-                tableRowEdit.addView(isHoliday); // checkbox
+                    isHoliday = new CheckBox(this);
+                    isHoliday.setChecked(shift.isHoliday());
+                    tableRowEdit.addView(isHoliday); // checkbox
 
-                textShiftProfit = new TextView(this);
-                textShiftProfit.setText(String.format("%.2f", Float.parseFloat(shift.getShiftProfit())));
-                tableRowEdit.addView(textShiftProfit); // total profit
+                    textShiftProfit = new TextView(this);
+                    textShiftProfit.setText(String.format("%.2f", Float.parseFloat(shift.getShiftProfit())));
+                    tableRowEdit.addView(textShiftProfit); // total profit
 
-                Button bu = new Button(this,null,android.R.attr.buttonBarButtonStyle);
-                bu.setId(editShiftIndex);
-                editShiftIndex++;
-/*                ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.setMargins(2, 2, 2, 2);
-                bu.setLayoutParams(params);*/
-                bu.setAllCaps(false);
-                bu.setBackgroundResource(R.color.colorPrimary);
-                bu.setText("Save");
-                bu.setTextColor(getResources().getColor(R.color.white));
-                gridButtons.add(bu);
-                bu.setOnClickListener(this);
-                tableRowEdit.addView(bu);
-                tableLayout.addView(tableRowEdit);
+                    Button bu = new Button(this, null, android.R.attr.buttonBarButtonStyle);
+                    bu.setId(editShiftIndex);
+                    editShiftIndex++;
+                    bu.setAllCaps(false);
+                    bu.setBackgroundResource(R.color.colorPrimary);
+                    bu.setText("Save");
+                    bu.setTextColor(getResources().getColor(R.color.white));
+                    gridButtons.add(bu);
+                    bu.setOnClickListener(this);
+                    tableRowEdit.addView(bu);
+                    tableLayout.addView(tableRowEdit);
+                }
             }
         }
     }
@@ -269,5 +270,14 @@ public class ShiftActivity extends AppCompatActivity implements Finals, View.OnC
                     Toast.makeText(getApplicationContext(), "Updated detail's Successfully", Toast.LENGTH_SHORT).show();
                 }).addOnFailureListener(
                 e -> Toast.makeText(getApplicationContext(), " An error has occurred", Toast.LENGTH_SHORT).show());
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

@@ -1,25 +1,20 @@
 package com.example.checkmypay;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 public class RateActivity extends AppCompatActivity implements View.OnClickListener {
@@ -38,7 +33,6 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rate);
         user = (User) getIntent().getSerializableExtra("user");
-        //Log.e("Rate", "onCreate: " + user.getId());
 
         input_wage = findViewById(R.id.rate_input_hourly_wage);
         input_startDate = findViewById(R.id.rate_input_start_date);
@@ -77,10 +71,8 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
 
     public void writeDetailsToDB() {
 
-        // TODO: Remove it! it is only for test
+        // TODO: it is only for test!
 
-
-        /// For test
         /*ArrayList<Shift> shifts = new ArrayList<>();
         Map<String, Paycheck> paychecks = new HashMap<>();
         shifts = new ArrayList<>();
@@ -122,6 +114,14 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
+        if ( (Integer.parseInt(input_fromHour.getText().toString()) < 0 || Integer.parseInt(input_fromHour.getText().toString()) > 23)
+                || (Integer.parseInt(input_toHour.getText().toString()) < 0 || Integer.parseInt(input_toHour.getText().toString()) > 23)
+                || (Integer.parseInt(input_fromMinute.getText().toString()) < 0 || Integer.parseInt(input_fromMinute.getText().toString()) > 59)
+                || (Integer.parseInt(input_toMinute.getText().toString()) < 0 || Integer.parseInt(input_toMinute.getText().toString()) > 59) ) {
+            Toast.makeText(RateActivity.this, "Wrong shabbat hours! please insert a valid input", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String id = user.getId();
         String email = user.getEmail();
         String password = user.getPassword();
@@ -156,5 +156,14 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
         intent.putExtra("user", user);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }
